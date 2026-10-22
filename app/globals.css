@@ -205,7 +205,17 @@ details p{padding:0 4px 22px;font-size:17px;line-height:1.6;color:var(--text);ma
 .cta .btn-ink:hover{transform:translateY(-2px)}
 .cta .btn-ghost{background:transparent;color:var(--on-g);border-color:color-mix(in srgb,var(--on-g) 40%,transparent)}
 .cta .btn-ghost:hover{border-color:var(--on-g)}
-.cta svg.m{flex:none;width:200px;max-width:50vw}
+.cta-section{padding-top:20px;padding-bottom:8px}
+.cta-stage{position:relative;margin-bottom:clamp(12px,3vw,28px)}
+.cta-actions{justify-content:flex-start;margin-top:4px}
+.cta-mascot-wrap{position:absolute;right:clamp(4px,2.5vw,36px);bottom:clamp(-48px,-4vw,-20px);width:clamp(132px,22vw,248px);z-index:3;pointer-events:none}
+.cta-mascot-3d{width:100%;height:auto;display:block;filter:drop-shadow(0 16px 32px rgba(21,22,19,.22));animation:mascot-bob 3.4s ease-in-out infinite;will-change:transform}
+@keyframes mascot-bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-11px) rotate(1deg)}}
+@media (max-width:760px){
+  .cta-stage{padding-bottom:0;display:flex;flex-direction:column;align-items:stretch}
+  .cta-mascot-wrap{position:relative;right:auto;bottom:auto;align-self:center;width:min(140px,42vw);margin:-8px auto 0;order:2}
+  .cta{order:1}
+}
 
 footer{border-top:1px solid var(--line)}
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:20px;padding-block:40px calc(40px + env(safe-area-inset-bottom,0px));font-size:15px;color:var(--muted)}
@@ -228,6 +238,7 @@ details p{overflow:hidden}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .steps .line i{width:100%}
+  .cta-mascot-3d{transform:none!important}
 }
 
 /* /kleur overview */

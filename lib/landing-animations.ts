@@ -207,8 +207,7 @@ export function initLandingAnimations(): () => void {
 
   // CTA groeit in beeld, mascotte zwaait
   gsap.fromTo('.cta', { scale: .9, y: 60, borderRadius: 80 }, { scale: 1, y: 0, borderRadius: 36, ease: 'none', scrollTrigger: { trigger: '.cta', start: 'top 95%', end: 'top 55%', scrub: .6 } });
-  gsap.from('.cta svg.m', { autoAlpha: 0, scale: .4, rotation: -30, y: 40, duration: 1, ease: 'back.out(2)', scrollTrigger: { trigger: '.cta', start: 'top 70%' } });
-  gsap.to('.cta svg.m', { rotation: 8, y: -8, duration: 1.6, ease: 'sine.inOut', yoyo: true, repeat: -1, transformOrigin: '50% 90%' });
+  gsap.from('.cta-mascot-3d', { autoAlpha: 0, scale: .4, rotation: -30, y: 40, duration: 1, ease: 'back.out(2)', scrollTrigger: { trigger: '.cta', start: 'top 70%' } });
   gsap.from('.cta .btn', { autoAlpha: 0, y: 16, stagger: .1, duration: .6, scrollTrigger: { trigger: '.cta', start: 'top 70%' } });
 
   /* ---------------- MICRO ---------------- */
