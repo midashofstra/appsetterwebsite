@@ -3,6 +3,9 @@
   --g-soft:#F1FCE9;
   --g-mid:#DDF8CC;
   --g-ink:#2F6B12;
+  --g-border:#7ADA4F;
+  --btn-main-fg:#151613;
+  --cta-sub:#1f3a10;
   --ink:#151613;
   --text:#43453F;
   --muted:#73766D;
@@ -26,8 +29,8 @@ h2{font-size:clamp(32px,4vw,54px);line-height:1.05;letter-spacing:-.035em;font-w
 
 /* buttons */
 .btn{display:inline-flex;align-items:center;justify-content:center;height:52px;padding:0 24px;border-radius:999px;font:700 16px/1 'Figtree',sans-serif;text-decoration:none;border:1.5px solid var(--ink);cursor:pointer;transition:transform .2s ease,background .2s ease,box-shadow .2s ease}
-.btn-main{background:var(--g);color:var(--ink)}
-.btn-main:hover{transform:translateY(-2px);box-shadow:0 10px 24px -10px rgba(47,107,18,.5)}
+.btn-main{background:var(--g);color:var(--btn-main-fg)}
+.btn-main:hover{transform:translateY(-2px);box-shadow:0 10px 24px -10px color-mix(in srgb,var(--g-ink) 50%,transparent)}
 .btn-ghost{background:#fff;color:var(--ink);border-color:var(--line)}
 .btn-ghost:hover{border-color:var(--ink)}
 .btn-sm{height:42px;padding:0 18px;font-size:15px}
@@ -60,7 +63,7 @@ nav{display:flex;align-items:center;justify-content:space-between;gap:20px;heigh
 .tile svg{width:58%;height:58%}
 
 /* Geanimeerd appointmentsetter-icoon (loop van 6s, zoals de video) */
-.as-tile{width:1.18em;height:1.18em;background:#8BF15B;border-color:#7ADA4F;overflow:hidden}
+.as-tile{width:1.18em;height:1.18em;background:var(--g);border-color:var(--g-border);overflow:hidden}
 .as-tile svg.as-icon{width:100%;height:100%}
 .as-happy,.as-sleepy{opacity:0}
 .hero .sub{max-width:580px;margin:26px auto 0}
@@ -194,7 +197,7 @@ details p{padding:0 4px 22px;font-size:17px;line-height:1.6;color:var(--text);ma
 .cta{background:var(--g);border-radius:36px;padding:clamp(40px,6vw,84px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:40px}
 .cta > div{flex:1 1 460px;display:flex;flex-direction:column;gap:20px}
 .cta h2{font-size:clamp(36px,5vw,68px)}
-.cta .sub{color:#1f3a10;max-width:520px}
+.cta .sub{color:var(--cta-sub);max-width:520px}
 .cta .btn-ink{background:var(--ink);color:#fff;border-color:var(--ink)}
 .cta .btn-ink:hover{transform:translateY(-2px)}
 .cta .btn-ghost{background:transparent;border-color:rgba(21,22,19,.35)}
@@ -218,8 +221,22 @@ details p{overflow:hidden}
 @keyframes in{to{opacity:1;transform:none}}
 @keyframes tile{to{opacity:1;transform:rotate(var(--rot))}}
 @keyframes bob{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-8px) rotate(-2deg)}}
-@keyframes ping{0%{box-shadow:0 0 0 0 rgba(139,241,91,.7)}100%{box-shadow:0 0 0 10px rgba(139,241,91,0)}}
+@keyframes ping{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--g) 70%,transparent)}100%{box-shadow:0 0 0 10px color-mix(in srgb,var(--g) 0%,transparent)}}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .steps .line i{width:100%}
 }
+
+/* /kleur overview */
+.kleur-index{padding:72px 0 96px;font-family:inherit;color:var(--ink);background:var(--bg)}
+.kleur-index-back{display:inline-block;margin-bottom:28px;font-size:15px;font-weight:600;color:var(--text);text-decoration:none}
+.kleur-index-back:hover{color:var(--ink)}
+.kleur-index h1{font-size:clamp(32px,4vw,48px);letter-spacing:-.03em;margin-bottom:12px}
+.kleur-index-lead{max-width:560px;font-size:18px;line-height:1.55;color:var(--text);margin-bottom:36px}
+.kleur-index-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.kleur-index-card{display:flex;align-items:center;gap:16px;padding:16px 18px;border:1px solid var(--line);border-radius:18px;text-decoration:none;color:inherit;background:#fff;transition:box-shadow .2s ease,transform .2s ease}
+.kleur-index-card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.kleur-index-swatch{flex:none;width:52px;height:52px;border-radius:14px;border:1px solid rgba(21,22,19,.08)}
+.kleur-index-meta{display:flex;flex-direction:column;gap:4px}
+.kleur-index-meta strong{font-size:17px;letter-spacing:-.02em}
+.kleur-index-meta span{font-size:14px;color:var(--muted);font-weight:500}

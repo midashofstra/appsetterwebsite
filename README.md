@@ -13,6 +13,22 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+### Brand color variants
+
+The default green homepage stays at `/`. Alternative primaries for review:
+
+| Route | Primary |
+|-------|---------|
+| [/kleur](http://localhost:3000/kleur) | Overview with swatches |
+| `/kleur/ff0048` | `#FF0048` |
+| `/kleur/ff3b00` | `#FF3B00` |
+| `/kleur/acff00` | `#ACFF00` |
+| `/kleur/00f13e` | `#00F13E` |
+| `/kleur/00db77` | `#00DB77` |
+| `/kleur/00be58` | `#00BE58` |
+
+Each variant wraps the same landing page in a `ThemeRoot` that overrides CSS variables (`--g`, `--g-soft`, `--g-mid`, `--g-ink`, `--g-border`, `--btn-main-fg`, `--cta-sub`).
+
 ## Scripts
 
 | Command        | Description              |
