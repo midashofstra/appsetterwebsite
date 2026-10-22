@@ -26,8 +26,8 @@ export function Cta() {
             <Image
               src="/mascot-3d.webp"
               alt="3D-mascotte van appointmentsetter.app: een wit kalenderblok met twee ringen en grote zwarte ogen"
-              width={868}
-              height={917}
+              width={1242}
+              height={1228}
               className="cta-mascot-3d"
               sizes="(max-width: 760px) 140px, 240px"
             />
