@@ -71,6 +71,17 @@ function contrastRatio(fg: Rgb, bg: Rgb): number {
 const INK = parseHex("#151613");
 const WHITE = parseHex("#FFFFFF");
 
+/** Primaries that use white label text on solid `--g` surfaces (buttons, CTA band, chat bubbles). */
+const LIGHT_ON_PRIMARY_HEX = new Set(["FF0050", "FF0048"]);
+
+function normalizePrimaryHex(primary: string): string {
+  return primary.replace("#", "").trim().toUpperCase();
+}
+
+export function usesLightOnPrimary(primary: string): boolean {
+  return LIGHT_ON_PRIMARY_HEX.has(normalizePrimaryHex(primary));
+}
+
 /** Derive related brand tokens from a primary hex color. */
 export function deriveThemeTokens(primary: string) {
   const base = parseHex(primary);
@@ -79,12 +90,15 @@ export function deriveThemeTokens(primary: string) {
   const gMid = rgbToHex(mix(base, WHITE, 0.72));
   const gBorder = rgbToHex(mix(base, INK, 0.14));
   const gInk = rgbToHex(mix(base, INK, 0.78));
-  const ctaSub = rgbToHex(mix(parseHex(gInk), INK, 0.35));
+  const ctaSubDark = rgbToHex(mix(parseHex(gInk), INK, 0.35));
+
+  const lightOnPrimary = usesLightOnPrimary(primary);
 
   const onPrimaryInk = contrastRatio(INK, base);
   const onPrimaryWhite = contrastRatio(WHITE, base);
-  const btnMainFg =
-    onPrimaryInk >= 4.5
+  const btnMainFg = lightOnPrimary
+    ? "#FFFFFF"
+    : onPrimaryInk >= 4.5
       ? "#151613"
       : onPrimaryWhite >= 4.5
         ? "#FFFFFF"
@@ -92,13 +106,18 @@ export function deriveThemeTokens(primary: string) {
           ? "#FFFFFF"
           : "#151613";
 
+  const onG = lightOnPrimary ? "#FFFFFF" : "#151613";
+  const onGMuted = lightOnPrimary ? "rgba(255,255,255,0.88)" : ctaSubDark;
+
   return {
     "--g": primary.toUpperCase(),
     "--g-soft": gSoft,
     "--g-mid": gMid,
     "--g-border": gBorder,
     "--g-ink": gInk,
-    "--cta-sub": ctaSub,
+    "--on-g": onG,
+    "--on-g-muted": onGMuted,
+    "--cta-sub": onGMuted,
     "--btn-main-fg": btnMainFg,
   } as const;
 }
