@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Figtree } from "next/font/google";
 import type { CSSProperties } from "react";
 import { DEFAULT_PRIMARY, getDefaultThemeStyle } from "@/lib/color-themes";
+import "@/lib/fontawesome";
 import "./globals.css";
 
 const figtree = Figtree({

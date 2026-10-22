@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { CtaButton } from "@/components/ui/CtaButton";
 
 export function Cta() {
   return (
@@ -13,12 +14,12 @@ export function Cta() {
                 instellen? Dan onboarden we je.
               </p>
               <div className="ctas cta-actions">
-                <a className="btn btn-ink" href="#start">
+                <CtaButton href="#start" className="btn-ink">
                   Start voor €1
-                </a>
-                <a className="btn btn-ghost" href="#start">
+                </CtaButton>
+                <CtaButton href="#start" className="btn-ghost">
                   Laat ons je onboarden
-                </a>
+                </CtaButton>
               </div>
             </div>
           </div>

@@ -1,6 +1,56 @@
-/* Auto-generated from prototype HTML — structure preserved for visual fidelity */
+import { faCalendarDays, faPen, faSliders, faBolt } from "@fortawesome/free-solid-svg-icons";
+import { WhyFeatureCard } from "@/components/sections/WhyFeatureCard";
+import { CtaButton } from "@/components/ui/CtaButton";
+
+const feats = [
+  {
+    icon: faPen,
+    title: "Schrijft zoals jij",
+    text: "Jouw woorden, jouw stijl. Geen robottaal.",
+  },
+  {
+    icon: faBolt,
+    title: "Antwoordt binnen minuten",
+    text: "Ook om 23:00 en in het weekend.",
+  },
+  {
+    icon: faCalendarDays,
+    title: "Kent je agenda",
+    text: "Biedt alleen tijden aan die echt vrij zijn.",
+  },
+  {
+    icon: faSliders,
+    title: "Jij houdt de regie",
+    text: "Kijk mee in elk gesprek en neem over wanneer je wilt.",
+  },
+] as const;
+
 export function Why() {
   return (
-    <div dangerouslySetInnerHTML={{ __html: "<!-- GIDS -->\n<section class=\"soft\" id=\"waarom\">\n  <div class=\"wrap\">\n    <div class=\"guide\">\n      <div class=\"copy rv\">\n        <span class=\"label\" style=\"margin-bottom:0\"><i></i>Waarom wij</span>\n        <h2>We deden zelf jarenlang sales.</h2>\n        <p class=\"sub\">We weten hoe opvolgen werkt en wat een lead over de streep trekt. Die kennis zit nu in de tool.</p>\n        <a class=\"btn btn-main\" href=\"#start\" style=\"align-self:flex-start\">Probeer 3 dagen voor €1</a>\n      </div>\n      <div class=\"list\">\n        <div class=\"feat rv\"><span class=\"ico\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--g-ink)\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 20l4-1 11-11-3-3L5 16z\"/></svg></span><div><b>Schrijft zoals jij</b><span>Jouw woorden, jouw stijl. Geen robottaal.</span></div></div>\n        <div class=\"feat rv d1\"><span class=\"ico\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--g-ink)\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"8.5\"/><path d=\"M12 7.5V12l3 2\"/></svg></span><div><b>Antwoordt binnen minuten</b><span>Ook om 23:00 en in het weekend.</span></div></div>\n        <div class=\"feat rv d2\"><span class=\"ico\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--g-ink)\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"3.5\" y=\"5\" width=\"17\" height=\"15\" rx=\"3\"/><path d=\"M8 3v4M16 3v4M3.5 10h17\"/></svg></span><div><b>Kent je agenda</b><span>Biedt alleen tijden aan die echt vrij zijn.</span></div></div>\n        <div class=\"feat rv d3\"><span class=\"ico\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--g-ink)\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12z\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/></svg></span><div><b>Jij houdt de regie</b><span>Kijk mee in elk gesprek en neem over wanneer je wilt.</span></div></div>\n      </div>\n    </div>\n\n    <div class=\"stats\">\n      <div class=\"stat\"><b>[X]</b><span>afspraken geboekt</span></div>\n      <div class=\"stat\"><b>[X]</b><span>berichten verstuurd</span></div>\n      <div class=\"stat\"><b>[X]</b><span>leads opgevolgd</span></div>\n    </div>\n    <figure class=\"quote rv\">\n      <blockquote>\"[Review van een klant over meer afspraken en minder werk.]\"</blockquote>\n      <figcaption><i></i><div><b>[Naam klant]</b><span>[Functie, bedrijf]</span></div></figcaption>\n    </figure>\n    <div class=\"clogos rv\" aria-label=\"Klanten\"><span>[Logo]</span><span>[Logo]</span><span>[Logo]</span><span>[Logo]</span><span>[Logo]</span></div>\n  </div>\n</section>" }} />
+    <section className="soft" id="waarom">
+      <div className="wrap">
+        <div className="guide">
+          <div className="copy rv">
+            <span className="label" style={{ marginBottom: 0 }}>
+              <i />
+              Waarom wij
+            </span>
+            <h2>We deden zelf jarenlang sales.</h2>
+            <p className="sub">
+              We weten hoe opvolgen werkt en wat een lead over de streep trekt. Die kennis zit nu in de
+              tool.
+            </p>
+            <CtaButton href="#start" className="btn-main" style={{ alignSelf: "flex-start" }}>
+              Probeer 3 dagen voor €1
+            </CtaButton>
+          </div>
+          <div className="list">
+            {feats.map(({ icon, title, text }) => (
+              <WhyFeatureCard key={title} icon={icon} title={title} text={text} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }

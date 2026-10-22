@@ -1,6 +1,51 @@
-/* Auto-generated from prototype HTML — structure preserved for visual fidelity */
+import { faEnvelope, faCommentDots } from "@fortawesome/free-solid-svg-icons";
+import { faLinkedinIn } from "@fortawesome/free-brands-svg-icons";
+import { SiteIcon } from "@/components/icons/SiteIcon";
+
+const channels = [
+  {
+    className: "card rv",
+    icon: faLinkedinIn,
+    title: "LinkedIn",
+    text: "Reageert op connecties en antwoorden, en stuurt het gesprek richting een afspraak.",
+  },
+  {
+    className: "card rv d1",
+    icon: faEnvelope,
+    title: "E-mail",
+    text: "Volgt op na een offerte of formulier, op het juiste moment, zonder te pushen.",
+  },
+  {
+    className: "card g rv d2",
+    icon: faCommentDots,
+    title: "WhatsApp",
+    text: "Snel en persoonlijk. Precies waar je leads het liefst antwoorden.",
+  },
+] as const;
+
 export function Channels() {
   return (
-    <div dangerouslySetInnerHTML={{ __html: "<!-- KANALEN -->\n<section id=\"kanalen\" class=\"soft chan\">\n  <div class=\"wrap\">\n    <div class=\"head rv\"><div><span class=\"label\"><i></i>Kanalen</span><h2>Eén agent. Overal waar je klanten zijn.</h2></div></div>\n    <div class=\"cards\">\n      <div class=\"card rv\">\n        <svg width=\"40\" height=\"40\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#151613\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"4\"/><path d=\"M8 10.5V16M8 7.5v.01M12 16v-5.5M12 13c0-1.5 1-2.5 2.3-2.5S16.5 11.5 16.5 13v3\"/></svg>\n        <h3>LinkedIn</h3>\n        <p>Reageert op connecties en antwoorden, en stuurt het gesprek richting een afspraak.</p>\n      </div>\n      <div class=\"card rv d1\">\n        <svg width=\"40\" height=\"40\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#151613\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"2.5\" y=\"5\" width=\"19\" height=\"14\" rx=\"3\"/><path d=\"M3.5 6.5l8.5 6.5 8.5-6.5\"/></svg>\n        <h3>E-mail</h3>\n        <p>Volgt op na een offerte of formulier, op het juiste moment, zonder te pushen.</p>\n      </div>\n      <div class=\"card g rv d2\">\n        <svg width=\"40\" height=\"40\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#151613\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M20.5 11.5a8.5 8.5 0 0 1-12.4 7.6L3.5 20.5l1.4-4.4A8.5 8.5 0 1 1 20.5 11.5z\"/><path d=\"M9 9.5c0 3 2.5 5.5 5.5 5.5\"/></svg>\n        <h3>WhatsApp</h3>\n        <p>Snel en persoonlijk. Precies waar je leads het liefst antwoorden.</p>\n      </div>\n    </div>\n  </div>\n</section>" }} />
+    <section id="kanalen" className="soft chan">
+      <div className="wrap">
+        <div className="head rv">
+          <div>
+            <span className="label">
+              <i />
+              Kanalen
+            </span>
+            <h2>Eén agent. Overal waar je klanten zijn.</h2>
+          </div>
+        </div>
+        <div className="cards">
+          {channels.map(({ className, icon, title, text }) => (
+            <div className={className} key={title}>
+              <SiteIcon icon={icon} size={40} style={{ color: "#151613" }} />
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
