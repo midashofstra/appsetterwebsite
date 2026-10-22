@@ -64,6 +64,10 @@ nav{display:flex;align-items:center;justify-content:space-between;gap:20px;heigh
 .pill i{width:22px;height:22px;border-radius:99px;background:var(--g)}
 .hx{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.08em .26em;max-width:1080px;margin:28px auto 0;font-size:clamp(42px,6.4vw,92px);line-height:1.08;letter-spacing:-.045em;font-weight:800}
 .tiles{display:inline-flex;align-items:center}
+/* Hero headline slots: one inline width; tiles stacked (prototype deck) */
+.hx .tiles{position:relative;display:inline-flex;width:1.04em;height:1.04em;vertical-align:middle;flex:none}
+.hx .tiles:has(.as-tile){width:1.18em;height:1.18em}
+.hx .tiles>.tile{position:absolute;left:0;top:0;margin-left:0}
 .tile{width:1.04em;height:1.04em;display:inline-flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--line);border-radius:.24em;box-shadow:var(--shadow);margin-left:-.18em;transform:rotate(var(--rot));will-change:transform;-webkit-user-drag:none;user-select:none}
 .tile:first-child{margin-left:0}
 .tile img{width:56%;height:56%;object-fit:contain;-webkit-user-drag:none;user-select:none}
