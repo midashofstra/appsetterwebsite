@@ -13,7 +13,7 @@ const figtree = Figtree({
 const defaultTheme = getDefaultThemeStyle();
 
 export const metadata: Metadata = {
-  title: "appointmentsetter.app | AI appointment setter voor LinkedIn, e-mail en WhatsApp",
+  title: "Appointment Setter | AI appointment setter voor LinkedIn, e-mail en WhatsApp",
   description:
     "Een AI-agent die je leads opvolgt via LinkedIn, e-mail en WhatsApp en afspraken direct in je agenda plant.",
 };
