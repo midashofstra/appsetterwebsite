@@ -1,0 +1,809 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<script>document.documentElement.classList.add("gs")</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>appointmentsetter.app | AI appointment setter voor LinkedIn, e-mail en WhatsApp</title>
+<meta name="description" content="Een AI-agent die je leads opvolgt via LinkedIn, e-mail en WhatsApp en afspraken direct in je agenda plant.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' rx='30' fill='%238BF15B'/%3E%3Cg transform='rotate(-8 60 64)'%3E%3Crect x='25' y='35' width='62' height='56' rx='18' fill='%23fff' stroke='%23151613' stroke-width='7'/%3E%3Crect x='38' y='22' width='10' height='22' rx='5' fill='%23151613'/%3E%3Crect x='64' y='22' width='10' height='22' rx='5' fill='%23151613'/%3E%3Cellipse cx='49' cy='64' rx='7' ry='10' fill='%23151613'/%3E%3Cellipse cx='68' cy='64' rx='7' ry='10' fill='%23151613'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --g:#8BF15B;
+  --g-soft:#F1FCE9;
+  --g-mid:#DDF8CC;
+  --g-ink:#2F6B12;
+  --ink:#151613;
+  --text:#43453F;
+  --muted:#73766D;
+  --line:#E6E8E2;
+  --bg:#FFFFFF;
+  --tint:#F7F8F5;
+  --shadow:0 1px 2px rgba(21,22,19,.05),0 10px 30px -12px rgba(21,22,19,.14);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{margin:0;font-family:'Figtree',system-ui,-apple-system,'Segoe UI',sans-serif;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+svg,img{display:block;max-width:100%}
+a{color:inherit}
+h1,h2,h3,p{margin:0}
+:focus-visible{outline:2px solid var(--g-ink);outline-offset:3px;border-radius:10px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+h2{font-size:clamp(32px,4vw,54px);line-height:1.05;letter-spacing:-.035em;font-weight:800}
+.sub{font-size:clamp(17px,1.5vw,20px);line-height:1.6;color:var(--text)}
+.label{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:600;color:var(--g-ink);margin-bottom:16px}
+.label i{width:8px;height:8px;border-radius:9px;background:var(--g)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;height:52px;padding:0 24px;border-radius:999px;font:700 16px/1 'Figtree',sans-serif;text-decoration:none;border:1.5px solid var(--ink);cursor:pointer;transition:transform .2s ease,background .2s ease,box-shadow .2s ease}
+.btn-main{background:var(--g);color:var(--ink)}
+.btn-main:hover{transform:translateY(-2px);box-shadow:0 10px 24px -10px rgba(47,107,18,.5)}
+.btn-ghost{background:#fff;color:var(--ink);border-color:var(--line)}
+.btn-ghost:hover{border-color:var(--ink)}
+.btn-sm{height:42px;padding:0 18px;font-size:15px}
+
+/* nav */
+header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding-top:env(safe-area-inset-top,0px);transition:box-shadow .2s}
+header.scrolled{box-shadow:0 1px 0 var(--line)}
+nav{display:flex;align-items:center;justify-content:space-between;gap:20px;height:70px}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;font-weight:800;font-size:18px;letter-spacing:-.02em}
+.navlinks{display:flex;gap:30px;font-size:15px;font-weight:500}
+.navlinks a{text-decoration:none;color:var(--text)}
+.navlinks a:hover{color:var(--ink)}
+@media (max-width:880px){.navlinks{display:none}}
+@media (max-width:440px){.brand span{display:none}}
+
+/* hero */
+.hero{position:relative;padding:84px 0 40px;text-align:center;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:80px 80px;background-position:center top}
+.hero::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(255,255,255,.4),#fff 72%);pointer-events:none}
+.hero .wrap{position:relative;z-index:1}
+.pill{display:inline-flex;align-items:center;gap:10px;height:36px;padding:0 16px 0 8px;border-radius:999px;background:#fff;border:1px solid var(--line);font-weight:600;font-size:14.5px;color:var(--text);box-shadow:var(--shadow)}
+.pill i{width:22px;height:22px;border-radius:99px;background:var(--g)}
+.hx{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.08em .26em;max-width:1080px;margin:28px auto 0;font-size:clamp(42px,6.4vw,92px);line-height:1.08;letter-spacing:-.045em;font-weight:800}
+.tiles{display:inline-flex;align-items:center}
+.tile{width:1.04em;height:1.04em;display:inline-flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--line);border-radius:.24em;box-shadow:var(--shadow);margin-left:-.18em;transform:rotate(var(--rot));will-change:transform}
+.tile:first-child{margin-left:0}
+.tile img{width:56%;height:56%;object-fit:contain}
+.t1{--rot:-4deg;animation-delay:.3s}.t2{--rot:2deg;animation-delay:.4s;z-index:1}.t3{--rot:-1deg;animation-delay:.5s}
+.t4{--rot:-3deg;animation-delay:.65s}.t5{--rot:3deg;animation-delay:.75s;z-index:1}
+.t6{--rot:-3deg;animation-delay:.9s}.t7{--rot:2deg;animation-delay:1s;z-index:1}.t8{--rot:-2deg;animation-delay:1.1s;z-index:2}
+.tile svg{width:58%;height:58%}
+
+/* Geanimeerd appointmentsetter-icoon (loop van 6s, zoals de video) */
+.as-tile{width:1.18em;height:1.18em;background:#8BF15B;border-color:#7ADA4F;overflow:hidden}
+.as-tile svg.as-icon{width:100%;height:100%}
+.as-happy,.as-sleepy{opacity:0}
+.hero .sub{max-width:580px;margin:26px auto 0}
+.ctas{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:34px}
+.ticks{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:center;margin-top:22px;font-size:14.5px;font-weight:500;color:var(--muted)}
+.ticks span{display:inline-flex;align-items:center;gap:7px}
+
+/* product */
+.stage{position:relative;max-width:1040px;margin:72px auto 0}
+.mascot-float{position:absolute;top:-62px;right:40px;z-index:5;width:104px}
+.app{position:relative;background:#fff;border:1px solid var(--line);border-radius:28px;box-shadow:0 30px 70px -30px rgba(21,22,19,.25);overflow:hidden;display:flex;text-align:left;min-height:440px}
+.side{flex:0 0 280px;border-right:1px solid var(--line);background:var(--tint);padding:18px;display:flex;flex-direction:column;gap:4px}
+.side h4{margin:4px 10px 10px;font-size:13px;font-weight:600;color:var(--muted)}
+.row{display:flex;align-items:center;gap:12px;padding:10px;border-radius:14px}
+.row.on{background:#fff;box-shadow:0 0 0 1px var(--line)}
+.av{flex:none;width:36px;height:36px;border-radius:99px;background:#ECEEE8;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+.row b{display:block;font-size:14px;font-weight:600}
+.row small{font-size:12.5px;color:var(--muted)}
+.tag{margin-left:auto;font-size:12px;font-weight:600;padding:4px 9px;border-radius:99px;background:#ECEEE8;color:var(--text)}
+.tag.g{background:var(--g-mid);color:var(--g-ink)}
+.main{flex:1;min-width:0;padding:22px 24px;display:flex;flex-direction:column;gap:12px}
+.chat-top{display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.chat-top .who{display:flex;gap:12px;align-items:center}
+.chat-top b{display:block;font-size:15px}
+.chat-top small{font-size:13px;color:var(--muted)}
+.live{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--g-ink)}
+.live i{width:8px;height:8px;border-radius:9px;background:var(--g);animation:ping 2s infinite}
+.msg{max-width:76%;padding:11px 15px;font-size:15.5px;line-height:1.45;border-radius:18px;}
+.msg.in{align-self:flex-start;background:#F1F2EE;border-bottom-left-radius:6px}
+.msg.out{align-self:flex-end;background:var(--g);border-bottom-right-radius:6px}
+.m1{animation-delay:1.2s}.m2{animation-delay:1.9s}.m3{animation-delay:2.6s}.m4{animation-delay:3.3s}
+.booked{position:absolute;left:-26px;bottom:34px;z-index:6;background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:14px 16px;display:flex;align-items:center;gap:12px;text-align:left;}
+.booked .ok{flex:none;width:42px;height:42px;border-radius:13px;background:var(--g);display:flex;align-items:center;justify-content:center}
+.booked b{display:block;font-size:15px}
+.booked span{font-size:13.5px;color:var(--muted)}
+@media (max-width:820px){.side{display:none}.booked{left:12px;bottom:-24px}.mascot-float{width:80px;top:-50px;right:12px}}
+
+/* logos */
+.logos{padding:100px 0 0;text-align:center}
+.logos p{font-size:14px;font-weight:500;color:var(--muted)}
+.logo-row{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:20px}
+.logo-row span{display:inline-flex;align-items:center;gap:10px;height:48px;padding:0 18px 0 14px;border-radius:999px;border:1px solid var(--line);font-weight:600;font-size:15px;background:#fff}
+.logo-row img{width:20px;height:20px;object-fit:contain}
+
+/* sections */
+section{padding:130px 0}
+.head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:52px}
+.head h2{max-width:760px}
+.cards{display:flex;flex-wrap:wrap;gap:20px}
+.card{flex:1 1 300px;background:#fff;border:1px solid var(--line);border-radius:24px;padding:30px;display:flex;flex-direction:column;gap:12px;transition:box-shadow .3s ease;will-change:transform}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.card h3{font-size:23px;line-height:1.2;letter-spacing:-.02em;font-weight:700}
+.card p{font-size:17px;line-height:1.55;color:var(--text)}
+.card.g{background:var(--g-soft);border-color:var(--g-mid)}
+.num-ic{width:44px;height:44px;border-radius:14px;background:var(--tint);display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.card.g .num-ic{background:var(--g)}
+
+/* guide */
+.soft{background:var(--tint)}
+.guide{display:flex;flex-wrap:wrap;gap:64px;align-items:center}
+.guide .copy{flex:1 1 440px;display:flex;flex-direction:column;gap:22px}
+.guide .list{flex:1 1 440px;display:flex;flex-direction:column;gap:12px}
+.feat{display:flex;align-items:center;gap:16px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px 20px}
+.ico{flex:none;width:44px;height:44px;border-radius:13px;background:var(--g-soft);display:flex;align-items:center;justify-content:center}
+.feat b{display:block;font-size:17.5px;font-weight:700}
+.feat span{font-size:15.5px;color:var(--text)}
+.quote{margin-top:64px;background:#fff;border:1px solid var(--line);border-radius:24px;padding:36px;display:flex;flex-wrap:wrap;gap:24px;align-items:flex-end;justify-content:space-between}
+.quote blockquote{margin:0;flex:1 1 520px;font-size:clamp(21px,2.1vw,28px);line-height:1.4;font-weight:600;letter-spacing:-.015em}
+.quote figcaption{display:flex;align-items:center;gap:12px;font-size:15px}
+.quote figcaption i{width:44px;height:44px;border-radius:99px;background:#ECEEE8}
+.quote figcaption span{display:block;color:var(--muted)}
+
+/* manifest + bewijs */
+.manifest{padding:40px 0 120px;text-align:center}
+.manifest h2{max-width:980px;margin:0 auto;font-size:clamp(30px,4.2vw,58px);line-height:1.12}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:72px}
+@media (max-width:700px){.stats{grid-template-columns:minmax(0,1fr)}}
+.stat{background:#fff;border:1px solid var(--line);border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:6px}
+.stat b{font-size:clamp(40px,4.4vw,60px);font-weight:800;letter-spacing:-.04em;line-height:1}
+.stat span{font-size:16px;color:var(--text)}
+.quote{margin-top:20px}
+.clogos{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:40px}
+.clogos span{height:48px;min-width:120px;padding:0 18px;border-radius:14px;border:1px dashed #CFD2CA;display:inline-flex;align-items:center;justify-content:center;font-size:14px;color:var(--muted)}
+
+/* steps */
+.steps{position:relative;display:flex;flex-wrap:wrap;gap:28px}
+.steps .line{position:absolute;left:30px;right:30px;top:27px;height:2px;background:var(--line)}
+.steps .line i{display:block;height:100%;width:100%;background:var(--g);transform-origin:left center;transform:scaleX(0)}
+.step{position:relative;flex:1 1 300px;display:flex;flex-direction:column;gap:14px}
+.num{width:56px;height:56px;border-radius:99px;background:#fff;border:1.5px solid var(--ink);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800}
+.step:last-child .num{background:var(--g);border-color:var(--g)}
+.step h3{font-size:24px;font-weight:700;letter-spacing:-.02em;margin-top:6px}
+.step p{font-size:17px;line-height:1.55;color:var(--text);max-width:330px}
+.mini{margin-top:6px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:8px;max-width:360px}
+.mini .r{display:flex;align-items:center;gap:10px;font-size:14.5px;font-weight:500;padding:9px 11px;border-radius:12px;background:var(--tint)}
+.mini .r img{width:18px;height:18px}
+.mini .r .tag{margin-left:auto}
+.cal{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.cal i{height:26px;border-radius:8px;background:var(--tint)}
+.cal i.x{background:var(--g)}
+@media (max-width:960px){.steps .line{display:none}}
+
+/* channels */
+.chan .card svg{margin-bottom:8px}
+
+/* stakes */
+.compare{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+@media (max-width:760px){.compare{grid-template-columns:minmax(0,1fr)}}
+.col{border-radius:24px;padding:32px;display:flex;flex-direction:column;gap:16px}
+.col.no{background:#fff;border:1px dashed #CFD2CA}
+.col.yes{background:var(--g-soft);border:1px solid var(--g-mid)}
+.col h3{font-size:18px;font-weight:700}
+.col.no h3{color:var(--muted)}
+.col.yes h3{color:var(--g-ink)}
+.it{display:flex;gap:12px;align-items:flex-start;font-size:18px;line-height:1.45;color:var(--text)}
+.col.yes .it{color:var(--ink)}
+.it svg{flex:none;margin-top:3px}
+
+/* faq */
+.faq{max-width:820px;margin:0 auto}
+.faq h2{text-align:center;margin-bottom:40px}
+details{border-bottom:1px solid var(--line)}
+details:first-of-type{border-top:1px solid var(--line)}
+summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:22px 4px;font-size:19px;font-weight:600}
+summary::-webkit-details-marker{display:none}
+.pl{flex:none;width:30px;height:30px;border-radius:99px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;transition:transform .25s ease,background .25s ease,border-color .25s}
+details[open] .pl{transform:rotate(45deg);background:var(--g);border-color:var(--g)}
+details p{padding:0 4px 22px;font-size:17px;line-height:1.6;color:var(--text);max-width:640px}
+
+/* cta */
+.cta{background:var(--g);border-radius:36px;padding:clamp(40px,6vw,84px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:40px}
+.cta > div{flex:1 1 460px;display:flex;flex-direction:column;gap:20px}
+.cta h2{font-size:clamp(36px,5vw,68px)}
+.cta .sub{color:#1f3a10;max-width:520px}
+.cta .btn-ink{background:var(--ink);color:#fff;border-color:var(--ink)}
+.cta .btn-ink:hover{transform:translateY(-2px)}
+.cta .btn-ghost{background:transparent;border-color:rgba(21,22,19,.35)}
+.cta .btn-ghost:hover{border-color:var(--ink)}
+.cta svg.m{flex:none;width:200px;max-width:50vw}
+
+footer{border-top:1px solid var(--line)}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:20px;padding-block:40px calc(40px + env(safe-area-inset-bottom,0px));font-size:15px;color:var(--muted)}
+footer .links{display:flex;gap:22px}
+footer .links a{text-decoration:none}
+footer .links a:hover{color:var(--ink)}
+
+/* motion */
+.gs .hero-hide{visibility:hidden}
+.wm{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.1em;margin-bottom:-.1em}
+.wi{display:inline-block;will-change:transform}
+.typing{align-self:flex-end;display:none;gap:5px;padding:14px 16px;border-radius:18px;border-bottom-right-radius:6px;background:var(--g)}
+.typing i{width:7px;height:7px;border-radius:9px;background:var(--ink);opacity:.5}
+.progress{position:fixed;left:0;top:0;height:3px;width:100%;background:var(--g);transform-origin:left center;transform:scaleX(0);z-index:60}
+details p{overflow:hidden}
+@keyframes in{to{opacity:1;transform:none}}
+@keyframes tile{to{opacity:1;transform:rotate(var(--rot))}}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-8px) rotate(-2deg)}}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(139,241,91,.7)}100%{box-shadow:0 0 0 10px rgba(139,241,91,0)}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .steps .line i{width:100%}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="agent">
+      <rect x="31" y="41" width="62" height="56" rx="18" fill="#151613"/>
+      <rect x="25" y="35" width="62" height="56" rx="18" fill="#fff" stroke="#151613" stroke-width="5"/>
+      <rect x="38" y="22" width="10" height="22" rx="5" fill="#151613"/>
+      <rect x="64" y="22" width="10" height="22" rx="5" fill="#151613"/>
+      <ellipse cx="49" cy="64" rx="7" ry="10" fill="#151613"/>
+      <ellipse cx="68" cy="64" rx="7" ry="10" fill="#151613"/>
+      <circle cx="52" cy="60" r="2.6" fill="#fff"/>
+      <circle cx="71" cy="60" r="2.6" fill="#fff"/>
+    </g>
+    <symbol id="check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<div class="progress" id="progress" aria-hidden="true"></div>
+<header id="hdr">
+  <div class="wrap">
+    <nav aria-label="Hoofdmenu">
+      <a href="#top" class="brand">
+        <svg width="38" height="38" viewBox="0 0 120 120" aria-hidden="true"><rect width="120" height="120" rx="30" fill="#8BF15B"/><use href="#agent" transform="rotate(-8 60 64)"/></svg>
+        <span>appointmentsetter.app</span>
+      </a>
+      <div class="navlinks">
+        <a href="#probleem">Probleem</a>
+        <a href="#waarom">Waarom wij</a>
+        <a href="#plan">Hoe het werkt</a>
+        <a href="#kanalen">Kanalen</a>
+        <a href="#faq">Vragen</a>
+      </div>
+      <a class="btn btn-main btn-sm" href="#start">Probeer voor €1</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="wrap">
+    <span class="pill hero-hide"><i></i>AI appointment setter voor LinkedIn, e-mail en WhatsApp</span>
+
+    <h1 class="hx hero-hide">
+      <span>Laat</span>
+      <span class="tiles" role="img" aria-label="appointmentsetter">
+        <span class="tile t1 as-tile">
+          <svg class="as-icon" viewBox="0 0 120 120" aria-hidden="true">
+            <rect width="120" height="120" rx="30" fill="#8BF15B"/>
+            <g class="as-body">
+              <rect x="31" y="41" width="62" height="56" rx="18" fill="#151613"/>
+              <rect x="25" y="35" width="62" height="56" rx="18" fill="#fff" stroke="#151613" stroke-width="6"/>
+              <rect x="38" y="22" width="10" height="22" rx="5" fill="#151613"/>
+              <rect x="64" y="22" width="10" height="22" rx="5" fill="#151613"/>
+              <g class="as-open"><g class="as-look">
+                <ellipse cx="49" cy="64" rx="7" ry="10" fill="#151613"/>
+                <ellipse cx="68" cy="64" rx="7" ry="10" fill="#151613"/>
+                <circle cx="52" cy="60" r="2.6" fill="#fff"/>
+                <circle cx="71" cy="60" r="2.6" fill="#fff"/>
+              </g></g>
+              <g class="as-happy" fill="none" stroke="#151613" stroke-width="4" stroke-linecap="round">
+                <path d="M42 63q7 7 14 0"/><path d="M61 63q7 7 14 0"/>
+              </g>
+              <g class="as-sleepy" fill="#151613">
+                <path d="M42 63h14a7 6 0 0 1-14 0z"/><path d="M61 63h14a7 6 0 0 1-14 0z"/>
+              </g>
+            </g>
+          </svg>
+        </span>
+      </span>
+      <span>je</span>
+      <span class="tiles" role="img" aria-label="Outlook en Google Agenda">
+        <span class="tile t4"><img src="data:image/svg+xml,%3Csvg%20width%3D%2270%22%20height%3D%2270%22%20viewBox%3D%220%200%2070%2070%22%20fill%3D%22none%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20clip-path%3D%22url%28%23clip0_882_213%29%22%3E%3Cpath%20d%3D%22M0%2019.2577L33.2882%2015.559C34.2069%2015.4569%2035.1345%2015.4569%2036.0533%2015.559L69.3417%2019.2577V56.8176C69.3417%2063.7321%2063.736%2069.3376%2056.8215%2069.3376H12.52C5.60541%2069.3376%200%2063.7321%200%2056.8176L0%2019.2577Z%22%20fill%3D%22url%28%23paint0_linear_882_213%29%22/%3E%3Cpath%20d%3D%22M0%2012.52C0%205.60537%205.60537%200%2012.52%200L56.8215%200C63.736%200%2069.3417%205.60537%2069.3417%2012.52V19.2615H0L0%2012.52Z%22%20fill%3D%22url%28%23paint1_linear_882_213%29%22/%3E%3Cg%20filter%3D%22url%28%23filter0_dd_882_213%29%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M18.2919%2028.8906C15.6325%2028.8906%2013.4766%2031.0463%2013.4766%2033.706C13.4766%2036.3656%2015.6325%2038.5213%2018.2919%2038.5213C20.9514%2038.5213%2023.1074%2036.3656%2023.1074%2033.706C23.1074%2031.0463%2020.9514%2028.8906%2018.2919%2028.8906ZM18.2919%2044.2998C15.6325%2044.2998%2013.4766%2046.4555%2013.4766%2049.1152C13.4766%2051.7748%2015.6325%2053.9306%2018.2919%2053.9306C20.9514%2053.9306%2023.1074%2051.7748%2023.1074%2049.1152C23.1074%2046.4555%2020.9514%2044.2998%2018.2919%2044.2998ZM29.8488%2033.706C29.8488%2031.0463%2032.0046%2028.8906%2034.6643%2028.8906C37.3238%2028.8906%2039.4796%2031.0463%2039.4796%2033.706C39.4796%2036.3656%2037.3238%2038.5213%2034.6643%2038.5213C32.0046%2038.5213%2029.8488%2036.3656%2029.8488%2033.706ZM34.6643%2044.2998C32.0046%2044.2998%2029.8488%2046.4555%2029.8488%2049.1152C29.8488%2051.7748%2032.0046%2053.9306%2034.6643%2053.9306C37.3238%2053.9306%2039.4796%2051.7748%2039.4796%2049.1152C39.4796%2046.4555%2037.3238%2044.2998%2034.6643%2044.2998ZM46.2212%2033.706C46.2212%2031.0463%2048.3769%2028.8906%2051.0365%2028.8906C53.6961%2028.8906%2055.8519%2031.0463%2055.8519%2033.706C55.8519%2036.3656%2053.6961%2038.5213%2051.0365%2038.5213C48.3769%2038.5213%2046.2212%2036.3656%2046.2212%2033.706Z%22%20fill%3D%22url%28%23paint2_linear_882_213%29%22/%3E%3C/g%3E%3C/g%3E%3Cdefs%3E%3Cfilter%20id%3D%22filter0_dd_882_213%22%20x%3D%2210.2425%22%20y%3D%2227.2736%22%20width%3D%2248.8431%22%20height%3D%2231.5071%22%20filterUnits%3D%22userSpaceOnUse%22%20color-interpolation-filters%3D%22sRGB%22%3E%3CfeFlood%20flood-opacity%3D%220%22%20result%3D%22BackgroundImageFix%22/%3E%3CfeColorMatrix%20in%3D%22SourceAlpha%22%20type%3D%22matrix%22%20values%3D%220%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%20127%200%22%20result%3D%22hardAlpha%22/%3E%3CfeOffset%20dy%3D%221.61702%22/%3E%3CfeGaussianBlur%20stdDeviation%3D%221.61702%22/%3E%3CfeColorMatrix%20type%3D%22matrix%22%20values%3D%220%200%200%200%200.0156863%200%200%200%200%200.286275%200%200%200%200%200.811765%200%200%200%200.32%200%22/%3E%3CfeBlend%20mode%3D%22normal%22%20in2%3D%22BackgroundImageFix%22%20result%3D%22effect1_dropShadow_882_213%22/%3E%3CfeColorMatrix%20in%3D%22SourceAlpha%22%20type%3D%22matrix%22%20values%3D%220%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%20127%200%22%20result%3D%22hardAlpha%22/%3E%3CfeOffset%20dy%3D%220.323403%22/%3E%3CfeGaussianBlur%20stdDeviation%3D%220.161702%22/%3E%3CfeColorMatrix%20type%3D%22matrix%22%20values%3D%220%200%200%200%200.0156863%200%200%200%200%200.286275%200%200%200%200%200.811765%200%200%200%200.24%200%22/%3E%3CfeBlend%20mode%3D%22normal%22%20in2%3D%22effect1_dropShadow_882_213%22%20result%3D%22effect2_dropShadow_882_213%22/%3E%3CfeBlend%20mode%3D%22normal%22%20in%3D%22SourceGraphic%22%20in2%3D%22effect2_dropShadow_882_213%22%20result%3D%22shape%22/%3E%3C/filter%3E%3ClinearGradient%20id%3D%22paint0_linear_882_213%22%20x1%3D%2234.6707%22%20y1%3D%2269.3376%22%20x2%3D%2234.6707%22%20y2%3D%2224.3941%22%20gradientUnits%3D%22userSpaceOnUse%22%3E%3Cstop%20stop-color%3D%22%230091EB%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%233DCBFF%22/%3E%3C/linearGradient%3E%3ClinearGradient%20id%3D%22paint1_linear_882_213%22%20x1%3D%2232.194%22%20y1%3D%22-8.66766%22%20x2%3D%2271.8657%22%20y2%3D%2242.3384%22%20gradientUnits%3D%22userSpaceOnUse%22%3E%3Cstop%20stop-color%3D%22%230078D4%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%230068C6%22/%3E%3C/linearGradient%3E%3ClinearGradient%20id%3D%22paint2_linear_882_213%22%20x1%3D%2234.6643%22%20y1%3D%2228.8906%22%20x2%3D%2234.6643%22%20y2%3D%2253.9306%22%20gradientUnits%3D%22userSpaceOnUse%22%3E%3Cstop%20stop-color%3D%22%23EBFBFF%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23BDF2FF%22/%3E%3C/linearGradient%3E%3CclipPath%20id%3D%22clip0_882_213%22%3E%3Crect%20width%3D%2269.3396%22%20height%3D%2269.3396%22%20fill%3D%22white%22/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E" alt=""></span><span class="tile t5"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20200%20200%22%3E%3Cg%20transform%3D%22translate%283.75%203.75%29%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M148.882%2C43.618l-47.368-5.263l-57.895%2C5.263L38.355%2C96.25l5.263%2C52.632l52.632%2C6.579l52.632-6.579l5.263-53.947L148.882%2C43.618z%22/%3E%3Cpath%20fill%3D%22%231A73E8%22%20d%3D%22M65.211%2C125.276c-3.934-2.658-6.658-6.539-8.145-11.671l9.132-3.763c0.829%2C3.158%2C2.276%2C5.605%2C4.342%2C7.342c2.053%2C1.737%2C4.553%2C2.592%2C7.474%2C2.592c2.987%2C0%2C5.553-0.908%2C7.697-2.724s3.224-4.132%2C3.224-6.934c0-2.868-1.132-5.211-3.395-7.026s-5.105-2.724-8.5-2.724h-5.276v-9.039H76.5c2.921%2C0%2C5.382-0.789%2C7.382-2.368c2-1.579%2C3-3.737%2C3-6.487c0-2.447-0.895-4.395-2.684-5.855s-4.053-2.197-6.803-2.197c-2.684%2C0-4.816%2C0.711-6.395%2C2.145s-2.724%2C3.197-3.447%2C5.276l-9.039-3.763c1.197-3.395%2C3.395-6.395%2C6.618-8.987c3.224-2.592%2C7.342-3.895%2C12.342-3.895c3.697%2C0%2C7.026%2C0.711%2C9.974%2C2.145c2.947%2C1.434%2C5.263%2C3.421%2C6.934%2C5.947c1.671%2C2.539%2C2.5%2C5.382%2C2.5%2C8.539c0%2C3.224-0.776%2C5.947-2.329%2C8.184c-1.553%2C2.237-3.461%2C3.947-5.724%2C5.145v0.539c2.987%2C1.25%2C5.421%2C3.158%2C7.342%2C5.724c1.908%2C2.566%2C2.868%2C5.632%2C2.868%2C9.211s-0.908%2C6.776-2.724%2C9.579c-1.816%2C2.803-4.329%2C5.013-7.513%2C6.618c-3.197%2C1.605-6.789%2C2.421-10.776%2C2.421C73.408%2C129.263%2C69.145%2C127.934%2C65.211%2C125.276z%22/%3E%3Cpath%20fill%3D%22%231A73E8%22%20d%3D%22M121.25%2C79.961l-9.974%2C7.25l-5.013-7.605l17.987-12.974h6.895v61.197h-9.895L121.25%2C79.961z%22/%3E%3Cpath%20fill%3D%22%23EA4335%22%20d%3D%22M148.882%2C196.25l47.368-47.368l-23.684-10.526l-23.684%2C10.526l-10.526%2C23.684L148.882%2C196.25z%22/%3E%3Cpath%20fill%3D%22%2334A853%22%20d%3D%22M33.092%2C172.566l10.526%2C23.684h105.263v-47.368H43.618L33.092%2C172.566z%22/%3E%3Cpath%20fill%3D%22%234285F4%22%20d%3D%22M12.039-3.75C3.316-3.75-3.75%2C3.316-3.75%2C12.039v136.842l23.684%2C10.526l23.684-10.526V43.618h105.263l10.526-23.684L148.882-3.75H12.039z%22/%3E%3Cpath%20fill%3D%22%23188038%22%20d%3D%22M-3.75%2C148.882v31.579c0%2C8.724%2C7.066%2C15.789%2C15.789%2C15.789h31.579v-47.368H-3.75z%22/%3E%3Cpath%20fill%3D%22%23FBBC04%22%20d%3D%22M148.882%2C43.618v105.263h47.368V43.618l-23.684-10.526L148.882%2C43.618z%22/%3E%3Cpath%20fill%3D%22%231967D2%22%20d%3D%22M196.25%2C43.618V12.039c0-8.724-7.066-15.789-15.789-15.789h-31.579v47.368H196.25z%22/%3E%3C/g%3E%3C/svg%3E" alt=""></span>
+      </span>
+      <span>vullen,</span>
+      <span>direct vanuit</span>
+      <span class="tiles" role="img" aria-label="Gmail, LinkedIn en WhatsApp">
+        <span class="tile t6"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%2252%2042%2088%2066%22%3E%3Cpath%20fill%3D%22%234285f4%22%20d%3D%22M58%20108h14V74L52%2059v43c0%203.32%202.69%206%206%206%22/%3E%3Cpath%20fill%3D%22%2334a853%22%20d%3D%22M120%20108h14c3.32%200%206-2.69%206-6V59l-20%2015%22/%3E%3Cpath%20fill%3D%22%23fbbc04%22%20d%3D%22M120%2048v26l20-15v-8c0-7.42-8.47-11.65-14.4-7.2%22/%3E%3Cpath%20fill%3D%22%23ea4335%22%20d%3D%22M72%2074V48l24%2018%2024-18v26L96%2092%22/%3E%3Cpath%20fill%3D%22%23c5221f%22%20d%3D%22M52%2051v8l20%2015V48l-5.6-4.2c-5.94-4.45-14.4-.22-14.4%207.2%22/%3E%3C/svg%3E" alt=""></span><span class="tile t7"><img src="data:image/svg+xml,%3Csvg%20width%3D%2277%22%20height%3D%2277%22%20viewBox%3D%220%200%2077%2077%22%20fill%3D%22none%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Crect%20x%3D%225.5%22%20y%3D%228.24805%22%20width%3D%2260.4834%22%20height%3D%2263.2326%22%20fill%3D%22white%22/%3E%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M71.4034%200L5.80274%200C2.66493%200%200%202.48165%200%205.53881L0%2071.4364C0%2074.4972%201.74852%2076.9788%204.88632%2076.9788H70.4869C73.6284%2076.9788%2076.9788%2074.4972%2076.9788%2071.4364V5.53881C76.9788%202.48165%2074.5448%200%2071.4034%200ZM29.3253%2029.3253H39.6881V34.6075H39.8017C41.3816%2031.7593%2046.048%2028.8671%2051.8178%2028.8671C62.8917%2028.8671%2065.9819%2034.7468%2065.9819%2045.6374V65.9819H54.9849V47.6426C54.9849%2042.7672%2053.0384%2038.4894%2048.4857%2038.4894C42.9578%2038.4894%2040.3222%2042.2321%2040.3222%2048.3757V65.9819H29.3253V29.3253ZM10.997%2065.9819H21.994V29.3253H10.997V65.9819ZM23.3686%2016.4955C23.369%2017.3979%2023.1916%2018.2916%2022.8466%2019.1255C22.5016%2019.9594%2021.9957%2020.7172%2021.3578%2021.3556C20.7199%2021.9939%2019.9625%2022.5004%2019.1288%2022.846C18.2952%2023.1916%2017.4016%2023.3696%2016.4991%2023.3699C15.5967%2023.3701%2014.703%2023.1926%2013.8692%2022.8474C13.0353%2022.5022%2012.2776%2021.9962%2011.6394%2021.3582C11.0012%2020.7201%2010.4948%2019.9626%2010.1494%2019.1289C9.80393%2018.2952%209.62609%2017.4016%209.62602%2016.4991C9.62587%2014.677%2010.3495%2012.9294%2011.6377%2011.6407C12.926%2010.352%2014.6733%209.6278%2016.4955%209.62731C18.3176%209.62683%2020.0653%2010.3501%2021.3543%2011.6381C22.6432%2012.9261%2023.3677%2014.6733%2023.3686%2016.4955Z%22%20fill%3D%22%230A66C2%22/%3E%3C/svg%3E" alt=""></span><span class="tile t8"><svg viewBox="0 0 175.216 175.552" aria-hidden="true"><defs><linearGradient id="wa-g" x1="85.915" x2="86.535" y1="32.567" y2="137.092" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#57d163"/><stop offset="1" stop-color="#23b33a"/></linearGradient><filter id="wa-f" width="1.115" height="1.114" x="-.057" y="-.057" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="3.531"/></filter></defs><path fill="#b3b3b3" d="m54.532 138.45 2.235 1.324c9.387 5.571 20.15 8.518 31.126 8.523h.023c33.707 0 61.139-27.426 61.153-61.135.006-16.335-6.349-31.696-17.895-43.251A60.75 60.75 0 0 0 87.94 25.983c-33.733 0-61.166 27.423-61.178 61.13a60.98 60.98 0 0 0 9.349 32.535l1.455 2.312-6.179 22.558zm-40.811 23.544L24.16 123.88c-6.438-11.154-9.825-23.808-9.821-36.772.017-40.556 33.021-73.55 73.578-73.55 19.681.01 38.154 7.669 52.047 21.572s21.537 32.383 21.53 52.037c-.018 40.553-33.027 73.553-73.578 73.553h-.032c-12.313-.005-24.412-3.094-35.159-8.954zm0 0" filter="url(#wa-f)"/><path fill="#fff" d="m12.966 161.238 10.439-38.114a73.42 73.42 0 0 1-9.821-36.772c.017-40.556 33.021-73.55 73.578-73.55 19.681.01 38.154 7.669 52.047 21.572s21.537 32.383 21.53 52.037c-.018 40.553-33.027 73.553-73.578 73.553h-.032c-12.313-.005-24.412-3.094-35.159-8.954z"/><path fill="url(#wa-g)" d="M87.184 25.227c-33.733 0-61.166 27.423-61.178 61.13a60.98 60.98 0 0 0 9.349 32.535l1.455 2.313-6.179 22.558 23.146-6.069 2.235 1.324c9.387 5.571 20.15 8.517 31.126 8.523h.023c33.707 0 61.14-27.426 61.153-61.135a60.75 60.75 0 0 0-17.895-43.251 60.75 60.75 0 0 0-43.235-17.928z"/><path fill="#fff" fill-rule="evenodd" d="M68.772 55.603c-1.378-3.061-2.828-3.123-4.137-3.176l-3.524-.043c-1.226 0-3.218.46-4.902 2.3s-6.435 6.287-6.435 15.332 6.588 17.785 7.506 19.013 12.718 20.381 31.405 27.75c15.529 6.124 18.689 4.906 22.061 4.6s10.877-4.447 12.408-8.74 1.532-7.971 1.073-8.74-1.685-1.226-3.525-2.146-10.877-5.367-12.562-5.981-2.91-.919-4.137.921-4.746 5.979-5.819 7.206-2.144 1.381-3.984.462-7.76-2.861-14.784-9.124c-5.465-4.873-9.154-10.891-10.228-12.73s-.114-2.835.808-3.751c.825-.824 1.838-2.147 2.759-3.22s1.224-1.84 1.836-3.065.307-2.301-.153-3.22-4.032-10.011-5.666-13.647"/></svg></span>
+      </span>
+    </h1>
+
+    <p class="sub hero-hide">Appointment Setter volgt elke lead op via LinkedIn, e-mail en WhatsApp en zet de afspraken in je agenda. Jij voert alleen nog de gesprekken.</p>
+    <div class="ctas hero-hide">
+      <a class="btn btn-main" href="#start">Probeer 3 dagen voor €1</a>
+      <a class="btn btn-ghost" href="#start">Laat ons je onboarden</a>
+    </div>
+    <div class="ticks hero-hide">
+      <span><svg width="18" height="18" style="color:#2F6B12"><use href="#check"/></svg>3 dagen proberen voor €1</span>
+      <span><svg width="18" height="18" style="color:#2F6B12"><use href="#check"/></svg>Geen setter meer nodig</span>
+      <span><svg width="18" height="18" style="color:#2F6B12"><use href="#check"/></svg>Jij kijkt altijd mee</span>
+    
+
+    <div class="stage hero-hide">
+      <svg class="mascot-float" viewBox="0 0 120 120" aria-hidden="true"><use href="#agent"/></svg>
+      <div class="app" role="img" aria-label="Voorbeeld van de inbox: de agent plant een afspraak via WhatsApp">
+        <aside class="side">
+          <h4>Gesprekken</h4>
+          <div class="row on"><span class="av">S</span><div><b>Sanne de Vries</b><small>WhatsApp</small></div><span class="tag g">Nu</span></div>
+          <div class="row"><span class="av">J</span><div><b>Jeroen Bakker</b><small>LinkedIn</small></div><span class="tag">Gepland</span></div>
+          <div class="row"><span class="av">M</span><div><b>Mila Jansen</b><small>E-mail</small></div><span class="tag">Opvolgen</span></div>
+          <div class="row"><span class="av">T</span><div><b>Thomas Visser</b><small>LinkedIn</small></div><span class="tag">Gepland</span></div>
+        </aside>
+        <div class="main">
+          <div class="chat-top">
+            <div class="who"><span class="av">S</span><div><b>Sanne de Vries</b><small>via WhatsApp</small></div></div>
+            <span class="live"><i></i>Agent actief</span>
+          </div>
+          <div class="msg in">Klinkt interessant. Wanneer kunnen we even bellen?</div>
+          <div class="typing" aria-hidden="true"><i></i><i></i><i></i></div>
+          <div class="msg out">Leuk! Past donderdag 10:00 of vrijdag 14:30 je beter?</div>
+          <div class="msg in">Donderdag 10:00 is top.</div>
+          <div class="msg out">Staat erin. Je krijgt zo een uitnodiging in je mail.</div>
+        </div>
+      </div>
+      <div class="booked">
+        <span class="ok"><svg width="20" height="20" style="color:#151613"><use href="#check"/></svg></span>
+        <div><b>Afspraak ingepland</b><span>Do 10:00, kennismaking met Sanne</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="logos">
+  <div class="wrap">
+    <p class="rv">Werkt met de tools die je al gebruikt</p>
+    <div class="logo-row rv d1">
+      <span><img src="data:image/svg+xml,%3Csvg%20width%3D%2277%22%20height%3D%2277%22%20viewBox%3D%220%200%2077%2077%22%20fill%3D%22none%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Crect%20x%3D%225.5%22%20y%3D%228.24805%22%20width%3D%2260.4834%22%20height%3D%2263.2326%22%20fill%3D%22white%22/%3E%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M71.4034%200L5.80274%200C2.66493%200%200%202.48165%200%205.53881L0%2071.4364C0%2074.4972%201.74852%2076.9788%204.88632%2076.9788H70.4869C73.6284%2076.9788%2076.9788%2074.4972%2076.9788%2071.4364V5.53881C76.9788%202.48165%2074.5448%200%2071.4034%200ZM29.3253%2029.3253H39.6881V34.6075H39.8017C41.3816%2031.7593%2046.048%2028.8671%2051.8178%2028.8671C62.8917%2028.8671%2065.9819%2034.7468%2065.9819%2045.6374V65.9819H54.9849V47.6426C54.9849%2042.7672%2053.0384%2038.4894%2048.4857%2038.4894C42.9578%2038.4894%2040.3222%2042.2321%2040.3222%2048.3757V65.9819H29.3253V29.3253ZM10.997%2065.9819H21.994V29.3253H10.997V65.9819ZM23.3686%2016.4955C23.369%2017.3979%2023.1916%2018.2916%2022.8466%2019.1255C22.5016%2019.9594%2021.9957%2020.7172%2021.3578%2021.3556C20.7199%2021.9939%2019.9625%2022.5004%2019.1288%2022.846C18.2952%2023.1916%2017.4016%2023.3696%2016.4991%2023.3699C15.5967%2023.3701%2014.703%2023.1926%2013.8692%2022.8474C13.0353%2022.5022%2012.2776%2021.9962%2011.6394%2021.3582C11.0012%2020.7201%2010.4948%2019.9626%2010.1494%2019.1289C9.80393%2018.2952%209.62609%2017.4016%209.62602%2016.4991C9.62587%2014.677%2010.3495%2012.9294%2011.6377%2011.6407C12.926%2010.352%2014.6733%209.6278%2016.4955%209.62731C18.3176%209.62683%2020.0653%2010.3501%2021.3543%2011.6381C22.6432%2012.9261%2023.3677%2014.6733%2023.3686%2016.4955Z%22%20fill%3D%22%230A66C2%22/%3E%3C/svg%3E" alt="">LinkedIn</span>
+      <span><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%2252%2042%2088%2066%22%3E%3Cpath%20fill%3D%22%234285f4%22%20d%3D%22M58%20108h14V74L52%2059v43c0%203.32%202.69%206%206%206%22/%3E%3Cpath%20fill%3D%22%2334a853%22%20d%3D%22M120%20108h14c3.32%200%206-2.69%206-6V59l-20%2015%22/%3E%3Cpath%20fill%3D%22%23fbbc04%22%20d%3D%22M120%2048v26l20-15v-8c0-7.42-8.47-11.65-14.4-7.2%22/%3E%3Cpath%20fill%3D%22%23ea4335%22%20d%3D%22M72%2074V48l24%2018%2024-18v26L96%2092%22/%3E%3Cpath%20fill%3D%22%23c5221f%22%20d%3D%22M52%2051v8l20%2015V48l-5.6-4.2c-5.94-4.45-14.4-.22-14.4%207.2%22/%3E%3C/svg%3E" alt="">Gmail</span>
+      <span><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20200%20200%22%3E%3Cg%20transform%3D%22translate%283.75%203.75%29%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M148.882%2C43.618l-47.368-5.263l-57.895%2C5.263L38.355%2C96.25l5.263%2C52.632l52.632%2C6.579l52.632-6.579l5.263-53.947L148.882%2C43.618z%22/%3E%3Cpath%20fill%3D%22%231A73E8%22%20d%3D%22M65.211%2C125.276c-3.934-2.658-6.658-6.539-8.145-11.671l9.132-3.763c0.829%2C3.158%2C2.276%2C5.605%2C4.342%2C7.342c2.053%2C1.737%2C4.553%2C2.592%2C7.474%2C2.592c2.987%2C0%2C5.553-0.908%2C7.697-2.724s3.224-4.132%2C3.224-6.934c0-2.868-1.132-5.211-3.395-7.026s-5.105-2.724-8.5-2.724h-5.276v-9.039H76.5c2.921%2C0%2C5.382-0.789%2C7.382-2.368c2-1.579%2C3-3.737%2C3-6.487c0-2.447-0.895-4.395-2.684-5.855s-4.053-2.197-6.803-2.197c-2.684%2C0-4.816%2C0.711-6.395%2C2.145s-2.724%2C3.197-3.447%2C5.276l-9.039-3.763c1.197-3.395%2C3.395-6.395%2C6.618-8.987c3.224-2.592%2C7.342-3.895%2C12.342-3.895c3.697%2C0%2C7.026%2C0.711%2C9.974%2C2.145c2.947%2C1.434%2C5.263%2C3.421%2C6.934%2C5.947c1.671%2C2.539%2C2.5%2C5.382%2C2.5%2C8.539c0%2C3.224-0.776%2C5.947-2.329%2C8.184c-1.553%2C2.237-3.461%2C3.947-5.724%2C5.145v0.539c2.987%2C1.25%2C5.421%2C3.158%2C7.342%2C5.724c1.908%2C2.566%2C2.868%2C5.632%2C2.868%2C9.211s-0.908%2C6.776-2.724%2C9.579c-1.816%2C2.803-4.329%2C5.013-7.513%2C6.618c-3.197%2C1.605-6.789%2C2.421-10.776%2C2.421C73.408%2C129.263%2C69.145%2C127.934%2C65.211%2C125.276z%22/%3E%3Cpath%20fill%3D%22%231A73E8%22%20d%3D%22M121.25%2C79.961l-9.974%2C7.25l-5.013-7.605l17.987-12.974h6.895v61.197h-9.895L121.25%2C79.961z%22/%3E%3Cpath%20fill%3D%22%23EA4335%22%20d%3D%22M148.882%2C196.25l47.368-47.368l-23.684-10.526l-23.684%2C10.526l-10.526%2C23.684L148.882%2C196.25z%22/%3E%3Cpath%20fill%3D%22%2334A853%22%20d%3D%22M33.092%2C172.566l10.526%2C23.684h105.263v-47.368H43.618L33.092%2C172.566z%22/%3E%3Cpath%20fill%3D%22%234285F4%22%20d%3D%22M12.039-3.75C3.316-3.75-3.75%2C3.316-3.75%2C12.039v136.842l23.684%2C10.526l23.684-10.526V43.618h105.263l10.526-23.684L148.882-3.75H12.039z%22/%3E%3Cpath%20fill%3D%22%23188038%22%20d%3D%22M-3.75%2C148.882v31.579c0%2C8.724%2C7.066%2C15.789%2C15.789%2C15.789h31.579v-47.368H-3.75z%22/%3E%3Cpath%20fill%3D%22%23FBBC04%22%20d%3D%22M148.882%2C43.618v105.263h47.368V43.618l-23.684-10.526L148.882%2C43.618z%22/%3E%3Cpath%20fill%3D%22%231967D2%22%20d%3D%22M196.25%2C43.618V12.039c0-8.724-7.066-15.789-15.789-15.789h-31.579v47.368H196.25z%22/%3E%3C/g%3E%3C/svg%3E" alt="">Google Agenda</span>
+      <span><img src="data:image/svg+xml,%3Csvg%20width%3D%2270%22%20height%3D%2270%22%20viewBox%3D%220%200%2070%2070%22%20fill%3D%22none%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20clip-path%3D%22url%28%23clip0_882_213%29%22%3E%3Cpath%20d%3D%22M0%2019.2577L33.2882%2015.559C34.2069%2015.4569%2035.1345%2015.4569%2036.0533%2015.559L69.3417%2019.2577V56.8176C69.3417%2063.7321%2063.736%2069.3376%2056.8215%2069.3376H12.52C5.60541%2069.3376%200%2063.7321%200%2056.8176L0%2019.2577Z%22%20fill%3D%22url%28%23paint0_linear_882_213%29%22/%3E%3Cpath%20d%3D%22M0%2012.52C0%205.60537%205.60537%200%2012.52%200L56.8215%200C63.736%200%2069.3417%205.60537%2069.3417%2012.52V19.2615H0L0%2012.52Z%22%20fill%3D%22url%28%23paint1_linear_882_213%29%22/%3E%3Cg%20filter%3D%22url%28%23filter0_dd_882_213%29%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M18.2919%2028.8906C15.6325%2028.8906%2013.4766%2031.0463%2013.4766%2033.706C13.4766%2036.3656%2015.6325%2038.5213%2018.2919%2038.5213C20.9514%2038.5213%2023.1074%2036.3656%2023.1074%2033.706C23.1074%2031.0463%2020.9514%2028.8906%2018.2919%2028.8906ZM18.2919%2044.2998C15.6325%2044.2998%2013.4766%2046.4555%2013.4766%2049.1152C13.4766%2051.7748%2015.6325%2053.9306%2018.2919%2053.9306C20.9514%2053.9306%2023.1074%2051.7748%2023.1074%2049.1152C23.1074%2046.4555%2020.9514%2044.2998%2018.2919%2044.2998ZM29.8488%2033.706C29.8488%2031.0463%2032.0046%2028.8906%2034.6643%2028.8906C37.3238%2028.8906%2039.4796%2031.0463%2039.4796%2033.706C39.4796%2036.3656%2037.3238%2038.5213%2034.6643%2038.5213C32.0046%2038.5213%2029.8488%2036.3656%2029.8488%2033.706ZM34.6643%2044.2998C32.0046%2044.2998%2029.8488%2046.4555%2029.8488%2049.1152C29.8488%2051.7748%2032.0046%2053.9306%2034.6643%2053.9306C37.3238%2053.9306%2039.4796%2051.7748%2039.4796%2049.1152C39.4796%2046.4555%2037.3238%2044.2998%2034.6643%2044.2998ZM46.2212%2033.706C46.2212%2031.0463%2048.3769%2028.8906%2051.0365%2028.8906C53.6961%2028.8906%2055.8519%2031.0463%2055.8519%2033.706C55.8519%2036.3656%2053.6961%2038.5213%2051.0365%2038.5213C48.3769%2038.5213%2046.2212%2036.3656%2046.2212%2033.706Z%22%20fill%3D%22url%28%23paint2_linear_882_213%29%22/%3E%3C/g%3E%3C/g%3E%3Cdefs%3E%3Cfilter%20id%3D%22filter0_dd_882_213%22%20x%3D%2210.2425%22%20y%3D%2227.2736%22%20width%3D%2248.8431%22%20height%3D%2231.5071%22%20filterUnits%3D%22userSpaceOnUse%22%20color-interpolation-filters%3D%22sRGB%22%3E%3CfeFlood%20flood-opacity%3D%220%22%20result%3D%22BackgroundImageFix%22/%3E%3CfeColorMatrix%20in%3D%22SourceAlpha%22%20type%3D%22matrix%22%20values%3D%220%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%20127%200%22%20result%3D%22hardAlpha%22/%3E%3CfeOffset%20dy%3D%221.61702%22/%3E%3CfeGaussianBlur%20stdDeviation%3D%221.61702%22/%3E%3CfeColorMatrix%20type%3D%22matrix%22%20values%3D%220%200%200%200%200.0156863%200%200%200%200%200.286275%200%200%200%200%200.811765%200%200%200%200.32%200%22/%3E%3CfeBlend%20mode%3D%22normal%22%20in2%3D%22BackgroundImageFix%22%20result%3D%22effect1_dropShadow_882_213%22/%3E%3CfeColorMatrix%20in%3D%22SourceAlpha%22%20type%3D%22matrix%22%20values%3D%220%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%20127%200%22%20result%3D%22hardAlpha%22/%3E%3CfeOffset%20dy%3D%220.323403%22/%3E%3CfeGaussianBlur%20stdDeviation%3D%220.161702%22/%3E%3CfeColorMatrix%20type%3D%22matrix%22%20values%3D%220%200%200%200%200.0156863%200%200%200%200%200.286275%200%200%200%200%200.811765%200%200%200%200.24%200%22/%3E%3CfeBlend%20mode%3D%22normal%22%20in2%3D%22effect1_dropShadow_882_213%22%20result%3D%22effect2_dropShadow_882_213%22/%3E%3CfeBlend%20mode%3D%22normal%22%20in%3D%22SourceGraphic%22%20in2%3D%22effect2_dropShadow_882_213%22%20result%3D%22shape%22/%3E%3C/filter%3E%3ClinearGradient%20id%3D%22paint0_linear_882_213%22%20x1%3D%2234.6707%22%20y1%3D%2269.3376%22%20x2%3D%2234.6707%22%20y2%3D%2224.3941%22%20gradientUnits%3D%22userSpaceOnUse%22%3E%3Cstop%20stop-color%3D%22%230091EB%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%233DCBFF%22/%3E%3C/linearGradient%3E%3ClinearGradient%20id%3D%22paint1_linear_882_213%22%20x1%3D%2232.194%22%20y1%3D%22-8.66766%22%20x2%3D%2271.8657%22%20y2%3D%2242.3384%22%20gradientUnits%3D%22userSpaceOnUse%22%3E%3Cstop%20stop-color%3D%22%230078D4%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%230068C6%22/%3E%3C/linearGradient%3E%3ClinearGradient%20id%3D%22paint2_linear_882_213%22%20x1%3D%2234.6643%22%20y1%3D%2228.8906%22%20x2%3D%2234.6643%22%20y2%3D%2253.9306%22%20gradientUnits%3D%22userSpaceOnUse%22%3E%3Cstop%20stop-color%3D%22%23EBFBFF%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23BDF2FF%22/%3E%3C/linearGradient%3E%3CclipPath%20id%3D%22clip0_882_213%22%3E%3Crect%20width%3D%2269.3396%22%20height%3D%2269.3396%22%20fill%3D%22white%22/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E" alt="">Outlook</span>
+    </div>
+  </div>
+</div>
+
+<!-- PROBLEEM -->
+<section id="probleem">
+  <div class="wrap">
+    <div class="head rv"><div><span class="label"><i></i>Het probleem</span><h2>Leads genoeg. Maar niemand die ze opvolgt.</h2></div></div>
+    <div class="cards">
+      <div class="card rv">
+        <h3>Geen tijd om op te volgen</h3>
+        <p>Handmatig opvolgen schiet erbij in. Leads blijven liggen en worden koud.</p>
+      </div>
+      <div class="card rv d1">
+        <h3>Een setter is duur</h3>
+        <p>€10 tot €50 per uur, of €100 per afspraak plus bonus. En een goede vind je lastig.</p>
+      </div>
+      <div class="card g rv d2">
+        <h3>Jij bent de bottleneck</h3>
+        <p>Je groei hangt af van jouw tijd, en die is op. Je voelt je meer verkoper dan ondernemer.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FILOSOFISCH -->
+<section class="manifest">
+  <div class="wrap">
+    <h2>Jouw werk is de afspraak. Alles wat daaraan voorafgaat, hoort niet op jouw bord.</h2>
+  </div>
+</section>
+
+<!-- GIDS -->
+<section class="soft" id="waarom">
+  <div class="wrap">
+    <div class="guide">
+      <div class="copy rv">
+        <span class="label" style="margin-bottom:0"><i></i>Waarom wij</span>
+        <h2>We deden zelf jarenlang sales.</h2>
+        <p class="sub">We weten hoe opvolgen werkt en wat een lead over de streep trekt. Die kennis zit nu in de tool.</p>
+        <a class="btn btn-main" href="#start" style="align-self:flex-start">Probeer 3 dagen voor €1</a>
+      </div>
+      <div class="list">
+        <div class="feat rv"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F6B12" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16z"/></svg></span><div><b>Schrijft zoals jij</b><span>Jouw woorden, jouw stijl. Geen robottaal.</span></div></div>
+        <div class="feat rv d1"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F6B12" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></span><div><b>Antwoordt binnen minuten</b><span>Ook om 23:00 en in het weekend.</span></div></div>
+        <div class="feat rv d2"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F6B12" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg></span><div><b>Kent je agenda</b><span>Biedt alleen tijden aan die echt vrij zijn.</span></div></div>
+        <div class="feat rv d3"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F6B12" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg></span><div><b>Jij houdt de regie</b><span>Kijk mee in elk gesprek en neem over wanneer je wilt.</span></div></div>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><b>[X]</b><span>afspraken geboekt</span></div>
+      <div class="stat"><b>[X]</b><span>berichten verstuurd</span></div>
+      <div class="stat"><b>[X]</b><span>leads opgevolgd</span></div>
+    </div>
+    <figure class="quote rv">
+      <blockquote>"[Review van een klant over meer afspraken en minder werk.]"</blockquote>
+      <figcaption><i></i><div><b>[Naam klant]</b><span>[Functie, bedrijf]</span></div></figcaption>
+    </figure>
+    <div class="clogos rv" aria-label="Klanten"><span>[Logo]</span><span>[Logo]</span><span>[Logo]</span><span>[Logo]</span><span>[Logo]</span></div>
+  </div>
+</section>
+
+<!-- PLAN -->
+<section id="plan">
+  <div class="wrap">
+    <div class="head rv">
+      <div><span class="label"><i></i>Hoe het werkt</span><h2>In drie stappen een volle agenda.</h2></div>
+      <a class="btn btn-ghost" href="#start">Probeer 3 dagen voor €1</a>
+    </div>
+    <div class="steps" id="steps">
+      <div class="line" aria-hidden="true"><i></i></div>
+      <div class="step rv">
+        <span class="num">1</span>
+        <h3>Koppel je kanalen</h3>
+        <p>Koppel je LinkedIn, e-mail en agenda. Klaar in een paar klikken.</p>
+        <div class="mini" aria-hidden="true">
+          <div class="r"><img src="data:image/svg+xml,%3Csvg%20width%3D%2277%22%20height%3D%2277%22%20viewBox%3D%220%200%2077%2077%22%20fill%3D%22none%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Crect%20x%3D%225.5%22%20y%3D%228.24805%22%20width%3D%2260.4834%22%20height%3D%2263.2326%22%20fill%3D%22white%22/%3E%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M71.4034%200L5.80274%200C2.66493%200%200%202.48165%200%205.53881L0%2071.4364C0%2074.4972%201.74852%2076.9788%204.88632%2076.9788H70.4869C73.6284%2076.9788%2076.9788%2074.4972%2076.9788%2071.4364V5.53881C76.9788%202.48165%2074.5448%200%2071.4034%200ZM29.3253%2029.3253H39.6881V34.6075H39.8017C41.3816%2031.7593%2046.048%2028.8671%2051.8178%2028.8671C62.8917%2028.8671%2065.9819%2034.7468%2065.9819%2045.6374V65.9819H54.9849V47.6426C54.9849%2042.7672%2053.0384%2038.4894%2048.4857%2038.4894C42.9578%2038.4894%2040.3222%2042.2321%2040.3222%2048.3757V65.9819H29.3253V29.3253ZM10.997%2065.9819H21.994V29.3253H10.997V65.9819ZM23.3686%2016.4955C23.369%2017.3979%2023.1916%2018.2916%2022.8466%2019.1255C22.5016%2019.9594%2021.9957%2020.7172%2021.3578%2021.3556C20.7199%2021.9939%2019.9625%2022.5004%2019.1288%2022.846C18.2952%2023.1916%2017.4016%2023.3696%2016.4991%2023.3699C15.5967%2023.3701%2014.703%2023.1926%2013.8692%2022.8474C13.0353%2022.5022%2012.2776%2021.9962%2011.6394%2021.3582C11.0012%2020.7201%2010.4948%2019.9626%2010.1494%2019.1289C9.80393%2018.2952%209.62609%2017.4016%209.62602%2016.4991C9.62587%2014.677%2010.3495%2012.9294%2011.6377%2011.6407C12.926%2010.352%2014.6733%209.6278%2016.4955%209.62731C18.3176%209.62683%2020.0653%2010.3501%2021.3543%2011.6381C22.6432%2012.9261%2023.3677%2014.6733%2023.3686%2016.4955Z%22%20fill%3D%22%230A66C2%22/%3E%3C/svg%3E" alt="">LinkedIn<span class="tag g">Gekoppeld</span></div>
+          <div class="r"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%2252%2042%2088%2066%22%3E%3Cpath%20fill%3D%22%234285f4%22%20d%3D%22M58%20108h14V74L52%2059v43c0%203.32%202.69%206%206%206%22/%3E%3Cpath%20fill%3D%22%2334a853%22%20d%3D%22M120%20108h14c3.32%200%206-2.69%206-6V59l-20%2015%22/%3E%3Cpath%20fill%3D%22%23fbbc04%22%20d%3D%22M120%2048v26l20-15v-8c0-7.42-8.47-11.65-14.4-7.2%22/%3E%3Cpath%20fill%3D%22%23ea4335%22%20d%3D%22M72%2074V48l24%2018%2024-18v26L96%2092%22/%3E%3Cpath%20fill%3D%22%23c5221f%22%20d%3D%22M52%2051v8l20%2015V48l-5.6-4.2c-5.94-4.45-14.4-.22-14.4%207.2%22/%3E%3C/svg%3E" alt="">Gmail<span class="tag g">Gekoppeld</span></div>
+          <div class="r"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20200%20200%22%3E%3Cg%20transform%3D%22translate%283.75%203.75%29%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M148.882%2C43.618l-47.368-5.263l-57.895%2C5.263L38.355%2C96.25l5.263%2C52.632l52.632%2C6.579l52.632-6.579l5.263-53.947L148.882%2C43.618z%22/%3E%3Cpath%20fill%3D%22%231A73E8%22%20d%3D%22M65.211%2C125.276c-3.934-2.658-6.658-6.539-8.145-11.671l9.132-3.763c0.829%2C3.158%2C2.276%2C5.605%2C4.342%2C7.342c2.053%2C1.737%2C4.553%2C2.592%2C7.474%2C2.592c2.987%2C0%2C5.553-0.908%2C7.697-2.724s3.224-4.132%2C3.224-6.934c0-2.868-1.132-5.211-3.395-7.026s-5.105-2.724-8.5-2.724h-5.276v-9.039H76.5c2.921%2C0%2C5.382-0.789%2C7.382-2.368c2-1.579%2C3-3.737%2C3-6.487c0-2.447-0.895-4.395-2.684-5.855s-4.053-2.197-6.803-2.197c-2.684%2C0-4.816%2C0.711-6.395%2C2.145s-2.724%2C3.197-3.447%2C5.276l-9.039-3.763c1.197-3.395%2C3.395-6.395%2C6.618-8.987c3.224-2.592%2C7.342-3.895%2C12.342-3.895c3.697%2C0%2C7.026%2C0.711%2C9.974%2C2.145c2.947%2C1.434%2C5.263%2C3.421%2C6.934%2C5.947c1.671%2C2.539%2C2.5%2C5.382%2C2.5%2C8.539c0%2C3.224-0.776%2C5.947-2.329%2C8.184c-1.553%2C2.237-3.461%2C3.947-5.724%2C5.145v0.539c2.987%2C1.25%2C5.421%2C3.158%2C7.342%2C5.724c1.908%2C2.566%2C2.868%2C5.632%2C2.868%2C9.211s-0.908%2C6.776-2.724%2C9.579c-1.816%2C2.803-4.329%2C5.013-7.513%2C6.618c-3.197%2C1.605-6.789%2C2.421-10.776%2C2.421C73.408%2C129.263%2C69.145%2C127.934%2C65.211%2C125.276z%22/%3E%3Cpath%20fill%3D%22%231A73E8%22%20d%3D%22M121.25%2C79.961l-9.974%2C7.25l-5.013-7.605l17.987-12.974h6.895v61.197h-9.895L121.25%2C79.961z%22/%3E%3Cpath%20fill%3D%22%23EA4335%22%20d%3D%22M148.882%2C196.25l47.368-47.368l-23.684-10.526l-23.684%2C10.526l-10.526%2C23.684L148.882%2C196.25z%22/%3E%3Cpath%20fill%3D%22%2334A853%22%20d%3D%22M33.092%2C172.566l10.526%2C23.684h105.263v-47.368H43.618L33.092%2C172.566z%22/%3E%3Cpath%20fill%3D%22%234285F4%22%20d%3D%22M12.039-3.75C3.316-3.75-3.75%2C3.316-3.75%2C12.039v136.842l23.684%2C10.526l23.684-10.526V43.618h105.263l10.526-23.684L148.882-3.75H12.039z%22/%3E%3Cpath%20fill%3D%22%23188038%22%20d%3D%22M-3.75%2C148.882v31.579c0%2C8.724%2C7.066%2C15.789%2C15.789%2C15.789h31.579v-47.368H-3.75z%22/%3E%3Cpath%20fill%3D%22%23FBBC04%22%20d%3D%22M148.882%2C43.618v105.263h47.368V43.618l-23.684-10.526L148.882%2C43.618z%22/%3E%3Cpath%20fill%3D%22%231967D2%22%20d%3D%22M196.25%2C43.618V12.039c0-8.724-7.066-15.789-15.789-15.789h-31.579v47.368H196.25z%22/%3E%3C/g%3E%3C/svg%3E" alt="">Google Agenda<span class="tag g">Gekoppeld</span></div>
+        </div>
+      </div>
+      <div class="step rv d1">
+        <span class="num">2</span>
+        <h3>Vertel wie je ideale klant is</h3>
+        <p>Wie wil je spreken, en waarom? De AI weet dan met wie hij een afspraak moet maken.</p>
+        <div class="mini" aria-hidden="true">
+          <div class="r">Branche<span class="tag">Bouw en installatie</span></div>
+          <div class="r">Functie<span class="tag">Eigenaar of directeur</span></div>
+          <div class="r">Regio<span class="tag">Nederland</span></div>
+        </div>
+      </div>
+      <div class="step rv d2">
+        <span class="num">3</span>
+        <h3>Ontvang afspraken in je agenda</h3>
+        <p>Gesprekken verschijnen gewoon in je agenda. Jij hoeft alleen te bellen.</p>
+        <div class="mini" aria-hidden="true">
+          <div class="cal"><i></i><i class="x"></i><i></i><i></i><i class="x"></i><i class="x"></i><i></i><i class="x"></i><i></i><i></i><i></i><i class="x"></i><i></i><i class="x"></i><i class="x"></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KANALEN -->
+<section id="kanalen" class="soft chan">
+  <div class="wrap">
+    <div class="head rv"><div><span class="label"><i></i>Kanalen</span><h2>Eén agent. Overal waar je klanten zijn.</h2></div></div>
+    <div class="cards">
+      <div class="card rv">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#151613" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 10.5V16M8 7.5v.01M12 16v-5.5M12 13c0-1.5 1-2.5 2.3-2.5S16.5 11.5 16.5 13v3"/></svg>
+        <h3>LinkedIn</h3>
+        <p>Reageert op connecties en antwoorden, en stuurt het gesprek richting een afspraak.</p>
+      </div>
+      <div class="card rv d1">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#151613" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="3"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/></svg>
+        <h3>E-mail</h3>
+        <p>Volgt op na een offerte of formulier, op het juiste moment, zonder te pushen.</p>
+      </div>
+      <div class="card g rv d2">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#151613" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 11.5a8.5 8.5 0 0 1-12.4 7.6L3.5 20.5l1.4-4.4A8.5 8.5 0 1 1 20.5 11.5z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5"/></svg>
+        <h3>WhatsApp</h3>
+        <p>Snel en persoonlijk. Precies waar je leads het liefst antwoorden.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FALEN VS SUCCES -->
+<section>
+  <div class="wrap">
+    <div class="head rv"><div><span class="label"><i></i>Het verschil</span><h2>Van achter leads aanrennen naar alleen nog gesprekken voeren.</h2></div></div>
+    <div class="compare">
+      <div class="col no rv">
+        <h3>Als je niks doet</h3>
+        <div class="it"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A9D93" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>Leads koelen af en gaan naar je concurrent</div>
+        <div class="it"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A9D93" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>Je blijft de bottleneck en je groei stopt</div>
+        <div class="it"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A9D93" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>Je betaalt een setter, zonder garantie op resultaat</div>
+        <div class="it"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A9D93" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>Je agenda blijft leeg terwijl er genoeg kansen zijn</div>
+        <div class="it"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A9D93" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>Je dagen zitten vol werk dat AI ook kan</div>
+      </div>
+      <div class="col yes rv d1">
+        <h3>Met Appointment Setter</h3>
+        <div class="it"><svg width="20" height="20" style="color:#2F6B12"><use href="#check"/></svg>Elke lead wordt opgevolgd</div>
+        <div class="it"><svg width="20" height="20" style="color:#2F6B12"><use href="#check"/></svg>Een volle agenda</div>
+        <div class="it"><svg width="20" height="20" style="color:#2F6B12"><use href="#check"/></svg>Jij bent bezig met wat ertoe doet</div>
+        <div class="it"><svg width="20" height="20" style="color:#2F6B12"><use href="#check"/></svg>Geen setter meer nodig, dus lagere kosten</div>
+        <div class="it"><svg width="20" height="20" style="color:#2F6B12"><use href="#check"/></svg>Een stabielere business</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="padding-top:20px">
+  <div class="wrap faq">
+    <h2 class="rv">Vragen die we vaak krijgen</h2>
+    <details class="rv"><summary>Hoe werkt de proef van €1?<span class="pl" aria-hidden="true">+</span></summary><p>Je gebruikt Appointment Setter 3 dagen voor €1. Daarna [JOUW PRIJS]. Stoppen kan altijd.</p></details>
+    <details class="rv"><summary>Is dit goedkoper dan een setter?<span class="pl" aria-hidden="true">+</span></summary><p>Een setter kost al snel €10 tot €50 per uur, of €100 per afspraak plus bonus. Appointment Setter kost [JOUW PRIJS] en werkt dag en nacht.</p></details>
+    <details class="rv"><summary>Klinkt de AI als een robot?<span class="pl" aria-hidden="true">+</span></summary><p>Nee. Hij schrijft in jouw toon en jij bepaalt wat hij wel en niet zegt.</p></details>
+    <details class="rv"><summary>Kan ik meekijken en zelf overnemen?<span class="pl" aria-hidden="true">+</span></summary><p>Ja. Je ziet elk gesprek en kunt op elk moment zelf verder.</p></details>
+    <details class="rv"><summary>Ik heb geen tijd om het in te stellen.<span class="pl" aria-hidden="true">+</span></summary><p>Dan doen wij het. We onboarden je en zetten alles voor je klaar.</p></details>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="start" style="padding-top:20px">
+  <div class="wrap">
+    <div class="cta rv">
+      <div>
+        <h2>Probeer het 3 dagen voor €1.</h2>
+        <p class="sub">Koppel je kanalen en zie de eerste afspraken binnenkomen. Liever dat wij het instellen? Dan onboarden we je.</p>
+        <div class="ctas" style="justify-content:flex-start;margin-top:4px">
+          <a class="btn btn-ink" href="#start">Start voor €1</a>
+          <a class="btn btn-ghost" href="#start">Laat ons je onboarden</a>
+        </div>
+      </div>
+      <svg class="m" viewBox="0 0 120 120" aria-hidden="true"><use href="#agent"/></svg>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="#top" class="brand" style="color:var(--ink);font-size:16px">
+      <svg width="30" height="30" viewBox="0 0 120 120" aria-hidden="true"><rect width="120" height="120" rx="30" fill="#8BF15B"/><use href="#agent" transform="rotate(-8 60 64)"/></svg>
+      appointmentsetter.app
+    </a>
+    <div class="links"><a href="#top">Privacy</a><a href="#top">Voorwaarden</a><span>© 2026</span></div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  var root = document.documentElement;
+  var hdr = document.getElementById('hdr');
+  window.addEventListener('scroll', function(){ hdr.classList.toggle('scrolled', window.scrollY > 8); }, { passive:true });
+
+  // Zonder GSAP of met "minder beweging": alles gewoon tonen
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!window.gsap || reduce) {
+    root.classList.remove('gs');
+    var li = document.querySelector('.steps .line i'); if (li) li.style.transform = 'none';
+    return;
+  }
+  gsap.registerPlugin(ScrollTrigger);
+  var fine = window.matchMedia('(pointer: fine)').matches;
+  var q = function(sel, ctx){ return Array.prototype.slice.call((ctx || document).querySelectorAll(sel)); };
+
+  // Woorden in een masker zetten
+  function splitWords(el){
+    var words = el.textContent.trim().split(/\s+/);
+    el.innerHTML = words.map(function(w){ return '<span class="wm"><span class="wi">' + w + '</span></span>'; }).join(' ');
+    return q('.wi', el);
+  }
+
+  /* ---------------- HERO ---------------- */
+  var hx = document.querySelector('.hx');
+  var heroWords = [];
+  q(':scope > span:not(.tiles)', hx).forEach(function(sp){ heroWords = heroWords.concat(splitWords(sp)); });
+  var tiles = q('.tile', hx);
+  root.classList.remove('gs');
+
+  var intro = gsap.timeline({ defaults: { ease: 'power3.out' } });
+  intro
+    .from('.pill', { autoAlpha: 0, y: 16, scale: .96, duration: .7 })
+    .from(heroWords, { yPercent: 115, duration: .9, stagger: .06 }, '-=.35')
+    .from(tiles, { autoAlpha: 0, scale: .2, y: 30, rotation: function(i){ return i % 2 ? 24 : -24; }, duration: .8, ease: 'back.out(2.2)', stagger: .08 }, '-=.75')
+    .from('.hero .sub', { autoAlpha: 0, y: 18, duration: .7 }, '-=.4')
+    .from('.ctas.hero-hide .btn', { autoAlpha: 0, y: 18, stagger: .08, duration: .6 }, '-=.45')
+    .from('.ticks span', { autoAlpha: 0, y: 10, stagger: .07, duration: .5 }, '-=.35')
+    .from('.ticks svg', { scale: 0, rotation: -45, stagger: .07, duration: .5, ease: 'back.out(3)' }, '<')
+    .from('.stage', { autoAlpha: 0, y: 80, duration: 1.1 }, '-=.6')
+    .from('.mascot-float', { autoAlpha: 0, y: 40, scale: .6, rotation: -20, duration: .9, ease: 'back.out(2)' }, '-=.5')
+    .add(chat(), '-=.2');
+
+  // Chat: typen, bericht, afspraak
+  function chat(){
+    var msgs = q('.msg'), typing = document.querySelector('.typing');
+    gsap.set(msgs, { autoAlpha: 0, y: 12, scale: .92 });
+    gsap.set('.booked', { autoAlpha: 0, scale: .6, rotation: -8, y: 20 });
+    var tl = gsap.timeline();
+    msgs.forEach(function(m){
+      var out = m.classList.contains('out');
+      if (out) {
+        tl.call(function(){ m.parentNode.insertBefore(typing, m); typing.style.display = 'flex'; })
+          .fromTo(q('i', typing), { y: 0, opacity: .4 }, { y: -4, opacity: 1, stagger: .12, yoyo: true, repeat: 3, duration: .2, ease: 'sine.inOut' })
+          .call(function(){ typing.style.display = 'none'; });
+      } else {
+        tl.to({}, { duration: .35 });
+      }
+      tl.to(m, { autoAlpha: 1, y: 0, scale: 1, duration: .45, ease: 'back.out(1.8)', transformOrigin: out ? '100% 100%' : '0% 100%' });
+    });
+    tl.to('.booked', { autoAlpha: 1, scale: 1, rotation: -2, y: 0, duration: .7, ease: 'back.out(2.2)' }, '+=.2')
+      .from('.booked .ok svg', { scale: 0, rotation: -90, duration: .5, ease: 'back.out(3)' }, '-=.35')
+      .to('.booked', { y: -6, duration: 2.2, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+    return tl;
+  }
+
+  // Mascotte in de hero zweeft zachtjes
+  gsap.to('.mascot-float', { y: -10, rotation: -2, duration: 2.4, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 2 });
+
+  // App-venster trekt recht tijdens scroll
+  gsap.fromTo('.app', { rotationX: 12, scale: .95, transformPerspective: 1400, transformOrigin: '50% 0%' },
+    { rotationX: 0, scale: 1, ease: 'none', scrollTrigger: { trigger: '.stage', start: 'top 85%', end: 'top 25%', scrub: .6 } });
+
+  // Geanimeerd icoon (zelfde loop als de video)
+  (function(){
+    var body = document.querySelector('.as-body'), look = document.querySelector('.as-look');
+    var open = document.querySelector('.as-open'), happy = document.querySelector('.as-happy'), sleepy = document.querySelector('.as-sleepy');
+    gsap.set(body, { rotation: -8, svgOrigin: '60 64' });
+    function eyes(state){ return function(){ gsap.set(open, { opacity: state === 'open' ? 1 : 0 }); gsap.set(happy, { opacity: state === 'happy' ? 1 : 0 }); gsap.set(sleepy, { opacity: state === 'sleepy' ? 1 : 0 }); }; }
+    var tl = gsap.timeline({ repeat: -1, delay: 1.2 });
+    tl.to(body, { rotation: 0, duration: .7, ease: 'back.out(2)', svgOrigin: '60 64' })
+      .call(eyes('happy'), null, .25).call(eyes('open'), null, .6)
+      .to(look, { x: 3, duration: .3, ease: 'power2.out' }, 1.1)
+      .to(look, { x: -3, y: 1, duration: .35, ease: 'power2.inOut' }, 1.8)
+      .to(look, { x: 0, y: 0, duration: .3 }, 2.3)
+      .call(eyes('happy'), null, 2.4).call(eyes('open'), null, 2.8)
+      .to(look, { x: -2, y: -2, duration: .3 }, 3.1)
+      .to(body, { rotation: 30, y: -2, duration: .55, ease: 'power2.inOut', svgOrigin: '60 64' }, 3.5)
+      .to(look, { x: 2, y: -1, duration: .3 }, 3.6)
+      .to(body, { rotation: 24, duration: .4, ease: 'sine.inOut', svgOrigin: '60 64' }, 4.2)
+      .to(body, { rotation: 0, y: 0, duration: .6, ease: 'back.out(2.4)', svgOrigin: '60 64' }, 4.7)
+      .to(look, { x: 0, y: 0, duration: .3 }, 4.8)
+      .call(eyes('sleepy'), null, 5.2).call(eyes('open'), null, 5.6)
+      .to(body, { rotation: -8, duration: .4, ease: 'power2.inOut', svgOrigin: '60 64' }, 5.6);
+  })();
+
+  // Logo-groepen maken af en toe een sprongetje
+  var groups = q('.tiles', hx).filter(function(g){ return g.children.length > 1; });
+  gsap.timeline({ repeat: -1, repeatDelay: 1.2, delay: 3.5 })
+    .add(groups.map(function(g){
+      return gsap.timeline()
+        .to(g.children, { y: '-0.14em', rotation: 0, duration: .28, ease: 'power2.out', stagger: .07 })
+        .to(g.children, { y: 0, rotation: function(i, el){ return getComputedStyle(el).getPropertyValue('--rot').trim(); }, duration: .5, ease: 'bounce.out', stagger: .07 }, '-=.1');
+    }), '+=0')
+    .to({}, { duration: 1 });
+
+  // Tegels reageren op hover
+  if (fine) tiles.forEach(function(t){
+    t.addEventListener('mouseenter', function(){ gsap.to(t, { y: '-0.12em', scale: 1.1, rotation: 0, zIndex: 5, duration: .35, ease: 'back.out(3)' }); });
+    t.addEventListener('mouseleave', function(){ gsap.to(t, { y: 0, scale: 1, rotation: getComputedStyle(t).getPropertyValue('--rot').trim(), zIndex: '', duration: .5, ease: 'elastic.out(1,.5)' }); });
+  });
+
+  /* ---------------- SECTIES ---------------- */
+  // Scroll-voortgang
+  gsap.to('#progress', { scaleX: 1, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: .3 } });
+
+  // Koppen woord voor woord
+  q('section h2').forEach(function(h){
+    var ws = splitWords(h);
+    gsap.from(ws, { yPercent: 115, duration: .9, ease: 'power3.out', stagger: .045, scrollTrigger: { trigger: h, start: 'top 85%' } });
+  });
+  q('.label').forEach(function(l){
+    gsap.from(l, { autoAlpha: 0, x: -16, duration: .6, ease: 'power2.out', scrollTrigger: { trigger: l, start: 'top 88%' } });
+    gsap.from(q('i', l), { scale: 0, duration: .5, ease: 'back.out(4)', delay: .2, scrollTrigger: { trigger: l, start: 'top 88%' } });
+  });
+  q('section .sub, .head .btn, .guide .copy .btn').forEach(function(el){
+    gsap.from(el, { autoAlpha: 0, y: 24, duration: .8, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%' } });
+  });
+
+  // Logo-rij
+  gsap.from('.logos p', { autoAlpha: 0, y: 12, duration: .6, scrollTrigger: { trigger: '.logos', start: 'top 85%' } });
+  gsap.from('.logo-row span', { autoAlpha: 0, y: 24, scale: .9, duration: .6, ease: 'back.out(2)', stagger: .08, scrollTrigger: { trigger: '.logo-row', start: 'top 88%' } });
+
+  // Kaarten in batches
+  gsap.set('.cards .card', { autoAlpha: 0, y: 60, rotation: function(i){ return i % 2 ? 2 : -2; } });
+  ScrollTrigger.batch('.cards .card', { start: 'top 88%', once: true,
+    onEnter: function(b){ gsap.to(b, { autoAlpha: 1, y: 0, rotation: 0, duration: .9, ease: 'power3.out', stagger: .12 }); } });
+  q('.chan .card svg').forEach(function(ic){
+    gsap.from(ic, { scale: 0, rotation: -30, duration: .6, ease: 'back.out(3)', scrollTrigger: { trigger: ic, start: 'top 85%' }, delay: .3 });
+  });
+
+  // Gids: features schuiven in
+  gsap.set('.feat', { autoAlpha: 0, x: 40 });
+  ScrollTrigger.batch('.feat', { start: 'top 90%', once: true,
+    onEnter: function(b){ gsap.to(b, { autoAlpha: 1, x: 0, duration: .8, ease: 'power3.out', stagger: .1 });
+      gsap.from(b.map(function(f){ return f.querySelector('.ico'); }), { scale: 0, rotation: -40, duration: .6, ease: 'back.out(3)', stagger: .1, delay: .2 }); } });
+  gsap.from('.quote', { autoAlpha: 0, y: 40, duration: .9, ease: 'power3.out', scrollTrigger: { trigger: '.quote', start: 'top 88%' } });
+  gsap.from('.quote figcaption', { autoAlpha: 0, x: 20, duration: .7, delay: .3, scrollTrigger: { trigger: '.quote', start: 'top 88%' } });
+
+  // Bewijs
+  gsap.from('.stat', { autoAlpha: 0, y: 40, scale: .95, duration: .8, ease: 'power3.out', stagger: .12, scrollTrigger: { trigger: '.stats', start: 'top 85%' } });
+  gsap.from('.clogos span', { autoAlpha: 0, y: 16, duration: .5, stagger: .07, scrollTrigger: { trigger: '.clogos', start: 'top 90%' } });
+  // Manifest: woorden lichten op tijdens scroll
+  gsap.fromTo('.manifest .wi', { opacity: .15 }, { opacity: 1, stagger: .1, ease: 'none', scrollTrigger: { trigger: '.manifest', start: 'top 75%', end: 'bottom 55%', scrub: .5 } });
+
+  // Stappen: lijn tekent mee, nummers ploppen
+  gsap.to('.steps .line i', { scaleX: 1, ease: 'none', scrollTrigger: { trigger: '#steps', start: 'top 75%', end: 'center 45%', scrub: .5 } });
+  q('.step').forEach(function(st, i){
+    var tl = gsap.timeline({ scrollTrigger: { trigger: st, start: 'top 82%' } });
+    tl.from(st, { autoAlpha: 0, y: 40, duration: .8, ease: 'power3.out', delay: i * .12 })
+      .from(st.querySelector('.num'), { scale: 0, rotation: -90, duration: .6, ease: 'back.out(2.5)' }, '-=.5')
+      .from(q('.mini .r', st), { autoAlpha: 0, x: -20, duration: .45, stagger: .1, ease: 'power2.out' }, '-=.2')
+      .from(q('.mini .r .tag', st), { scale: .5, autoAlpha: 0, duration: .4, stagger: .1, ease: 'back.out(3)' }, '-=.3')
+      .from(q('.cal i', st), { scale: 0, duration: .35, ease: 'back.out(3)', stagger: { each: .03, from: 'random' } }, '-=.4');
+  });
+
+  // Verschil
+  gsap.from('.col.no', { autoAlpha: 0, x: -50, duration: .9, ease: 'power3.out', scrollTrigger: { trigger: '.compare', start: 'top 85%' } });
+  gsap.from('.col.yes', { autoAlpha: 0, x: 50, duration: .9, ease: 'power3.out', scrollTrigger: { trigger: '.compare', start: 'top 85%' } });
+  q('.col').forEach(function(c){
+    gsap.from(q('.it', c), { autoAlpha: 0, y: 14, duration: .5, stagger: .1, delay: .35, scrollTrigger: { trigger: c, start: 'top 85%' } });
+    gsap.from(q('.it svg', c), { scale: 0, rotation: -60, duration: .5, stagger: .1, delay: .45, ease: 'back.out(3)', scrollTrigger: { trigger: c, start: 'top 85%' } });
+  });
+
+  // FAQ: items in beeld en zacht open/dicht
+  gsap.from('.faq details', { autoAlpha: 0, y: 20, duration: .6, stagger: .08, ease: 'power2.out', scrollTrigger: { trigger: '.faq', start: 'top 80%' } });
+  q('.faq details').forEach(function(d){
+    var sum = d.querySelector('summary'), p = d.querySelector('p');
+    sum.addEventListener('click', function(e){
+      e.preventDefault();
+      if (d.open) {
+        gsap.to(p, { height: 0, autoAlpha: 0, paddingBottom: 0, duration: .35, ease: 'power2.in', onComplete: function(){ d.open = false; gsap.set(p, { clearProps: 'all' }); } });
+        gsap.to(d.querySelector('.pl'), { rotation: 0, duration: .35 });
+      } else {
+        d.open = true;
+        gsap.fromTo(p, { height: 0, autoAlpha: 0, paddingBottom: 0 }, { height: 'auto', autoAlpha: 1, paddingBottom: 22, duration: .45, ease: 'power3.out' });
+        gsap.fromTo(d.querySelector('.pl'), { rotation: 0 }, { rotation: 135, duration: .45, ease: 'back.out(2)' });
+      }
+    });
+  });
+
+  // CTA groeit in beeld, mascotte zwaait
+  gsap.fromTo('.cta', { scale: .9, y: 60, borderRadius: 80 }, { scale: 1, y: 0, borderRadius: 36, ease: 'none', scrollTrigger: { trigger: '.cta', start: 'top 95%', end: 'top 55%', scrub: .6 } });
+  gsap.from('.cta svg.m', { autoAlpha: 0, scale: .4, rotation: -30, y: 40, duration: 1, ease: 'back.out(2)', scrollTrigger: { trigger: '.cta', start: 'top 70%' } });
+  gsap.to('.cta svg.m', { rotation: 8, y: -8, duration: 1.6, ease: 'sine.inOut', yoyo: true, repeat: -1, transformOrigin: '50% 90%' });
+  gsap.from('.cta .btn', { autoAlpha: 0, y: 16, stagger: .1, duration: .6, scrollTrigger: { trigger: '.cta', start: 'top 70%' } });
+
+  /* ---------------- MICRO ---------------- */
+  if (fine) {
+    // Magnetische knoppen
+    q('.btn').forEach(function(b){
+      var xTo = gsap.quickTo(b, 'x', { duration: .4, ease: 'power3' }), yTo = gsap.quickTo(b, 'y', { duration: .4, ease: 'power3' });
+      b.addEventListener('mousemove', function(e){ var r = b.getBoundingClientRect(); xTo((e.clientX - r.left - r.width / 2) * .25); yTo((e.clientY - r.top - r.height / 2) * .35); });
+      b.addEventListener('mouseleave', function(){ xTo(0); yTo(0); });
+    });
+    // Kaarten kantelen licht mee met de muis
+    q('.card, .col, .feat').forEach(function(c){
+      gsap.set(c, { transformPerspective: 900 });
+      var rx = gsap.quickTo(c, 'rotationX', { duration: .5, ease: 'power3' }), ry = gsap.quickTo(c, 'rotationY', { duration: .5, ease: 'power3' });
+      c.addEventListener('mousemove', function(e){ var r = c.getBoundingClientRect(); ry(((e.clientX - r.left) / r.width - .5) * 6); rx(-((e.clientY - r.top) / r.height - .5) * 6); });
+      c.addEventListener('mouseleave', function(){ rx(0); ry(0); });
+    });
+    // Icoontjes wiebelen bij hover
+    q('.feat').forEach(function(f){
+      var ic = f.querySelector('.ico');
+      f.addEventListener('mouseenter', function(){ gsap.fromTo(ic, { rotation: 0 }, { keyframes: { rotation: [-12, 10, -6, 0] }, duration: .6, ease: 'power1.inOut' }); });
+    });
+    q('.num').forEach(function(n){
+      n.addEventListener('mouseenter', function(){ gsap.fromTo(n, { rotation: 0 }, { rotation: 360, duration: .7, ease: 'back.out(1.6)' }); });
+    });
+    // Mascotte in de hero kijkt een beetje naar je muis
+    var mf = document.querySelector('.mascot-float');
+    var mx = gsap.quickTo(mf, 'x', { duration: .8, ease: 'power3' });
+    window.addEventListener('mousemove', function(e){ mx((e.clientX / window.innerWidth - .5) * 18); });
+  }
+  // Logo-pills en tegels in de stappen: klein veertje bij hover
+  q('.logo-row span').forEach(function(sp){
+    sp.addEventListener('mouseenter', function(){ gsap.to(sp, { y: -4, duration: .3, ease: 'back.out(3)' }); });
+    sp.addEventListener('mouseleave', function(){ gsap.to(sp, { y: 0, duration: .4, ease: 'power2.out' }); });
+  });
+
+  window.addEventListener('load', function(){ ScrollTrigger.refresh(); });
+})();
+</script>
+
+</body>
+</html>
+
+</body></html>
