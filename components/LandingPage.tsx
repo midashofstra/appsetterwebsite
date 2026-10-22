@@ -29,8 +29,8 @@ export function LandingPage() {
         <Plan />
         <Channels />
         <Compare />
-        <Cta />
         <Faq />
+        <Cta />
       </main>
       <Footer />
       <LandingAnimations />
