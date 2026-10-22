@@ -2,7 +2,7 @@
 
 Dutch-language landing page for [appointmentsetter.app](https://appointmentsetter.app), an AI appointment setter for LinkedIn, e-mail and WhatsApp.
 
-Built with **Next.js 15** (App Router, TypeScript), static export for **Vercel**, and **GSAP** for scroll and hero animations from the original single-file prototype.
+Built with **Next.js 15** (App Router, TypeScript), static export, and **GSAP** for scroll and hero animations from the original single-file prototype.
 
 ## Run locally
 
@@ -63,4 +63,20 @@ Section components preserve the prototype markup (including inline SVGs and data
 
 ## Deploy
 
-The site uses `output: "export"` in `next.config.ts`. Deploy the repo to Vercel as a standard Next.js project; the build output is static HTML in `out/`.
+The site uses `output: "export"` in `next.config.ts`. Build output is static HTML in `out/`.
+
+### GitHub Pages
+
+Production deploys via [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml) on push to `main` (and `workflow_dispatch`). The workflow uses `actions/configure-pages` and sets `NEXT_PUBLIC_BASE_PATH` to the Pages `base_path` (e.g. `/appsetterwebsite` for this repo).
+
+**One-time repo setting:** In GitHub **Settings → Pages → Build and deployment**, set **Source** to **GitHub Actions** (not “Deploy from a branch”).
+
+Local check for the project-site URL:
+
+```bash
+NEXT_PUBLIC_BASE_PATH=/appsetterwebsite npm run build
+npx serve out -l 8765
+# open http://localhost:8765/appsetterwebsite/
+```
+
+For Vercel or a custom domain, build without `NEXT_PUBLIC_BASE_PATH` so `basePath` stays empty.
