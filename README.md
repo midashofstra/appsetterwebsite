@@ -13,13 +13,17 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-### Brand color variants
+### Brand color
 
-The default green homepage stays at `/`. Alternative primaries for review:
+The live homepage at `/` uses primary **`#FF0050`** (tokens from `deriveThemeTokens` in `lib/color-themes.ts`, applied on `<html>` and in `:root`).
+
+### Color review routes
 
 | Route | Primary |
 |-------|---------|
 | [/kleur](http://localhost:3000/kleur) | Overview with swatches |
+| `/kleur/ff0050` | `#FF0050` (same as live) |
+| `/kleur/8bf15b` | `#8BF15B` (original prototype green) |
 | `/kleur/ff0048` | `#FF0048` |
 | `/kleur/ff3b00` | `#FF3B00` |
 | `/kleur/acff00` | `#ACFF00` |

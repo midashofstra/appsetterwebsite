@@ -4,8 +4,12 @@ export type ColorVariant = {
   label: string;
 };
 
-/** Alternate brand primaries (home `/` keeps default green in :root). */
+export const DEFAULT_PRIMARY = "#FF0050";
+
+/** Brand primaries for `/kleur/*` previews (includes legacy green and production pink). */
 export const COLOR_VARIANTS: ColorVariant[] = [
+  { slug: "ff0050", primary: "#FF0050", label: "#FF0050 (live)" },
+  { slug: "8bf15b", primary: "#8BF15B", label: "#8BF15B (origineel groen)" },
   { slug: "ff0048", primary: "#FF0048", label: "#FF0048" },
   { slug: "ff3b00", primary: "#FF3B00", label: "#FF3B00" },
   { slug: "acff00", primary: "#ACFF00", label: "#ACFF00" },
@@ -13,8 +17,6 @@ export const COLOR_VARIANTS: ColorVariant[] = [
   { slug: "00db77", primary: "#00DB77", label: "#00DB77" },
   { slug: "00be58", primary: "#00BE58", label: "#00BE58" },
 ];
-
-export const DEFAULT_PRIMARY = "#8BF15B";
 
 type Rgb = { r: number; g: number; b: number };
 
@@ -109,4 +111,9 @@ export function themeStyleFromPrimary(
   primary: string,
 ): Record<string, string> {
   return { ...deriveThemeTokens(primary) };
+}
+
+/** CSS custom properties for the production default (home `/`). */
+export function getDefaultThemeStyle(): Record<string, string> {
+  return themeStyleFromPrimary(DEFAULT_PRIMARY);
 }

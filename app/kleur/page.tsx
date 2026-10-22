@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { COLOR_VARIANTS } from "@/lib/color-themes";
+import { COLOR_VARIANTS, DEFAULT_PRIMARY } from "@/lib/color-themes";
 
 export const metadata = {
   title: "Kleurvarianten | appointmentsetter.app",
@@ -11,12 +11,12 @@ export default function KleurIndexPage() {
     <main className="kleur-index">
       <div className="wrap">
         <Link href="/" className="kleur-index-back">
-          ← Originele homepage (#8BF15B)
+          ← Homepage ({DEFAULT_PRIMARY})
         </Link>
         <h1>Kleurvarianten</h1>
         <p className="kleur-index-lead">
-          Zes alternatieven voor de primaire merkkleur. Elke variant gebruikt dezelfde pagina met
-          aangepaste CSS-variabelen.
+          Vergelijk alternatieven voor de primaire merkkleur. De live site gebruikt{" "}
+          {DEFAULT_PRIMARY}; elke variant gebruikt dezelfde pagina met aangepaste CSS-variabelen.
         </p>
         <ul className="kleur-index-grid">
           {COLOR_VARIANTS.map((variant) => (
