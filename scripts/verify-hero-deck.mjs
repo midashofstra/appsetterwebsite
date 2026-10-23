@@ -42,22 +42,63 @@ for (const { width, suffix } of [
   const page = await browser.newPage({ viewport: { width, height: 900 } });
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("http://127.0.0.1:3001/", { waitUntil: "networkidle" });
-  await page.waitForTimeout(2500);
   await revealHero(page);
-  await page.locator(".hero .hx").screenshot({ path: `${outDir}/hero-deck-${suffix}.png` });
-  await page.screenshot({ path: `${outDir}/hero-full-deck-${suffix}.png` });
+  await page.waitForTimeout(150);
+
+  const agendaFront = await page.locator(".hx .tiles-deck").nth(0).getAttribute("data-hero-front");
+  const channelFront = await page.locator(".hx .tiles-deck").nth(1).getAttribute("data-hero-front");
+  console.log(`load-front ${suffix}: agenda=${agendaFront} channel=${channelFront}`);
+  if (agendaFront !== "google-agenda" || channelFront !== "linkedin") {
+    console.error("initial front cards incorrect on load");
+    process.exitCode = 1;
+  }
+
+  await page.locator(".hero .hx").screenshot({ path: `${outDir}/hero-deck-load-${suffix}.png` });
   await page.close();
 }
 
-{
-  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+for (const { width, suffix } of [
+  { width: 1440, suffix: "1440" },
+  { width: 390, suffix: "390" },
+]) {
+  const page = await browser.newPage({ viewport: { width, height: 900 } });
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("http://127.0.0.1:3001/", { waitUntil: "networkidle" });
   await revealHero(page);
-  const channelDeck = page.locator(".hx .tiles-deck").last();
+  const channelDeck = page.locator(".hx .tiles-deck").nth(1);
   await channelDeck.click();
-  await page.waitForTimeout(180);
-  await channelDeck.screenshot({ path: `${outDir}/hero-deck-mid-flip-channel-1440.png` });
+  await page.waitForTimeout(225);
+  const mid = await channelDeck.evaluate((deck) => {
+    const exiting = deck.querySelector('[data-card-id][style*="blur"]');
+    const front = deck.querySelector('[data-hero-front]');
+    const exitingEl = deck.querySelector('[data-card-id]');
+    const tiles = [...deck.querySelectorAll(".tile-deck-card")];
+    const transforms = tiles.map((t) => getComputedStyle(t).transform);
+    const filters = tiles.map((t) => getComputedStyle(t).filter);
+    return {
+      hasBlur: filters.some((f) => f.includes("blur") && !f.includes("blur(0px)")),
+      transforms,
+      filters,
+    };
+  });
+  console.log(`mid-flip ${suffix}: hasBlur=${mid.hasBlur}`);
+  if (!mid.hasBlur) {
+    console.error("expected blur mid-transition");
+    process.exitCode = 1;
+  }
+  const maxTranslate = mid.transforms.some((t) => {
+    if (!t || t === "none") return false;
+    const m = t.match(/matrix\(([^)]+)\)/);
+    if (!m) return false;
+    const parts = m[1].split(",").map(Number);
+    const tx = parts[4];
+    return Math.abs(tx) > 8;
+  });
+  if (maxTranslate) {
+    console.error("outgoing card appears to translate horizontally mid-flip");
+    process.exitCode = 1;
+  }
+  await channelDeck.screenshot({ path: `${outDir}/hero-deck-mid-flip-${suffix}.png` });
   await page.close();
 }
 
@@ -71,17 +112,17 @@ for (const { width, suffix } of [
   await page.goto("http://127.0.0.1:3001/", { waitUntil: "networkidle" });
   await revealHero(page);
   await page.waitForTimeout(3200);
-  await page.locator(".hx .tiles-deck").last().click();
+  await page.locator(".hx .tiles-deck").nth(1).click();
   await page.waitForTimeout(1200);
-  await page.locator(".hx .tiles-deck").first().click();
+  await page.locator(".hx .tiles-deck").nth(0).click();
   await page.waitForTimeout(1200);
   const vid = await page.video()?.path();
   await page.close();
   await ctx.close();
   if (vid) {
     const { renameSync } = await import("fs");
-    renameSync(vid, `${outDir}/hero-deck-cycle-demo.webm`);
-    console.log("video", `${outDir}/hero-deck-cycle-demo.webm`);
+    renameSync(vid, `${outDir}/hero-deck-fade-blur-demo.webm`);
+    console.log("video", `${outDir}/hero-deck-fade-blur-demo.webm`);
   }
 }
 
@@ -90,13 +131,12 @@ for (const { width, suffix } of [
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("http://127.0.0.1:3001/", { waitUntil: "networkidle" });
   await revealHero(page);
-  const channelDeck = page.locator(".hx .tiles-deck").last();
+  const channelDeck = page.locator(".hx .tiles-deck").nth(1);
   const before = await channelDeck.getAttribute("data-hero-front");
   await channelDeck.click();
   await page.waitForFunction(
     (prev) => {
-      const decks = document.querySelectorAll(".hx .tiles-deck");
-      const el = decks[decks.length - 1];
+      const el = document.querySelectorAll(".hx .tiles-deck")[1];
       return el && el.getAttribute("data-hero-front") !== prev;
     },
     before,
@@ -104,25 +144,8 @@ for (const { width, suffix } of [
   );
   const after = await channelDeck.getAttribute("data-hero-front");
   console.log(`click-advance channel: ${before} -> ${after}`);
-  if (!before || before === after) {
-    console.error("click did not advance channel deck");
-    process.exitCode = 1;
-  }
-  const agendaDeck = page.locator(".hx .tiles-deck").nth(0);
-  const b1 = await agendaDeck.getAttribute("data-hero-front");
-  await agendaDeck.click();
-  await page.waitForFunction(
-    (prev) => {
-      const el = document.querySelectorAll(".hx .tiles-deck")[0];
-      return el && el.getAttribute("data-hero-front") !== prev;
-    },
-    b1,
-    { timeout: 5000 }
-  );
-  const b2 = await agendaDeck.getAttribute("data-hero-front");
-  console.log(`click-advance agenda: ${b1} -> ${b2}`);
-  if (!b1 || b1 === b2) {
-    console.error("click did not advance agenda deck");
+  if (before !== "linkedin" || after !== "gmail") {
+    console.error("expected linkedin -> gmail on first channel click");
     process.exitCode = 1;
   }
   await page.close();

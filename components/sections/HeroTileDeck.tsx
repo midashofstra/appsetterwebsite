@@ -11,9 +11,10 @@ import {
 } from "react";
 import type { HeroTileSpec } from "@/lib/hero-tiles";
 
-const EASE = [0.22, 1, 0.36, 1] as const;
+/** Ease-out, no overshoot */
+const EASE_OUT = [0, 0, 0.2, 1] as const;
 const CYCLE_MS = 3000;
-const FLIP_MS = 380;
+const FLIP_MS = 450;
 
 const WHATSAPP_SVG = (
   <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -77,6 +78,7 @@ export function HeroTileDeck({ cards, ariaLabel, autoStartDelayMs = 0 }: Props) 
 
   frontRef.current = front;
   const frontId = cards[front]?.id ?? "";
+  const transitionActive = exitId !== null;
 
   const clearTimer = useCallback(() => {
     if (timerRef.current) {
@@ -173,7 +175,7 @@ export function HeroTileDeck({ cards, ariaLabel, autoStartDelayMs = 0 }: Props) 
               className={`tile ${card.className} tile-deck-card`}
               initial={false}
               animate={{ opacity: isFront ? 1 : 0 }}
-              transition={{ duration: 0.35, ease: EASE }}
+              transition={{ duration: 0.4, ease: EASE_OUT }}
               style={{
                 zIndex: isFront ? 40 : 0,
                 pointerEvents: "none",
@@ -184,29 +186,53 @@ export function HeroTileDeck({ cards, ariaLabel, autoStartDelayMs = 0 }: Props) 
           );
         }
 
+        const frontPose = {
+          x: 0,
+          y: 0,
+          rotate: baseRot,
+          scale: 1,
+          opacity: 1,
+          filter: "blur(0px)",
+        };
+
+        let animateTarget: Record<string, string | number>;
+        if (isExiting) {
+          animateTarget = {
+            ...frontPose,
+            scale: 0.96,
+            opacity: 0,
+            filter: "blur(8px)",
+          };
+        } else if (isFront && transitionActive) {
+          animateTarget = {
+            ...frontPose,
+            opacity: 1,
+            filter: "blur(0px)",
+          };
+        } else {
+          animateTarget = {
+            x: stack.x,
+            y: stack.y,
+            rotate: stack.rotate,
+            scale: 1,
+            opacity: depth > 2 ? 0 : depth === 0 ? 1 : 0.92,
+            filter: depth === 0 ? "blur(0px)" : depth === 1 && transitionActive ? "blur(3px)" : "blur(0px)",
+          };
+        }
+
         return (
           <motion.span
             key={card.id}
             data-card-id={card.id}
             className={`tile ${card.className} tile-deck-card`}
             initial={false}
-            animate={
-              isExiting
-                ? {
-                    x: "46%",
-                    y: "-0.12em",
-                    rotate: baseRot + 14,
-                    opacity: 0.82,
-                  }
-                : {
-                    x: stack.x,
-                    y: stack.y,
-                    rotate: stack.rotate,
-                    opacity: depth > 2 ? 0 : 1,
-                  }
-            }
-            transition={{ duration: FLIP_MS / 1000, ease: EASE }}
-            style={{ zIndex: isExiting ? 60 : stack.zIndex, pointerEvents: "none" }}
+            animate={animateTarget}
+            transition={{ duration: FLIP_MS / 1000, ease: EASE_OUT }}
+            style={{
+              zIndex: isExiting ? 60 : stack.zIndex,
+              pointerEvents: "none",
+              transformOrigin: "center center",
+            }}
           >
             {renderTileContent(card)}
           </motion.span>

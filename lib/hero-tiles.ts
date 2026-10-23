@@ -16,10 +16,10 @@ export const HERO_AGENDA_TILES: HeroTileSpec[] = [
   { id: "outlook-calendar", className: "t4", kind: "img", src: OUTLOOK_CALENDAR_LOGO, alt: "" },
 ];
 
-/** Gmail → LinkedIn → WhatsApp → Outlook mail. */
+/** LinkedIn first (initial front), then Gmail → WhatsApp → Outlook mail. */
 export const HERO_CHANNEL_TILES: HeroTileSpec[] = [
-  { id: "gmail", className: "t6", kind: "img", src: byLabel("Gmail").src, alt: "" },
   { id: "linkedin", className: "t7", kind: "img", src: byLabel("LinkedIn").src, alt: "" },
+  { id: "gmail", className: "t6", kind: "img", src: byLabel("Gmail").src, alt: "" },
   { id: "whatsapp", className: "t8", kind: "whatsapp" },
   { id: "outlook-mail", className: "t9", kind: "img", src: OUTLOOK_MAIL_LOGO, alt: "" },
 ];

@@ -46,7 +46,7 @@ export function HeroHeadline() {
       <span>direct vanuit</span>
       <HeroTileDeck
         cards={HERO_CHANNEL_TILES}
-        ariaLabel="Gmail, LinkedIn, WhatsApp en Outlook"
+        ariaLabel="LinkedIn, Gmail, WhatsApp en Outlook"
         autoStartDelayMs={1400}
       />
     </h1>
