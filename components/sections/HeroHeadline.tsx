@@ -1,6 +1,10 @@
 "use client";
 
 import { HeroTileDeck } from "@/components/sections/HeroTileDeck";
+import {
+  HERO_DECK_CHANNEL_STAGGER_MS,
+  HERO_DECK_CYCLE_MS,
+} from "@/lib/hero-deck-timing";
 import { HERO_AGENDA_TILES, HERO_CHANNEL_TILES } from "@/lib/hero-tiles";
 
 export function HeroHeadline() {
@@ -40,14 +44,15 @@ export function HeroHeadline() {
       <HeroTileDeck
         cards={HERO_AGENDA_TILES}
         ariaLabel="Google Agenda en Outlook"
-        autoStartDelayMs={800}
+        firstFlipDelayAfterIntroMs={HERO_DECK_CYCLE_MS}
       />
       <span>vullen,</span>
       <span>direct vanuit</span>
       <HeroTileDeck
         cards={HERO_CHANNEL_TILES}
         ariaLabel="LinkedIn, Gmail, WhatsApp en Outlook"
-        autoStartDelayMs={1400}
+        firstFlipDelayAfterIntroMs={HERO_DECK_CYCLE_MS}
+        firstFlipStaggerMs={HERO_DECK_CHANNEL_STAGGER_MS}
       />
     </h1>
   );
