@@ -9,11 +9,16 @@ import {
   useState,
   type KeyboardEvent,
 } from "react";
+import {
+  HERO_DECK_CYCLE_MS,
+  HERO_INTRO_COMPLETE_EVENT,
+  isHeroIntroComplete,
+} from "@/lib/hero-deck-timing";
 import type { HeroTileSpec } from "@/lib/hero-tiles";
 
 /** Ease-out, no overshoot */
 const EASE_OUT = [0, 0, 0.2, 1] as const;
-const CYCLE_MS = 3000;
+const CYCLE_MS = HERO_DECK_CYCLE_MS;
 const FLIP_MS = 450;
 
 const WHATSAPP_SVG = (
@@ -62,11 +67,18 @@ function renderTileContent(card: HeroTileSpec) {
 type Props = {
   cards: HeroTileSpec[];
   ariaLabel: string;
-  /** Delay before the first automatic flip (ms). */
-  autoStartDelayMs?: number;
+  /** Dwell after hero intro before the first auto-flip (ms). */
+  firstFlipDelayAfterIntroMs?: number;
+  /** Extra delay on top of `firstFlipDelayAfterIntroMs` (channel stagger). */
+  firstFlipStaggerMs?: number;
 };
 
-export function HeroTileDeck({ cards, ariaLabel, autoStartDelayMs = 0 }: Props) {
+export function HeroTileDeck({
+  cards,
+  ariaLabel,
+  firstFlipDelayAfterIntroMs = HERO_DECK_CYCLE_MS,
+  firstFlipStaggerMs = 0,
+}: Props) {
   const reduceMotion = useReducedMotion();
   const n = cards.length;
   const [front, setFront] = useState(0);
@@ -74,6 +86,7 @@ export function HeroTileDeck({ cards, ariaLabel, autoStartDelayMs = 0 }: Props) 
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const exitTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const frontRef = useRef(0);
+  const autoFlipScheduledRef = useRef(false);
   const deckId = useId();
 
   frontRef.current = front;
@@ -121,13 +134,40 @@ export function HeroTileDeck({ cards, ariaLabel, autoStartDelayMs = 0 }: Props) 
 
   useEffect(() => {
     if (n <= 1) return undefined;
-    const start = setTimeout(() => flipRef.current(), autoStartDelayMs);
+
+    const firstFlipDelayMs = firstFlipDelayAfterIntroMs + firstFlipStaggerMs;
+    let introWaitTimer: ReturnType<typeof setTimeout> | null = null;
+
+    const scheduleFirstAutoFlip = () => {
+      if (autoFlipScheduledRef.current) return;
+      autoFlipScheduledRef.current = true;
+      clearTimer();
+      timerRef.current = setTimeout(() => {
+        flipRef.current();
+      }, firstFlipDelayMs);
+    };
+
+    const onIntroComplete = () => {
+      scheduleFirstAutoFlip();
+    };
+
+    if (isHeroIntroComplete()) {
+      scheduleFirstAutoFlip();
+    } else {
+      window.addEventListener(HERO_INTRO_COMPLETE_EVENT, onIntroComplete, { once: true });
+      introWaitTimer = setTimeout(() => {
+        if (!autoFlipScheduledRef.current) scheduleFirstAutoFlip();
+      }, 8000);
+    }
+
     return () => {
-      clearTimeout(start);
+      window.removeEventListener(HERO_INTRO_COMPLETE_EVENT, onIntroComplete);
+      if (introWaitTimer) clearTimeout(introWaitTimer);
       clearTimer();
       clearExitTimer();
+      autoFlipScheduledRef.current = false;
     };
-  }, [autoStartDelayMs, clearExitTimer, clearTimer, n]);
+  }, [clearExitTimer, clearTimer, firstFlipDelayAfterIntroMs, firstFlipStaggerMs, n]);
 
   const onActivate = () => {
     flipRef.current();

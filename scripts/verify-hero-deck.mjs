@@ -35,25 +35,36 @@ async function revealHero(page) {
   await page.locator(".hero .hx").waitFor({ state: "visible", timeout: 15000 });
 }
 
+async function assertInitialFronts(page, label) {
+  const agendaFront = await page.locator(".hx .tiles-deck").nth(0).getAttribute("data-hero-front");
+  const channelFront = await page.locator(".hx .tiles-deck").nth(1).getAttribute("data-hero-front");
+  console.log(`${label}: agenda=${agendaFront} channel=${channelFront}`);
+  if (agendaFront !== "google-agenda" || channelFront !== "linkedin") {
+    console.error(`expected google-agenda + linkedin at ${label}`);
+    process.exitCode = 1;
+    return false;
+  }
+  return true;
+}
+
 for (const { width, suffix } of [
   { width: 1440, suffix: "1440" },
   { width: 390, suffix: "390" },
 ]) {
   const page = await browser.newPage({ viewport: { width, height: 900 } });
   await page.emulateMedia({ reducedMotion: "no-preference" });
-  await page.goto("http://127.0.0.1:3001/", { waitUntil: "networkidle" });
-  await revealHero(page);
-  await page.waitForTimeout(150);
+  await page.goto("http://127.0.0.1:3001/", { waitUntil: "domcontentloaded" });
+  await page.locator(".hero .hx .tiles-deck").first().waitFor({ state: "attached", timeout: 15000 });
 
-  const agendaFront = await page.locator(".hx .tiles-deck").nth(0).getAttribute("data-hero-front");
-  const channelFront = await page.locator(".hx .tiles-deck").nth(1).getAttribute("data-hero-front");
-  console.log(`load-front ${suffix}: agenda=${agendaFront} channel=${channelFront}`);
-  if (agendaFront !== "google-agenda" || channelFront !== "linkedin") {
-    console.error("initial front cards incorrect on load");
-    process.exitCode = 1;
+  let elapsed = 0;
+  for (const targetMs of [500, 2000, 2800]) {
+    await page.waitForTimeout(targetMs - elapsed);
+    elapsed = targetMs;
+    await assertInitialFronts(page, `t=${targetMs / 1000}s ${suffix}`);
+    await page.locator(".hero .hx").screenshot({
+      path: `${outDir}/hero-deck-t${targetMs}ms-${suffix}.png`,
+    });
   }
-
-  await page.locator(".hero .hx").screenshot({ path: `${outDir}/hero-deck-load-${suffix}.png` });
   await page.close();
 }
 

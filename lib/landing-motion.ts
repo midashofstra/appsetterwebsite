@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { markHeroIntroComplete } from "@/lib/hero-deck-timing";
 import { animate, inView, scroll, stagger } from "motion";
 
 type CleanupFn = () => void;
@@ -75,6 +76,7 @@ export function initLandingMotion(): CleanupFn {
     q(".hero-hide").forEach((el) => {
       el.style.visibility = "visible";
     });
+    markHeroIntroComplete();
     return () => cleanups.forEach((fn) => fn());
   }
 
@@ -87,6 +89,7 @@ export function initLandingMotion(): CleanupFn {
   const hx = document.querySelector(".hx") as HTMLElement | null;
   if (!hx) {
     root.classList.remove("gs");
+    markHeroIntroComplete();
     return () => cleanups.forEach((fn) => fn());
   }
 
@@ -118,6 +121,7 @@ export function initLandingMotion(): CleanupFn {
         { duration: 0.9, ease: [0.34, 1.56, 0.64, 1], at: "-0.5" },
       ],
     ] as any);
+    markHeroIntroComplete();
     await runChatDemo();
   })();
 
