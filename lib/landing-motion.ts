@@ -94,7 +94,9 @@ export function initLandingMotion(): CleanupFn {
   q(":scope > span:not(.tiles)", hx).forEach((sp) => {
     heroWords = heroWords.concat(splitWords(sp));
   });
-  const tiles = q(".tile", hx);
+  const introTiles = q(".hx .tiles-deck", hx).concat(
+    q(".hx .tiles:not(.tiles-deck) .tile", hx)
+  );
   root.classList.remove("gs");
   q(".hero-hide").forEach((el) => {
     el.style.visibility = "visible";
@@ -104,7 +106,7 @@ export function initLandingMotion(): CleanupFn {
     await animate([
       [".pill", { opacity: [0, 1], y: [16, 0], scale: [0.96, 1] }, { duration: 0.7, ease: [0.22, 1, 0.36, 1] }],
       [heroWords, { y: ["115%", "0%"] }, { duration: 0.9, delay: stagger(0.06), ease: [0.22, 1, 0.36, 1], at: "-0.35" }],
-      [tiles, { opacity: [0, 1], scale: [0.2, 1], y: [30, 0] }, { duration: 0.8, delay: stagger(0.08), ease: [0.34, 1.56, 0.64, 1], at: "-0.75" }],
+      [introTiles, { opacity: [0, 1], scale: [0.2, 1], y: [30, 0] }, { duration: 0.8, delay: stagger(0.08), ease: [0.34, 1.56, 0.64, 1], at: "-0.75" }],
       [".hero .sub", { opacity: [0, 1], y: [18, 0] }, { duration: 0.7, at: "-0.4" }],
       [".ctas.hero-hide .btn", { opacity: [0, 1], y: [18, 0] }, { duration: 0.6, delay: stagger(0.08), at: "-0.45" }],
       [".ticks span", { opacity: [0, 1], y: [10, 0] }, { duration: 0.5, delay: stagger(0.07), at: "-0.35" }],
@@ -213,28 +215,9 @@ export function initLandingMotion(): CleanupFn {
     })();
   })();
 
-  const groups = q(".tiles", hx).filter((g) => g.children.length > 1);
-  void (async () => {
-    await new Promise((r) => setTimeout(r, 3500));
-    while (!stopped) {
-      for (const g of groups) {
-        const children = Array.from(g.children) as HTMLElement[];
-        await animate(children, { y: "-0.14em", rotate: 0 }, { duration: 0.28, delay: stagger(0.07) });
-        await animate(
-          children,
-          {
-            y: "0em",
-            rotate: children.map((el) => getComputedStyle(el).getPropertyValue("--rot").trim() || "0deg"),
-          },
-          { duration: 0.5, delay: stagger(0.07), ease: [0.34, 1.56, 0.64, 1] }
-        );
-      }
-      await new Promise((r) => setTimeout(r, 1200));
-    }
-  })();
-
+  const hoverTiles = q(".tile", hx).filter((t) => !t.closest(".tiles-deck"));
   if (fine) {
-    tiles.forEach((t) => {
+    hoverTiles.forEach((t) => {
       const onEnter = () => {
         void animate(t, { y: "-0.12em", scale: 1.1, rotate: 0, zIndex: 5 }, { duration: 0.35, ease: [0.34, 1.56, 0.64, 1] });
       };
