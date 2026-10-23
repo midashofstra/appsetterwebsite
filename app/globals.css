@@ -83,7 +83,7 @@ nav{display:flex;align-items:center;justify-content:space-between;gap:20px;heigh
 .as-tile{width:1.18em;height:1.18em;background:var(--g);border-color:var(--g-border);overflow:hidden}
 .as-tile svg.as-icon{width:100%;height:100%}
 .as-happy,.as-sleepy{opacity:0}
-.hero .sub{max-width:580px;margin:26px auto 0}
+.hero .sub{max-width:580px;margin:26px auto 0;-webkit-user-select:none;user-select:none}
 .ctas{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:34px}
 .ticks{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:center;margin-top:22px;font-size:14.5px;font-weight:500;color:var(--muted)}
 .ticks span{display:inline-flex;align-items:center;gap:7px}
