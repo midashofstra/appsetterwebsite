@@ -125,7 +125,7 @@ export function initLandingMotion(): CleanupFn {
     });
 
     await animate([
-      [".pill", { opacity: [0, 1], y: [16, 0], scale: [0.96, 1] }, { duration: 0.7, ease: [0.22, 1, 0.36, 1] }],
+      // [".pill", { opacity: [0, 1], y: [16, 0], scale: [0.96, 1] }, { duration: 0.7, ease: [0.22, 1, 0.36, 1] }],
       [
         heroWords,
         {
