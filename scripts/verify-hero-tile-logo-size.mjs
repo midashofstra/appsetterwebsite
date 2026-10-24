@@ -37,12 +37,15 @@ for (const width of [1440, 375]) {
   await page.locator(".hero").screenshot({ path: `${outDir}/hero-tile-logos-${width}.png` });
   const m = await page.evaluate(() => {
     const body = document.querySelector(".as-tile .as-body")?.getBoundingClientRect().width ?? 0;
-    const linkedin = document.querySelector('[data-card-id="linkedin"] img');
-    const imgW = linkedin ? linkedin.getBoundingClientRect().width : 0;
-    return { mascotBody: body, linkedinImg: imgW, delta: imgW - body };
+    const tile = document.querySelector('[data-card-id="linkedin"]');
+    const img = tile?.querySelector("img");
+    const tileW = tile?.clientWidth ?? 0;
+    const imgW = img?.clientWidth ?? 0;
+    const pct = tileW ? (imgW / tileW) * 100 : 0;
+    return { mascotBody: body, linkedinImg: imgW, tileW, imgPct: Math.round(pct * 10) / 10, delta: imgW - body };
   });
   console.log({ width, ...m });
-  if (Math.abs(m.delta) > 4) process.exitCode = 1;
+  if (m.imgPct < 66 || m.imgPct > 70) process.exitCode = 1;
   await page.close();
 }
 
