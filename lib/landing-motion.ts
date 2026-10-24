@@ -4,6 +4,20 @@ import { animate, inView, scroll, stagger } from "motion";
 
 type CleanupFn = () => void;
 
+/** Hero headline / sub / CTA text intro (Mobbin-style fade + blur + slide). */
+const HERO_TEXT_INTRO_EASE: [number, number, number, number] = [0, 0, 0.2, 1];
+const HERO_TEXT_INTRO_BLUR_PX = 8;
+const HERO_TEXT_BLUR_IN = `blur(${HERO_TEXT_INTRO_BLUR_PX}px)`;
+const HERO_TEXT_BLUR_OUT = "blur(0px)";
+
+function clearHeroTextFilters(selectors: string[]) {
+  selectors.forEach((sel) => {
+    q(sel).forEach((el) => {
+      el.style.filter = "";
+    });
+  });
+}
+
 function q(sel: string, ctx?: ParentNode): HTMLElement[] {
   return Array.from((ctx ?? document).querySelectorAll(sel)) as HTMLElement[];
 }
@@ -106,24 +120,74 @@ export function initLandingMotion(): CleanupFn {
   });
 
   void (async () => {
+    heroWords.forEach((w) => {
+      w.style.willChange = "transform, opacity, filter";
+    });
+
     await animate([
       [".pill", { opacity: [0, 1], y: [16, 0], scale: [0.96, 1] }, { duration: 0.7, ease: [0.22, 1, 0.36, 1] }],
-      [heroWords, { y: ["115%", "0%"] }, { duration: 0.9, delay: stagger(0.06), ease: [0.22, 1, 0.36, 1], at: "-0.35" }],
+      [
+        heroWords,
+        {
+          y: ["115%", "0%"],
+          opacity: [0, 1],
+          filter: [HERO_TEXT_BLUR_IN, HERO_TEXT_BLUR_OUT],
+        },
+        { duration: 0.9, delay: stagger(0.06), ease: HERO_TEXT_INTRO_EASE, at: "-0.35" },
+      ],
       [introTiles, { opacity: [0, 1], scale: [0.2, 1], y: [30, 0] }, { duration: 0.8, delay: stagger(0.08), ease: [0.34, 1.56, 0.64, 1], at: "-0.75" }],
-      [".hero .sub", { opacity: [0, 1], y: [18, 0] }, { duration: 0.7, at: "-0.4" }],
-      [".ctas.hero-hide .btn", { opacity: [0, 1], y: [18, 0] }, { duration: 0.6, delay: stagger(0.08), at: "-0.45" }],
-      [".ticks span", { opacity: [0, 1], y: [10, 0] }, { duration: 0.5, delay: stagger(0.07), at: "-0.35" }],
+      [
+        ".hero .sub",
+        {
+          opacity: [0, 1],
+          y: [18, 0],
+          filter: [HERO_TEXT_BLUR_IN, HERO_TEXT_BLUR_OUT],
+        },
+        { duration: 0.7, ease: HERO_TEXT_INTRO_EASE, at: "-0.4" },
+      ],
+      [
+        ".ctas.hero-hide .btn",
+        {
+          opacity: [0, 1],
+          y: [18, 0],
+          filter: [HERO_TEXT_BLUR_IN, HERO_TEXT_BLUR_OUT],
+        },
+        { duration: 0.6, delay: stagger(0.08), ease: HERO_TEXT_INTRO_EASE, at: "-0.45" },
+      ],
+      [
+        ".ticks span",
+        {
+          opacity: [0, 1],
+          y: [10, 0],
+          filter: [HERO_TEXT_BLUR_IN, HERO_TEXT_BLUR_OUT],
+        },
+        { duration: 0.5, delay: stagger(0.07), ease: HERO_TEXT_INTRO_EASE, at: "-0.35" },
+      ],
       [".ticks svg", { scale: [0, 1], rotate: [-45, 0] }, { duration: 0.5, delay: stagger(0.07), ease: [0.34, 1.56, 0.64, 1], at: "<" }],
-      [".stage", { opacity: [0, 1], y: [80, 0] }, { duration: 1.1, at: "-0.6" }],
+    ] as any);
+
+    heroWords.forEach((w) => {
+      w.style.willChange = "";
+      w.style.filter = "";
+    });
+    clearHeroTextFilters([".hero .sub", ".ctas.hero-hide .btn", ".ticks span"]);
+
+    markHeroIntroComplete();
+
+    void animate([
+      [".stage", { opacity: [0, 1], y: [80, 0] }, { duration: 1.1 }],
       [
         ".mascot-float",
         { opacity: [0, 1], y: [40, 0], scale: [0.6, 1], rotate: [-20, 0] },
         { duration: 0.9, ease: [0.34, 1.56, 0.64, 1], at: "-0.5" },
       ],
     ] as any);
-    markHeroIntroComplete();
+
     await runChatDemo();
-  })();
+  })().catch((err) => {
+    console.error("[landing-motion] hero intro failed", err);
+    markHeroIntroComplete();
+  });
 
   async function runChatDemo() {
     const msgs = q(".msg");
