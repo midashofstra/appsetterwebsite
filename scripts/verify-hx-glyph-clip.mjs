@@ -34,6 +34,9 @@ for (const width of WIDTHS) {
     const page = await browser.newPage({ viewport: { width, height: 900 } });
     await page.emulateMedia({ reducedMotion: phase === "post" ? "reduce" : "no-preference" });
     await page.goto(baseUrl, { waitUntil: "networkidle" });
+    await page
+      .waitForFunction(() => document.querySelectorAll(".hx .wi").length > 0, null, { timeout: 15000 })
+      .catch(() => {});
     if (phase === "post") {
       await page.waitForFunction(
         () =>
