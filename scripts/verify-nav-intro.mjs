@@ -9,7 +9,8 @@ const baseUrl = process.env.NAV_INTRO_URL || "http://127.0.0.1:3001/";
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 await page.goto(baseUrl, { waitUntil: "commit" });
-await page.waitForTimeout(180);
+const midMs = Number(process.env.NAV_INTRO_MID_MS || 180);
+await page.waitForTimeout(midMs);
 const mid = await page.evaluate(() => {
   const brand = document.querySelector("#hdr .brand");
   if (!brand) return null;
