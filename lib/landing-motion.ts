@@ -315,16 +315,18 @@ export function initLandingMotion(): CleanupFn {
 
     markHeroIntroComplete();
 
-    void animate([
-      [".stage", { opacity: [0, 1], y: [80, 0] }, { duration: 1.1 }],
-      [
-        ".mascot-float",
-        { opacity: [0, 1], y: [40, 0], scale: [0.6, 1], rotate: [-20, 0] },
-        { duration: 0.9, ease: [0.34, 1.56, 0.64, 1], at: "-0.5" },
-      ],
-    ] as any);
-
-    await runChatDemo();
+    const legacyStage = document.querySelector(".stage");
+    if (legacyStage) {
+      void animate([
+        [".stage", { opacity: [0, 1], y: [80, 0] }, { duration: 1.1 }],
+        [
+          ".mascot-float",
+          { opacity: [0, 1], y: [40, 0], scale: [0.6, 1], rotate: [-20, 0] },
+          { duration: 0.9, ease: [0.34, 1.56, 0.64, 1], at: "-0.5" },
+        ],
+      ] as any);
+      await runChatDemo();
+    }
   })().catch((err) => {
     console.error("[landing-motion] hero intro failed", err);
     clearNavIntroInlineStyles(navIntro.all, navIntro.blurLayer);
@@ -333,6 +335,7 @@ export function initLandingMotion(): CleanupFn {
 
   async function runChatDemo() {
     const msgs = q(".msg");
+    if (!msgs.length) return;
     const typing = document.querySelector(".typing") as HTMLElement | null;
     const booked = document.querySelector(".booked") as HTMLElement | null;
     msgs.forEach((m) => {
@@ -366,8 +369,10 @@ export function initLandingMotion(): CleanupFn {
     }
   }
 
-  void animate(".mascot-float", { y: [0, -10] }, { duration: 2.4, ease: "easeInOut", repeat: Infinity, repeatType: "reverse", delay: 2 });
-  void animate(".mascot-float", { rotate: [0, -2] }, { duration: 2.4, ease: "easeInOut", repeat: Infinity, repeatType: "reverse", delay: 2 });
+  if (document.querySelector(".mascot-float")) {
+    void animate(".mascot-float", { y: [0, -10] }, { duration: 2.4, ease: "easeInOut", repeat: Infinity, repeatType: "reverse", delay: 2 });
+    void animate(".mascot-float", { rotate: [0, -2] }, { duration: 2.4, ease: "easeInOut", repeat: Infinity, repeatType: "reverse", delay: 2 });
+  }
 
   const stage = document.querySelector(".stage");
   const app = document.querySelector(".app");
@@ -467,6 +472,20 @@ export function initLandingMotion(): CleanupFn {
   q("section .sub, .head .btn, .guide .copy .btn").forEach((el) => {
     cleanups.push(revealOnScroll(el, { opacity: [0, 1], y: [24, 0] }, { trigger: el, start: "top 88%", duration: 0.8 }));
   });
+
+  const heroVideoFrame = document.querySelector(".hero-video__frame") as HTMLElement | null;
+  if (heroVideoFrame) {
+    heroVideoFrame.style.opacity = "0";
+    heroVideoFrame.style.transform = "translateY(28px)";
+    heroVideoFrame.style.filter = "blur(10px)";
+    cleanups.push(
+      revealOnScroll(
+        heroVideoFrame,
+        { opacity: [0, 1], y: [28, 0], filter: ["blur(10px)", "blur(0px)"] },
+        { trigger: ".hero-video", start: "top 92%", duration: 0.85, ease: [0.22, 1, 0.36, 1] }
+      )
+    );
+  }
 
   cleanups.push(revealOnScroll(".logos p", { opacity: [0, 1], y: [12, 0] }, { trigger: ".logos", start: "top 85%", duration: 0.6 }));
   cleanups.push(
