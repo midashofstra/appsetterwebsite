@@ -1,4 +1,5 @@
 import { HeroHeadline } from "@/components/sections/HeroHeadline";
+import { HeroVideo } from "@/components/sections/HeroVideo";
 import { HERO_BODY_AFTER_HEADLINE } from "@/lib/hero-body-html";
 
 export function Hero() {
@@ -14,6 +15,8 @@ export function Hero() {
         <HeroHeadline />
         <div dangerouslySetInnerHTML={{ __html: HERO_BODY_AFTER_HEADLINE }} />
       </div>
+      <HeroVideo />
+      {/* Legacy inbox demo: import HeroDemoStage from HeroDemoStage.tsx, render <HeroDemoStage />, remove <HeroVideo />. */}
     </div>
   );
 }
