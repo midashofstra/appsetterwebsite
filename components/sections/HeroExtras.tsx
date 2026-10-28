@@ -39,7 +39,7 @@ export function HeroExtras() {
       span.replaceWith(mount);
       createRoot(mount).render(
         <>
-          <SiteIcon icon={faCheck} size={18} style={{ color: "var(--g-ink)", flexShrink: 0 }} />
+          <SiteIcon icon={faCheck} size={18} className="hero-tick-icon" style={{ color: "var(--g-ink)", flexShrink: 0 }} />
           {text}
         </>
       );
