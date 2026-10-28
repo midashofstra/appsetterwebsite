@@ -1,1 +1,18 @@
-export const HERO_BODY_AFTER_HEADLINE = "<p class=\"sub hero-hide\">Appointment Setter volgt elke lead op via LinkedIn, e-mail en WhatsApp en zet de afspraken in je agenda. Jij voert alleen nog de gesprekken.</p>\n    <div class=\"ctas hero-hide\">\n      <a class=\"btn btn-main\" href=\"#start\">Probeer 3 dagen voor €1</a>\n      <a class=\"btn btn-ghost\" href=\"#start\">Laat ons je onboarden</a>\n    </div>\n    <div class=\"ticks hero-hide\">\n      <span><svg width=\"18\" height=\"18\" style=\"color:var(--g-ink)\"><use href=\"#check\"/></svg>3 dagen proberen voor €1</span>\n      <span><svg width=\"18\" height=\"18\" style=\"color:var(--g-ink)\"><use href=\"#check\"/></svg>Geen setter meer nodig</span>\n      <span><svg width=\"18\" height=\"18\" style=\"color:var(--g-ink)\"><use href=\"#check\"/></svg>Jij kijkt altijd mee</span>\n    </div>";
+import { nl } from "@/lib/i18n/nl";
+import type { Dictionary } from "@/lib/i18n/types";
+
+export function buildHeroBodyHtml(dict: Dictionary): string {
+  const { hero } = dict;
+  return `<p class="sub hero-hide">${hero.sub}</p>
+    <div class="ctas hero-hide">
+      <a class="btn btn-main" href="#start">${hero.ctaPrimary}</a>
+      <a class="btn btn-ghost" href="#start">${hero.ctaGhost}</a>
+    </div>
+    <div class="ticks hero-hide">
+      <span><svg width="18" height="18" style="color:var(--g-ink)"><use href="#check"/></svg>${hero.ticks[0]}</span>
+      <span><svg width="18" height="18" style="color:var(--g-ink)"><use href="#check"/></svg>${hero.ticks[1]}</span>
+      <span><svg width="18" height="18" style="color:var(--g-ink)"><use href="#check"/></svg>${hero.ticks[2]}</span>
+    </div>`;
+}
+
+export const HERO_BODY_AFTER_HEADLINE = buildHeroBodyHtml(nl);

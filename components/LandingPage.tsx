@@ -1,3 +1,4 @@
+import { LocaleDocument } from "@/components/LocaleDocument";
 import { LandingMotion } from "@/components/LandingMotion";
 import { Channels } from "@/components/sections/Channels";
 import { Compare } from "@/components/sections/Compare";
@@ -15,28 +16,31 @@ import { Problem } from "@/components/sections/Problem";
 import { Progress } from "@/components/sections/Progress";
 import { SvgDefs } from "@/components/sections/SvgDefs";
 import { Why } from "@/components/sections/Why";
+import { getDictionary, type Locale } from "@/lib/i18n";
 
-export function LandingPage() {
+export function LandingPage({ locale = "nl" }: { locale?: Locale }) {
+  const dict = getDictionary(locale);
   return (
     <>
+      <LocaleDocument dict={dict} />
       <SvgDefs />
       <Progress />
-      <Header />
+      <Header dict={dict} />
       <main id="top">
-        <Hero />
-        <HeroExtras />
-        <Logos />
-        <Problem />
-        <Manifest />
-        <Why />
-        <Plan />
-        <PlanExtras />
-        <Channels />
-        <Compare />
-        <Faq />
-        <Cta />
+        <Hero dict={dict} />
+        <HeroExtras dict={dict} />
+        <Logos dict={dict} />
+        <Problem dict={dict} />
+        <Manifest dict={dict} />
+        <Why dict={dict} />
+        <Plan dict={dict} />
+        <PlanExtras dict={dict} />
+        <Channels dict={dict} />
+        <Compare dict={dict} />
+        <Faq dict={dict} />
+        <Cta dict={dict} />
       </main>
-      <Footer />
+      <Footer dict={dict} />
       <LandingMotion />
     </>
   );

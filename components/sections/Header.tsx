@@ -1,8 +1,11 @@
+import { LangSwitcher } from "@/components/LangSwitcher";
 import { CtaButton } from "@/components/ui/CtaButton";
+import type { Dictionary } from "@/lib/i18n/types";
 
 const NAV_PROGRESSIVE_BLUR_PX = [0.5, 1, 2, 4, 8, 16, 32] as const;
 
-export function Header() {
+export function Header({ dict }: { dict: Dictionary }) {
+  const { nav } = dict;
   return (
     <header id="hdr">
       <div className="hdr-progressive-blur" aria-hidden="true">
@@ -11,24 +14,27 @@ export function Header() {
         ))}
       </div>
       <div className="wrap">
-        <nav aria-label="Hoofdmenu">
+        <nav aria-label={nav.aria}>
           <a href="#top" className="brand">
             <svg width="38" height="38" viewBox="0 0 120 120" aria-hidden="true">
               <rect width="120" height="120" rx="30" fill="var(--g)" />
               <use href="#agent" transform="rotate(-8 60 64)" />
             </svg>
-            <span>Appointment Setter</span>
+            <span>{nav.brand}</span>
           </a>
           <div className="navlinks">
-            <a href="#probleem">Probleem</a>
-            <a href="#waarom">Waarom wij</a>
-            <a href="#plan">Hoe het werkt</a>
-            <a href="#kanalen">Kanalen</a>
-            <a href="#faq">Vragen</a>
+            <a href="#probleem">{nav.problem}</a>
+            <a href="#waarom">{nav.why}</a>
+            <a href="#plan">{nav.plan}</a>
+            <a href="#kanalen">{nav.channels}</a>
+            <a href="#faq">{nav.faq}</a>
           </div>
-          <CtaButton href="#start" className="btn-main btn-sm">
-            Probeer voor €1
-          </CtaButton>
+          <div className="nav-end">
+            <LangSwitcher locale={dict.locale} />
+            <CtaButton href="#start" className="btn-main btn-sm">
+              {nav.cta}
+            </CtaButton>
+          </div>
         </nav>
       </div>
     </header>

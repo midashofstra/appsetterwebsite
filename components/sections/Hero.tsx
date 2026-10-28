@@ -1,8 +1,9 @@
 import { HeroHeadline } from "@/components/sections/HeroHeadline";
 import { HeroVideo } from "@/components/sections/HeroVideo";
-import { HERO_BODY_AFTER_HEADLINE } from "@/lib/hero-body-html";
+import { buildHeroBodyHtml } from "@/lib/hero-body-html";
+import type { Dictionary } from "@/lib/i18n/types";
 
-export function Hero() {
+export function Hero({ dict }: { dict: Dictionary }) {
   return (
     <div className="hero">
       <div className="wrap">
@@ -12,10 +13,10 @@ export function Hero() {
           AI appointment setter voor LinkedIn, e-mail en WhatsApp
         </span>
         */}
-        <HeroHeadline />
-        <div dangerouslySetInnerHTML={{ __html: HERO_BODY_AFTER_HEADLINE }} />
+        <HeroHeadline dict={dict} />
+        <div dangerouslySetInnerHTML={{ __html: buildHeroBodyHtml(dict) }} />
       </div>
-      <HeroVideo />
+      <HeroVideo dict={dict} />
       {/* Legacy inbox demo: import HeroDemoStage from HeroDemoStage.tsx, render <HeroDemoStage />, remove <HeroVideo />. */}
     </div>
   );

@@ -6,12 +6,14 @@ import {
   HERO_DECK_CYCLE_MS,
 } from "@/lib/hero-deck-timing";
 import { HERO_AGENDA_TILES, HERO_CHANNEL_TILES } from "@/lib/hero-tiles";
+import type { Dictionary } from "@/lib/i18n/types";
 
-export function HeroHeadline() {
+export function HeroHeadline({ dict }: { dict: Dictionary }) {
+  const [w0, w1, w2, w3] = dict.hero.words;
   return (
     <h1 className="hx hero-hide">
-      <span>Laat</span>
-      <span className="tiles" role="img" aria-label="appointmentsetter">
+      <span>{w0}</span>
+      <span className="tiles" role="img" aria-label={dict.hero.mascotAria}>
         <span className="tile t1 as-tile">
           <svg className="as-icon" viewBox="0 0 120 120" aria-hidden="true">
             <rect width="120" height="120" rx="30" fill="var(--g)" />
@@ -40,17 +42,17 @@ export function HeroHeadline() {
           </svg>
         </span>
       </span>
-      <span>je</span>
+      <span>{w1}</span>
       <HeroTileDeck
         cards={HERO_AGENDA_TILES}
-        ariaLabel="Google Agenda en Outlook"
+        ariaLabel={dict.hero.agendaDeckAria}
         firstFlipDelayAfterIntroMs={HERO_DECK_CYCLE_MS}
       />
-      <span>vullen,</span>
-      <span>direct vanuit</span>
+      <span>{w2}</span>
+      <span>{w3}</span>
       <HeroTileDeck
         cards={HERO_CHANNEL_TILES}
-        ariaLabel="LinkedIn, Gmail, WhatsApp en Outlook"
+        ariaLabel={dict.hero.channelDeckAria}
         firstFlipDelayAfterIntroMs={HERO_DECK_CYCLE_MS}
         firstFlipStaggerMs={HERO_DECK_CHANNEL_STAGGER_MS}
       />

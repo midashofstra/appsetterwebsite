@@ -4,8 +4,9 @@ import { useLayoutEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { INTEGRATION_LOGOS } from "@/lib/integration-logos";
 import { CtaButton } from "@/components/ui/CtaButton";
+import type { Dictionary } from "@/lib/i18n/types";
 
-export function PlanExtras() {
+export function PlanExtras({ dict }: { dict: Dictionary }) {
   useLayoutEffect(() => {
     const headBtn = document.querySelector("#plan .head .btn-ghost");
     if (headBtn && !headBtn.classList.contains("btn-roll")) {
@@ -14,7 +15,7 @@ export function PlanExtras() {
       headBtn.replaceWith(mount);
       createRoot(mount).render(
         <CtaButton href="#start" className="btn-ghost">
-          Probeer 3 dagen voor €1
+          {dict.why.cta}
         </CtaButton>
       );
     }
@@ -24,10 +25,10 @@ export function PlanExtras() {
       mini.setAttribute("data-integrations", "true");
       mini.innerHTML = INTEGRATION_LOGOS.map(
         ({ label, src }) =>
-          `<div class="r"><img draggable="false" src="${src}" alt="${label}">${label}<span class="tag g">Gekoppeld</span></div>`
+          `<div class="r"><img draggable="false" src="${src}" alt="${label}">${label}<span class="tag g">${dict.planExtras.connected}</span></div>`
       ).join("");
     }
-  }, []);
+  }, [dict.planExtras.connected, dict.why.cta]);
 
   return null;
 }

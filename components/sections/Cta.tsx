@@ -1,24 +1,23 @@
 import Image from "next/image";
 import { CtaButton } from "@/components/ui/CtaButton";
+import type { Dictionary } from "@/lib/i18n/types";
 
-export function Cta() {
+export function Cta({ dict }: { dict: Dictionary }) {
+  const { cta } = dict;
   return (
     <section id="start" className="cta-section">
       <div className="wrap">
         <div className="cta-stage">
           <div className="cta rv">
             <div>
-              <h2>Probeer het 3 dagen voor €1.</h2>
-              <p className="sub">
-                Koppel je kanalen en zie de eerste afspraken binnenkomen. Liever dat wij het
-                instellen? Dan onboarden we je.
-              </p>
+              <h2>{cta.title}</h2>
+              <p className="sub">{cta.sub}</p>
               <div className="ctas cta-actions">
                 <CtaButton href="#start" className="btn-ink">
-                  Start voor €1
+                  {cta.primary}
                 </CtaButton>
                 <CtaButton href="#start" className="btn-ghost">
-                  Laat ons je onboarden
+                  {cta.ghost}
                 </CtaButton>
               </div>
             </div>
@@ -26,7 +25,7 @@ export function Cta() {
           <div className="cta-mascot-wrap">
             <Image
               src="/mascot-3d.webp"
-              alt="3D-mascotte van appointmentsetter.app: een wit kalenderblok met twee ringen en grote zwarte ogen"
+              alt={cta.mascotAlt}
               width={1242}
               height={1228}
               className="cta-mascot-3d"

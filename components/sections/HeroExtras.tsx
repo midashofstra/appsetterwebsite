@@ -5,9 +5,10 @@ import { useLayoutEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { SiteIcon } from "@/components/icons/SiteIcon";
 import { CtaButton } from "@/components/ui/CtaButton";
+import type { Dictionary } from "@/lib/i18n/types";
 
 /** Hydrates hero CTAs and tick checkmarks inside injected hero HTML. */
-export function HeroExtras() {
+export function HeroExtras({ dict }: { dict: Dictionary }) {
   useLayoutEffect(() => {
     const ctas = document.querySelector(".hero .ctas");
     if (ctas && !ctas.querySelector(".btn-roll")) {
@@ -18,10 +19,10 @@ export function HeroExtras() {
       createRoot(mount).render(
         <>
           <CtaButton href="#start" className="btn-main">
-            Probeer 3 dagen voor €1
+            {dict.hero.ctaPrimary}
           </CtaButton>
           <CtaButton href="#start" className="btn-ghost">
-            Laat ons je onboarden
+            {dict.hero.ctaGhost}
           </CtaButton>
         </>
       );
@@ -50,7 +51,7 @@ export function HeroExtras() {
       bookedOk.innerHTML = "";
       createRoot(bookedOk).render(<SiteIcon icon={faCheck} size={20} style={{ color: "#151613" }} />);
     }
-  }, []);
+  }, [dict.hero.ctaGhost, dict.hero.ctaPrimary]);
 
   return null;
 }
