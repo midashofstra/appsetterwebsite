@@ -10,6 +10,52 @@ const HERO_TEXT_INTRO_BLUR_PX = 8;
 const HERO_TEXT_BLUR_IN = `blur(${HERO_TEXT_INTRO_BLUR_PX}px)`;
 const HERO_TEXT_BLUR_OUT = "blur(0px)";
 
+/** Navbar load intro (synced with hero text intro start; does not affect hero-intro-complete). */
+const NAV_INTRO_DURATION_S = 0.7;
+const NAV_INTRO_OFFSET_Y = -16;
+const NAV_INTRO_STAGGER_S = 0.06;
+
+function clearNavIntroInlineStyles(
+  targets: HTMLElement[],
+  blurLayer: HTMLElement | null
+) {
+  targets.forEach((el) => {
+    el.style.opacity = "";
+    el.style.transform = "";
+    el.style.filter = "";
+    el.style.willChange = "";
+  });
+  if (blurLayer) blurLayer.style.opacity = "";
+}
+
+function primeNavIntroFromState(
+  targets: HTMLElement[],
+  blurLayer: HTMLElement | null
+) {
+  targets.forEach((el) => {
+    el.style.opacity = "0";
+    el.style.transform = `translateY(${NAV_INTRO_OFFSET_Y}px)`;
+    el.style.filter = HERO_TEXT_BLUR_IN;
+    el.style.willChange = "transform, opacity, filter";
+  });
+  if (blurLayer) blurLayer.style.opacity = "0";
+}
+
+function getNavIntroTargets(): {
+  brand: HTMLElement | null;
+  links: HTMLElement[];
+  cta: HTMLElement | null;
+  blurLayer: HTMLElement | null;
+  all: HTMLElement[];
+} {
+  const brand = document.querySelector("#hdr .brand") as HTMLElement | null;
+  const links = q("#hdr .navlinks a");
+  const cta = document.querySelector("#hdr nav .btn-main") as HTMLElement | null;
+  const blurLayer = document.querySelector("#hdr .hdr-progressive-blur") as HTMLElement | null;
+  const all = [brand, ...links, cta].filter(Boolean) as HTMLElement[];
+  return { brand, links, cta, blurLayer, all };
+}
+
 function clearHeroTextFilters(selectors: string[]) {
   selectors.forEach((sel) => {
     q(sel).forEach((el) => {
@@ -81,8 +127,11 @@ export function initLandingMotion(): CleanupFn {
   const cleanups: CleanupFn[] = [() => window.removeEventListener("scroll", onScroll)];
 
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const navIntro = getNavIntroTargets();
+
   if (reduce) {
     root.classList.remove("gs");
+    clearNavIntroInlineStyles(navIntro.all, navIntro.blurLayer);
     const li = document.querySelector(".steps .line i") as HTMLElement | null;
     if (li) li.style.transform = "scaleX(1)";
     const progress = document.getElementById("progress");
@@ -103,6 +152,54 @@ export function initLandingMotion(): CleanupFn {
   const hx = document.querySelector(".hx") as HTMLElement | null;
   if (!hx) {
     root.classList.remove("gs");
+    primeNavIntroFromState(navIntro.all, navIntro.blurLayer);
+    void animate(
+      [
+        navIntro.blurLayer && [
+          navIntro.blurLayer,
+          { opacity: [0, 1] },
+          { duration: NAV_INTRO_DURATION_S, ease: HERO_TEXT_INTRO_EASE },
+        ],
+        navIntro.brand && [
+          navIntro.brand,
+          {
+            opacity: [0, 1],
+            y: [NAV_INTRO_OFFSET_Y, 0],
+            filter: [HERO_TEXT_BLUR_IN, HERO_TEXT_BLUR_OUT],
+          },
+          { duration: NAV_INTRO_DURATION_S, ease: HERO_TEXT_INTRO_EASE, at: 0 },
+        ],
+        navIntro.links.length && [
+          navIntro.links,
+          {
+            opacity: [0, 1],
+            y: [NAV_INTRO_OFFSET_Y, 0],
+            filter: [HERO_TEXT_BLUR_IN, HERO_TEXT_BLUR_OUT],
+          },
+          {
+            duration: NAV_INTRO_DURATION_S,
+            delay: stagger(NAV_INTRO_STAGGER_S),
+            ease: HERO_TEXT_INTRO_EASE,
+            at: NAV_INTRO_STAGGER_S,
+          },
+        ],
+        navIntro.cta && [
+          navIntro.cta,
+          {
+            opacity: [0, 1],
+            y: [NAV_INTRO_OFFSET_Y, 0],
+            filter: [HERO_TEXT_BLUR_IN, HERO_TEXT_BLUR_OUT],
+          },
+          {
+            duration: NAV_INTRO_DURATION_S,
+            ease: HERO_TEXT_INTRO_EASE,
+            at: NAV_INTRO_STAGGER_S * 2,
+          },
+        ],
+      ].filter(Boolean) as any
+    ).then(() => {
+      clearNavIntroInlineStyles(navIntro.all, navIntro.blurLayer);
+    });
     markHeroIntroComplete();
     return () => cleanups.forEach((fn) => fn());
   }
@@ -120,11 +217,54 @@ export function initLandingMotion(): CleanupFn {
   });
 
   void (async () => {
+    primeNavIntroFromState(navIntro.all, navIntro.blurLayer);
+
     heroWords.forEach((w) => {
       w.style.willChange = "transform, opacity, filter";
     });
 
     await animate([
+      navIntro.blurLayer && [
+        navIntro.blurLayer,
+        { opacity: [0, 1] },
+        { duration: NAV_INTRO_DURATION_S, ease: HERO_TEXT_INTRO_EASE },
+      ],
+      navIntro.brand && [
+        navIntro.brand,
+        {
+          opacity: [0, 1],
+          y: [NAV_INTRO_OFFSET_Y, 0],
+          filter: [HERO_TEXT_BLUR_IN, HERO_TEXT_BLUR_OUT],
+        },
+        { duration: NAV_INTRO_DURATION_S, ease: HERO_TEXT_INTRO_EASE, at: 0 },
+      ],
+      navIntro.links.length && [
+        navIntro.links,
+        {
+          opacity: [0, 1],
+          y: [NAV_INTRO_OFFSET_Y, 0],
+          filter: [HERO_TEXT_BLUR_IN, HERO_TEXT_BLUR_OUT],
+        },
+        {
+          duration: NAV_INTRO_DURATION_S,
+          delay: stagger(NAV_INTRO_STAGGER_S),
+          ease: HERO_TEXT_INTRO_EASE,
+          at: NAV_INTRO_STAGGER_S,
+        },
+      ],
+      navIntro.cta && [
+        navIntro.cta,
+        {
+          opacity: [0, 1],
+          y: [NAV_INTRO_OFFSET_Y, 0],
+          filter: [HERO_TEXT_BLUR_IN, HERO_TEXT_BLUR_OUT],
+        },
+        {
+          duration: NAV_INTRO_DURATION_S,
+          ease: HERO_TEXT_INTRO_EASE,
+          at: NAV_INTRO_STAGGER_S * 2,
+        },
+      ],
       // [".pill", { opacity: [0, 1], y: [16, 0], scale: [0.96, 1] }, { duration: 0.7, ease: [0.22, 1, 0.36, 1] }],
       [
         heroWords,
@@ -133,7 +273,7 @@ export function initLandingMotion(): CleanupFn {
           opacity: [0, 1],
           filter: [HERO_TEXT_BLUR_IN, HERO_TEXT_BLUR_OUT],
         },
-        { duration: 0.9, delay: stagger(0.06), ease: HERO_TEXT_INTRO_EASE, at: "-0.35" },
+        { duration: 0.9, delay: stagger(0.06), ease: HERO_TEXT_INTRO_EASE, at: 0 },
       ],
       [introTiles, { opacity: [0, 1], scale: [0.2, 1], y: [30, 0] }, { duration: 0.8, delay: stagger(0.08), ease: [0.34, 1.56, 0.64, 1], at: "-0.75" }],
       [
@@ -164,12 +304,13 @@ export function initLandingMotion(): CleanupFn {
         { duration: 0.5, delay: stagger(0.07), ease: HERO_TEXT_INTRO_EASE, at: "-0.35" },
       ],
       [".ticks svg", { scale: [0, 1], rotate: [-45, 0] }, { duration: 0.5, delay: stagger(0.07), ease: [0.34, 1.56, 0.64, 1], at: "<" }],
-    ] as any);
+    ].filter(Boolean) as any);
 
     heroWords.forEach((w) => {
       w.style.willChange = "";
       w.style.filter = "";
     });
+    clearNavIntroInlineStyles(navIntro.all, navIntro.blurLayer);
     clearHeroTextFilters([".hero .sub", ".ctas.hero-hide .btn", ".ticks span"]);
 
     markHeroIntroComplete();
@@ -186,6 +327,7 @@ export function initLandingMotion(): CleanupFn {
     await runChatDemo();
   })().catch((err) => {
     console.error("[landing-motion] hero intro failed", err);
+    clearNavIntroInlineStyles(navIntro.all, navIntro.blurLayer);
     markHeroIntroComplete();
   });
 
