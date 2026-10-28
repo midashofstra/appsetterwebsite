@@ -1,14 +1,24 @@
 import type { Metadata, Viewport } from "next";
-import { Figtree } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import type { CSSProperties } from "react";
 import { DEFAULT_PRIMARY, getDefaultThemeStyle } from "@/lib/color-themes";
 import "@/lib/fontawesome";
 import "./globals.css";
 
-const figtree = Figtree({
+// Previous site font (Figtree via next/font):
+// import { Figtree } from "next/font/google";
+// const figtree = Figtree({
+//   subsets: ["latin"],
+//   weight: ["400", "500", "600", "700", "800"],
+//   display: "swap",
+// });
+
+/** Plus Jakarta Sans: Google variable axis tops out at 800 (no 900 cut). */
+const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
   display: "swap",
+  variable: "--font-sans",
 });
 
 const defaultTheme = getDefaultThemeStyle();
@@ -31,10 +41,10 @@ export default function RootLayout({
   return (
     <html
       lang="nl"
-      className={`gs ${figtree.className}`}
+      className={`gs ${plusJakartaSans.variable}`}
       style={defaultTheme as CSSProperties}
     >
-      <body>{children}</body>
+      <body className={plusJakartaSans.className}>{children}</body>
     </html>
   );
 }
