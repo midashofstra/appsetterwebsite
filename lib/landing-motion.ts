@@ -26,7 +26,7 @@ function splitWords(el: HTMLElement): HTMLElement[] {
   const words = el.textContent?.trim().split(/\s+/) ?? [];
   el.innerHTML = words
     .map((w) => `<span class="wm"><span class="wi">${w}</span></span>`)
-    .join(" ");
+    .join("");
   return q(".wi", el);
 }
 
