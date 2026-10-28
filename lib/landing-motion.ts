@@ -9,6 +9,8 @@ const HERO_TEXT_INTRO_EASE: [number, number, number, number] = [0, 0, 0.2, 1];
 const HERO_TEXT_INTRO_BLUR_PX = 8;
 const HERO_TEXT_BLUR_IN = `blur(${HERO_TEXT_INTRO_BLUR_PX}px)`;
 const HERO_TEXT_BLUR_OUT = "blur(0px)";
+/** Gap after hero sub before CTA buttons animate in. */
+const HERO_CTA_AFTER_SUB_DELAY_S = 0.2;
 
 /** Navbar load intro (synced with hero text intro start; does not affect hero-intro-complete). */
 const NAV_INTRO_DURATION_S = 0.7;
@@ -285,25 +287,6 @@ export function initLandingMotion(): CleanupFn {
         },
         { duration: 0.7, ease: HERO_TEXT_INTRO_EASE, at: "-0.4" },
       ],
-      [
-        ".ctas.hero-hide .btn",
-        {
-          opacity: [0, 1],
-          y: [18, 0],
-          filter: [HERO_TEXT_BLUR_IN, HERO_TEXT_BLUR_OUT],
-        },
-        { duration: 0.6, delay: stagger(0.08), ease: HERO_TEXT_INTRO_EASE, at: "-0.45" },
-      ],
-      [
-        ".ticks span",
-        {
-          opacity: [0, 1],
-          y: [10, 0],
-          filter: [HERO_TEXT_BLUR_IN, HERO_TEXT_BLUR_OUT],
-        },
-        { duration: 0.5, delay: stagger(0.07), ease: HERO_TEXT_INTRO_EASE, at: "-0.35" },
-      ],
-      [".ticks svg", { scale: [0, 1], rotate: [-45, 0] }, { duration: 0.5, delay: stagger(0.07), ease: [0.34, 1.56, 0.64, 1], at: "<" }],
     ].filter(Boolean) as any);
 
     heroWords.forEach((w) => {
@@ -311,9 +294,46 @@ export function initLandingMotion(): CleanupFn {
       w.style.filter = "";
     });
     clearNavIntroInlineStyles(navIntro.all, navIntro.blurLayer);
-    clearHeroTextFilters([".hero .sub", ".ctas.hero-hide .btn", ".ticks span"]);
+    clearHeroTextFilters([".hero .sub"]);
 
     markHeroIntroComplete();
+
+    const heroCtaBtns = q(".ctas.hero-hide .btn");
+    heroCtaBtns.forEach((btn) => {
+      btn.style.opacity = "0";
+      btn.style.transform = "translateY(18px)";
+      btn.style.filter = HERO_TEXT_BLUR_IN;
+      btn.style.willChange = "transform, opacity, filter";
+    });
+    await new Promise((r) => setTimeout(r, HERO_CTA_AFTER_SUB_DELAY_S * 1000));
+
+    await animate(
+      heroCtaBtns,
+      {
+        opacity: [0, 1],
+        y: [18, 0],
+        filter: [HERO_TEXT_BLUR_IN, HERO_TEXT_BLUR_OUT],
+      },
+      { duration: 0.6, delay: stagger(0.08), ease: HERO_TEXT_INTRO_EASE }
+    );
+    heroCtaBtns.forEach((btn) => {
+      btn.style.willChange = "";
+      btn.style.filter = "";
+    });
+
+    await animate([
+      [
+        ".ticks span",
+        {
+          opacity: [0, 1],
+          y: [10, 0],
+          filter: [HERO_TEXT_BLUR_IN, HERO_TEXT_BLUR_OUT],
+        },
+        { duration: 0.5, delay: stagger(0.07), ease: HERO_TEXT_INTRO_EASE },
+      ],
+      [".ticks svg", { scale: [0, 1], rotate: [-45, 0] }, { duration: 0.5, delay: stagger(0.07), ease: [0.34, 1.56, 0.64, 1], at: "<" }],
+    ] as any);
+    clearHeroTextFilters([".ticks span"]);
 
     const legacyStage = document.querySelector(".stage");
     if (legacyStage) {
