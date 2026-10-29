@@ -1,138 +1,32 @@
 "use client";
 
-import {
-  motion,
-  useReducedMotion,
-  useSpring,
-  useTransform,
-} from "motion/react";
+import { useReducedMotion } from "motion/react";
 import { useEffect, useRef } from "react";
+import { initFaceFollowCursor } from "@/lib/osmo/face-follow-cursor";
 
 const BASE_INTENSITY = 30;
 const HIGHLIGHT_FACTOR = 1.5;
-const BODY_TILT_DEG = 4;
-const BODY_SHIFT_EM = 0.08;
-const SPRING = { stiffness: 380, damping: 32, mass: 0.35 };
 
 /** User mascot SVG (444×444); eyes/inner eyes + body follow cursor while hero is in view. */
 export function HeroMascotTile({ ariaLabel }: { ariaLabel: string }) {
   const reduceMotion = useReducedMotion();
-  const faceRef = useRef<HTMLSpanElement>(null);
-
-  const eyesX = useSpring(0, SPRING);
-  const eyesY = useSpring(0, SPRING);
-  const innerX = useSpring(0, SPRING);
-  const innerY = useSpring(0, SPRING);
-  const bodyRotate = useSpring(0, SPRING);
-  const bodyX = useSpring(0, SPRING);
-  const bodyY = useSpring(0, SPRING);
-
-  const eyesTransform = useTransform(
-    [eyesX, eyesY],
-    ([x, y]) => `translate(${x}%, ${y}%)`
-  );
-  const innerTransform = useTransform(
-    [innerX, innerY],
-    ([x, y]) => `translate(${x}%, ${y}%)`
-  );
-  const bodyTransform = useTransform(
-    [bodyRotate, bodyX, bodyY],
-    ([r, x, y]) => `rotate(${r}deg) translate(${x}em, ${y}em)`
-  );
+  const sectionRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     if (reduceMotion || !window.matchMedia("(pointer: fine)").matches) return undefined;
-
-    const faceEl = faceRef.current;
+    const section = sectionRef.current;
     const hero = document.querySelector(".hero");
-    if (!faceEl || !hero) return undefined;
-
-    let tracking = false;
-    let raf = 0;
-    let mx = 0;
-    let my = 0;
-
-    const mapTarget = (intensity: number) => {
-      const r = faceEl.getBoundingClientRect();
-      const cx = r.left + r.width / 2;
-      const cy = r.top + r.height / 2;
-      const rx = r.width / 2 || 1;
-      const ry = r.height / 2 || 1;
-      let nx = (mx - cx) / rx;
-      let ny = (my - cy) / ry;
-      const mag = Math.hypot(nx, ny);
-      if (mag > 1) {
-        nx /= mag;
-        ny /= mag;
-      }
-      return { x: nx * intensity, y: ny * intensity, nx, ny };
-    };
-
-    const tick = () => {
-      raf = 0;
-      const eyes = mapTarget(BASE_INTENSITY);
-      const inner = mapTarget(BASE_INTENSITY * HIGHLIGHT_FACTOR);
-      eyesX.set(eyes.x);
-      eyesY.set(eyes.y);
-      innerX.set(inner.x);
-      innerY.set(inner.y);
-      bodyRotate.set(eyes.nx * BODY_TILT_DEG);
-      bodyX.set(eyes.nx * BODY_SHIFT_EM);
-      bodyY.set(eyes.ny * BODY_SHIFT_EM);
-    };
-
-    const onMove = (e: MouseEvent) => {
-      mx = e.clientX;
-      my = e.clientY;
-      if (!raf) raf = requestAnimationFrame(tick);
-    };
-
-    const start = () => {
-      if (tracking) return;
-      window.addEventListener("mousemove", onMove, { passive: true });
-      tracking = true;
-    };
-    const stop = () => {
-      if (!tracking) return;
-      window.removeEventListener("mousemove", onMove);
-      tracking = false;
-      eyesX.set(0);
-      eyesY.set(0);
-      innerX.set(0);
-      innerY.set(0);
-      bodyRotate.set(0);
-      bodyX.set(0);
-      bodyY.set(0);
-    };
-
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting) start();
-        else stop();
-      },
-      { root: null, threshold: 0, rootMargin: "0px" }
-    );
-    io.observe(hero);
-
-    return () => {
-      io.disconnect();
-      stop();
-      if (raf) cancelAnimationFrame(raf);
-    };
-  }, [
-    bodyRotate,
-    bodyX,
-    bodyY,
-    eyesX,
-    eyesY,
-    innerX,
-    innerY,
-    reduceMotion,
-  ]);
+    if (!section || !hero) return undefined;
+    return initFaceFollowCursor(section, hero);
+  }, [reduceMotion]);
 
   return (
     <span className="tiles" role="img" aria-label={ariaLabel}>
-      <span className="tile t1 as-tile hero-mascot-tile" ref={faceRef} data-face={BASE_INTENSITY}>
+      <span
+        className="tile t1 as-tile hero-mascot-tile"
+        ref={sectionRef}
+        data-face={BASE_INTENSITY}
+      >
         <svg
           className="as-icon hero-mascot-svg"
           viewBox="0 0 444 444"
@@ -141,14 +35,7 @@ export function HeroMascotTile({ ariaLabel }: { ariaLabel: string }) {
           aria-hidden
         >
           <rect width="444" height="444" fill="#FF0050" />
-          <motion.g
-            className="hero-mascot-body"
-            style={{
-              transformBox: "fill-box",
-              transformOrigin: "center",
-              transform: bodyTransform,
-            }}
-          >
+          <g className="hero-mascot-body">
             <path
               d="M272.968 144.884L177.704 158.272C141.28 163.391 115.902 197.069 121.021 233.493L131.32 306.773C136.439 343.197 170.116 368.575 206.54 363.456L301.804 350.067C338.228 344.948 363.606 311.271 358.487 274.846L348.188 201.567C343.069 165.142 309.392 139.765 272.968 144.884Z"
               fill="black"
@@ -167,17 +54,9 @@ export function HeroMascotTile({ ariaLabel }: { ariaLabel: string }) {
               d="M262.111 94.1081C260.689 83.9902 251.334 76.9408 241.216 78.3628C231.099 79.7848 224.049 89.1396 225.471 99.2575L231.65 143.225C233.072 153.343 242.427 160.393 252.545 158.971C262.663 157.549 269.712 148.194 268.29 138.076L262.111 94.1081Z"
               fill="black"
             />
-          </motion.g>
+          </g>
           <g id="eyes">
-            <motion.g
-              id="eyes_2"
-              data-face-target="1"
-              style={{
-                transformBox: "fill-box",
-                transformOrigin: "center",
-                transform: eyesTransform,
-              }}
-            >
+            <g id="eyes_2" data-face-target="1">
               <path
                 d="M194.699 279.189C208.864 277.198 218.041 259.18 215.197 238.944C212.353 218.709 198.565 203.918 184.4 205.909C170.235 207.9 161.057 225.918 163.901 246.154C166.745 266.389 180.534 281.18 194.699 279.189Z"
                 fill="black"
@@ -186,16 +65,8 @@ export function HeroMascotTile({ ariaLabel }: { ariaLabel: string }) {
                 d="M264.306 269.404C278.471 267.413 287.649 249.395 284.805 229.159C281.961 208.924 268.172 194.133 254.007 196.124C239.842 198.115 230.665 216.133 233.509 236.368C236.353 256.604 250.141 271.395 264.306 269.404Z"
                 fill="black"
               />
-            </motion.g>
-            <motion.g
-              id="innereyes"
-              data-face-target={HIGHLIGHT_FACTOR}
-              style={{
-                transformBox: "fill-box",
-                transformOrigin: "center",
-                transform: innerTransform,
-              }}
-            >
+            </g>
+            <g id="innereyes" data-face-target={String(HIGHLIGHT_FACTOR)}>
               <path
                 d="M199.837 235.87C205.098 235.131 208.764 230.266 208.024 225.005C207.285 219.744 202.42 216.078 197.159 216.817C191.898 217.557 188.232 222.421 188.972 227.683C189.711 232.944 194.576 236.61 199.837 235.87Z"
                 fill="white"
@@ -204,7 +75,7 @@ export function HeroMascotTile({ ariaLabel }: { ariaLabel: string }) {
                 d="M269.442 226.085C274.704 225.346 278.369 220.481 277.63 215.22C276.89 209.959 272.026 206.293 266.765 207.032C261.503 207.772 257.838 212.636 258.577 217.897C259.317 223.159 264.181 226.824 269.442 226.085Z"
                 fill="white"
               />
-            </motion.g>
+            </g>
           </g>
         </svg>
       </span>
