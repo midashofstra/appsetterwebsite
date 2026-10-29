@@ -289,9 +289,11 @@ section{padding:130px 0}
 .faq-summary:focus-visible{outline:2px solid var(--g-ink);outline-offset:3px;border-radius:10px}
 .pl{flex:none;width:30px;height:30px;border-radius:99px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;transition:background .25s ease,border-color .25s ease,color .25s ease}
 .pl.is-open{background:var(--g);border-color:var(--g);color:var(--on-g)}
+.faq-panel{overflow:hidden}
 .faq-panel-outer{overflow:hidden}
-.faq-panel-inner{padding:0 4px 22px}
-.faq-panel-inner p{margin:0;font-size:17px;line-height:1.6;color:var(--text);max-width:640px}
+.faq-panel-inner,.faq-panel > div{padding:0 4px 22px}
+@media (max-width:767px){.faq-panel-inner,.faq-panel > div{padding:0 4px 18px}}
+.faq-panel-inner p,.faq-panel p{margin:0;font-size:17px;line-height:1.6;color:var(--text);max-width:640px}
 
 /* cta */
 .cta{background:var(--g);border-radius:36px;padding:clamp(40px,6vw,84px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:40px;color:var(--on-g)}
