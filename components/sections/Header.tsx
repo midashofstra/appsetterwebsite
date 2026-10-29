@@ -1,4 +1,4 @@
-import { LangSwitcher } from "@/components/LangSwitcher";
+// import { LangSwitcher } from "@/components/LangSwitcher";
 import { CtaButton } from "@/components/ui/CtaButton";
 import type { Dictionary } from "@/lib/i18n/types";
 
@@ -30,7 +30,7 @@ export function Header({ dict }: { dict: Dictionary }) {
             <a href="#faq">{nav.faq}</a>
           </div>
           <div className="nav-end">
-            <LangSwitcher locale={dict.locale} />
+            {/* <LangSwitcher locale={dict.locale} /> */}
             <CtaButton href="#start" className="btn-main btn-sm">
               {nav.cta}
             </CtaButton>
