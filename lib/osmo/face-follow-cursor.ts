@@ -11,6 +11,22 @@ type FaceTarget = {
 };
 
 const QUICK = { duration: 0.3, ease: "power2.out" };
+/** Mascot SVG viewBox is 0 0 444 444 — pivot body tilt around tile centre, not path bbox. */
+const MASCOT_VIEWBOX_CX = 222;
+const MASCOT_VIEWBOX_CY = 222;
+
+function setSvgGroupPivot(el: Element, mode: "viewBox" | "fillBox") {
+  const node = el as SVGGraphicsElement;
+  node.style.transformBox = mode === "viewBox" ? "view-box" : "fill-box";
+  node.style.transformOrigin = "50% 50%";
+  gsap.set(el, {
+    transformOrigin: "50% 50%",
+    svgOrigin:
+      mode === "viewBox"
+        ? `${MASCOT_VIEWBOX_CX} ${MASCOT_VIEWBOX_CY}`
+        : "50% 50%",
+  });
+}
 
 export function initFaceFollowCursor(section: Element, heroScrollTrigger: Element): () => void {
   const baseIntensity = parseFloat(section.getAttribute("data-face") ?? "") || 30;
@@ -27,6 +43,9 @@ export function initFaceFollowCursor(section: Element, heroScrollTrigger: Elemen
   });
 
   const body = section.querySelector(".hero-mascot-body");
+  if (body) setSvgGroupPivot(body, "viewBox");
+  targets.forEach((t) => setSvgGroupPivot(t.el, "fillBox"));
+
   const bodySetRotate = body ? gsap.quickTo(body, "rotation", QUICK) : null;
   const bodySetX = body ? gsap.quickTo(body, "xPercent", QUICK) : null;
   const bodySetY = body ? gsap.quickTo(body, "yPercent", QUICK) : null;
