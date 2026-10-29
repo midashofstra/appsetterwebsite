@@ -1,5 +1,11 @@
-/** Full dwell before the first auto-flip (after hero intro completes). */
+/** Agenda/calendar deck: dwell before first flip (after intro) and between flips. */
 export const HERO_DECK_CYCLE_MS = 3000;
+
+/**
+ * Channel deck (LinkedIn → Gmail → WhatsApp → Outlook): ~1.67× faster cycle than agenda.
+ * First flip dwell uses the same ratio vs {@link HERO_DECK_CYCLE_MS}.
+ */
+export const HERO_DECK_CHANNEL_CYCLE_MS = 1800;
 
 /** Extra delay for the channel deck so slots do not flip together. */
 export const HERO_DECK_CHANNEL_STAGGER_MS = 600;

@@ -18,7 +18,6 @@ import type { HeroTileSpec } from "@/lib/hero-tiles";
 
 /** Ease-out, no overshoot */
 const EASE_OUT = [0, 0, 0.2, 1] as const;
-const CYCLE_MS = HERO_DECK_CYCLE_MS;
 const FLIP_MS = 450;
 
 const WHATSAPP_SVG = (
@@ -71,6 +70,8 @@ type Props = {
   firstFlipDelayAfterIntroMs?: number;
   /** Extra delay on top of `firstFlipDelayAfterIntroMs` (channel stagger). */
   firstFlipStaggerMs?: number;
+  /** Pause between auto-flips after the first (ms). */
+  cycleIntervalMs?: number;
 };
 
 export function HeroTileDeck({
@@ -78,6 +79,7 @@ export function HeroTileDeck({
   ariaLabel,
   firstFlipDelayAfterIntroMs = HERO_DECK_CYCLE_MS,
   firstFlipStaggerMs = 0,
+  cycleIntervalMs = HERO_DECK_CYCLE_MS,
 }: Props) {
   const reduceMotion = useReducedMotion();
   const n = cards.length;
@@ -112,8 +114,8 @@ export function HeroTileDeck({
     if (n <= 1) return;
     timerRef.current = setTimeout(() => {
       flipRef.current();
-    }, CYCLE_MS);
-  }, [clearTimer, n]);
+    }, cycleIntervalMs);
+  }, [clearTimer, cycleIntervalMs, n]);
 
   const flipRef = useRef<() => void>(() => {});
 

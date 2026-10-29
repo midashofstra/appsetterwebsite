@@ -2,6 +2,7 @@
 
 import { HeroTileDeck } from "@/components/sections/HeroTileDeck";
 import {
+  HERO_DECK_CHANNEL_CYCLE_MS,
   HERO_DECK_CHANNEL_STAGGER_MS,
   HERO_DECK_CYCLE_MS,
 } from "@/lib/hero-deck-timing";
@@ -60,8 +61,9 @@ export function HeroHeadline({ dict }: { dict: Dictionary }) {
       <HeroTileDeck
         cards={HERO_CHANNEL_TILES}
         ariaLabel={dict.hero.channelDeckAria}
-        firstFlipDelayAfterIntroMs={HERO_DECK_CYCLE_MS}
+        firstFlipDelayAfterIntroMs={HERO_DECK_CHANNEL_CYCLE_MS}
         firstFlipStaggerMs={HERO_DECK_CHANNEL_STAGGER_MS}
+        cycleIntervalMs={HERO_DECK_CHANNEL_CYCLE_MS}
       />
     </h1>
   );
