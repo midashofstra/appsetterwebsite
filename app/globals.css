@@ -79,8 +79,8 @@ h2{font-size:clamp(32px,4vw,54px);line-height:1.08;letter-spacing:-.035em;font-w
 .btn-sm{height:42px;padding:0 18px;font-size:15px}
 
 /* nav — Osmo progressive blur (top), fallback solid tint on header */
-header{position:sticky;top:0;z-index:50;isolation:isolate;padding-top:env(safe-area-inset-top,0px);transition:box-shadow .2s;background:var(--hdr-bg)}
-header>.wrap{position:relative;z-index:1}
+header{position:sticky;top:0;z-index:50;padding-top:env(safe-area-inset-top,0px);transition:box-shadow .2s;background:var(--hdr-bg)}
+header>.wrap{position:relative;z-index:2}
 /* header.scrolled{box-shadow:0 1px 0 var(--line)} */
 /* PR #14 progressive blur (replaced):
 .hdr-progressive-blur{pointer-events:none;position:absolute;left:0;right:0;top:0;height:calc(100% + 56px);z-index:0;overflow:hidden}
@@ -95,61 +95,57 @@ header>.wrap{position:relative;z-index:1}
 .hdr-progressive-blur>div:nth-child(7){--hdr-layer-blur:32px;-webkit-mask-image:linear-gradient(to bottom,#000 0%,transparent 100%);mask-image:linear-gradient(to bottom,#000 0%,transparent 100%)}
 */
 #hdr .progressive-blur.hdr-progressive-blur{
-  z-index:49;
+  z-index:1;
   pointer-events:none;
-  isolation:isolate;
-  contain:paint;
   width:100%;
   font-size:clamp(14px,2.2vw,16px);
-  height:calc(clamp(5rem,11vw,7rem) + env(safe-area-inset-top,0px));
+  height:calc(clamp(6.5rem,14vw,8.5rem) + env(safe-area-inset-top,0px));
   padding-top:env(safe-area-inset-top,0px);
-  transform-style:preserve-3d;
   position:fixed;
   top:0;
   left:0;
   overflow:hidden;
-  transform:translateZ(0);
   box-sizing:border-box;
 }
 #hdr .progressive-blur.hdr-progressive-blur::before{
   content:"";
   position:absolute;
   inset:0;
-  background:linear-gradient(to bottom,color-mix(in srgb,var(--hdr-blur-tint) 100%,transparent) 0%,color-mix(in srgb,var(--hdr-blur-tint) 45%,transparent) 38%,transparent 100%);
+  background:linear-gradient(to bottom,color-mix(in srgb,var(--hdr-blur-tint) 92%,transparent) 0%,color-mix(in srgb,var(--hdr-blur-tint) 72%,transparent) 42%,color-mix(in srgb,var(--hdr-blur-tint) 28%,transparent) 58%,transparent 100%);
   pointer-events:none;
-  z-index:1;
+  z-index:6;
 }
 #hdr .progressive-blur__layer{width:100%;height:100%;position:absolute;inset:0;pointer-events:none}
-/* Osmo masks mirrored for top edge (strongest blur at top, fade downward) */
+/* Osmo masks mirrored for top edge — full strength through nav row (~top 40%), then fade */
 #hdr .progressive-blur__layer.is--1{
   -webkit-backdrop-filter:blur(.09375em);
   backdrop-filter:blur(.09375em);
-  -webkit-mask:linear-gradient(to bottom,#000 0%,#000 12.5%,#0000 25%,#0000 37.5%,#0000 50%);
-  mask:linear-gradient(to bottom,#000 0%,#000 12.5%,#0000 25%,#0000 37.5%,#0000 50%);
+  -webkit-mask:linear-gradient(to bottom,#000 0%,#000 48%,#0000 68%);
+  mask:linear-gradient(to bottom,#000 0%,#000 48%,#0000 68%);
 }
 #hdr .progressive-blur__layer.is--2{
   -webkit-backdrop-filter:blur(.1875em);
   backdrop-filter:blur(.1875em);
-  -webkit-mask:linear-gradient(to bottom,#000 0%,#000 12.5%,#0000 25%,#0000 37.5%);
-  mask:linear-gradient(to bottom,#000 0%,#000 12.5%,#0000 25%,#0000 37.5%);
+  -webkit-mask:linear-gradient(to bottom,#000 0%,#000 44%,#0000 64%);
+  mask:linear-gradient(to bottom,#000 0%,#000 44%,#0000 64%);
 }
 #hdr .progressive-blur__layer.is--3{
   -webkit-backdrop-filter:blur(.375em);
   backdrop-filter:blur(.375em);
-  -webkit-mask:linear-gradient(to bottom,#000 0%,#000 12.5%,#0000 25%);
-  mask:linear-gradient(to bottom,#000 0%,#000 12.5%,#0000 25%);
+  -webkit-mask:linear-gradient(to bottom,#000 0%,#000 40%,#0000 58%);
+  mask:linear-gradient(to bottom,#000 0%,#000 40%,#0000 58%);
 }
 #hdr .progressive-blur__layer.is--4{
   -webkit-backdrop-filter:blur(.75em);
   backdrop-filter:blur(.75em);
-  -webkit-mask:linear-gradient(to bottom,#000 0%,#000 8%,#0000 18%);
-  mask:linear-gradient(to bottom,#000 0%,#000 8%,#0000 18%);
+  -webkit-mask:linear-gradient(to bottom,#000 0%,#000 32%,#0000 52%);
+  mask:linear-gradient(to bottom,#000 0%,#000 32%,#0000 52%);
 }
 #hdr .progressive-blur__layer.is--5{
   -webkit-backdrop-filter:blur(1.5em);
   backdrop-filter:blur(1.5em);
-  -webkit-mask:linear-gradient(to bottom,#000 0%,#0000 12%);
-  mask:linear-gradient(to bottom,#000 0%,#0000 12%);
+  -webkit-mask:linear-gradient(to bottom,#000 0%,#000 28%,#0000 48%);
+  mask:linear-gradient(to bottom,#000 0%,#000 28%,#0000 48%);
 }
 @supports ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))){
 header{background:transparent}
