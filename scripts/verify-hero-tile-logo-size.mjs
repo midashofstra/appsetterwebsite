@@ -8,7 +8,7 @@ const baseUrl = process.env.HERO_LOGO_URL || "http://127.0.0.1:3001/";
 
 function measure(page) {
   return page.evaluate(() => {
-    const body = document.querySelector(".as-tile .as-body")?.getBoundingClientRect();
+    const body = document.querySelector(".hero-mascot-body")?.getBoundingClientRect();
     const target = body?.width ?? 0;
     const logos = [];
     document.querySelectorAll(".hx .tile:not(.as-tile)").forEach((tile) => {

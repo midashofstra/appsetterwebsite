@@ -512,6 +512,7 @@ export function initLandingMotion(): CleanupFn {
     );
   }
 
+  /* Legacy hero mascot idle loop (calendar SVG); disabled for face-follow mascot tile.
   (function mascotIconLoop() {
     const body = document.querySelector(".as-body") as SVGElement | null;
     const look = document.querySelector(".as-look");
@@ -556,6 +557,7 @@ export function initLandingMotion(): CleanupFn {
       }
     })();
   })();
+  */
 
   const hoverTiles = q(".tile", hx).filter((t) => !t.closest(".tiles-deck"));
   if (fine) {

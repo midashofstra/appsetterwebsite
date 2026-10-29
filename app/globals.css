@@ -199,6 +199,8 @@ nav{display:flex;align-items:center;justify-content:space-between;gap:20px;heigh
 /* Geanimeerd appointmentsetter-icoon (loop van 6s, zoals de video) */
 .as-tile{width:1.18em;height:1.18em;background:var(--g);border-color:var(--g-border);overflow:hidden}
 .as-tile svg.as-icon{width:100%;height:100%}
+.hero-mascot-svg{border-radius:.24em}
+.hero-mascot-body,.hero-mascot-svg [id="eyes_2"],.hero-mascot-svg [id="innereyes"]{transform-box:fill-box;transform-origin:center}
 .as-happy,.as-sleepy{opacity:0}
 .hero .sub{max-width:580px;margin:26px auto 0;-webkit-user-select:none;user-select:none}
 .ctas{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:44px}
