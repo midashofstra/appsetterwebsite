@@ -36,7 +36,7 @@ for (const width of [1440, 375]) {
   await page.waitForTimeout(400);
   await page.locator(".hero").screenshot({ path: `${outDir}/hero-tile-logos-${width}.png` });
   const m = await page.evaluate(() => {
-    const body = document.querySelector(".as-tile .as-body")?.getBoundingClientRect().width ?? 0;
+    const body = document.querySelector(".hero-mascot-body")?.getBoundingClientRect().width ?? 0;
     const tile = document.querySelector('[data-card-id="linkedin"]');
     const img = tile?.querySelector("img");
     const tileW = tile?.clientWidth ?? 0;
