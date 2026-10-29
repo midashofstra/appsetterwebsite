@@ -2,7 +2,11 @@
 
 import { useReducedMotion } from "motion/react";
 import { useEffect, useRef } from "react";
-import { initFaceFollowCursor } from "@/lib/osmo/face-follow-cursor";
+import {
+  initFaceFollowCursor,
+  initFaceIdleGlance,
+  prefersMascotCursorFollow,
+} from "@/lib/osmo/face-follow-cursor";
 
 const BASE_INTENSITY = 30;
 const HIGHLIGHT_FACTOR = 1.5;
@@ -13,11 +17,14 @@ export function HeroMascotTile({ ariaLabel }: { ariaLabel: string }) {
   const sectionRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    if (reduceMotion || !window.matchMedia("(pointer: fine)").matches) return undefined;
+    if (reduceMotion) return undefined;
     const section = sectionRef.current;
     const hero = document.querySelector(".hero");
     if (!section || !hero) return undefined;
-    return initFaceFollowCursor(section, hero);
+    if (prefersMascotCursorFollow()) {
+      return initFaceFollowCursor(section, hero);
+    }
+    return initFaceIdleGlance(section, hero);
   }, [reduceMotion]);
 
   return (
