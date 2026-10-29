@@ -2,16 +2,25 @@
 import { CtaButton } from "@/components/ui/CtaButton";
 import type { Dictionary } from "@/lib/i18n/types";
 
-const NAV_PROGRESSIVE_BLUR_PX = [0.5, 1, 2, 4, 8, 16, 32] as const;
+// const NAV_PROGRESSIVE_BLUR_PX = [0.5, 1, 2, 4, 8, 16, 32] as const;
 
 export function Header({ dict }: { dict: Dictionary }) {
   const { nav } = dict;
   return (
     <header id="hdr">
+      {/* PR #14 progressive blur (replaced by Osmo top blur below):
       <div className="hdr-progressive-blur" aria-hidden="true">
         {NAV_PROGRESSIVE_BLUR_PX.map((px) => (
           <div key={px} />
         ))}
+      </div>
+      */}
+      <div className="progressive-blur hdr-progressive-blur" aria-hidden="true">
+        <div className="progressive-blur__layer is--1" />
+        <div className="progressive-blur__layer is--2" />
+        <div className="progressive-blur__layer is--3" />
+        <div className="progressive-blur__layer is--4" />
+        <div className="progressive-blur__layer is--5" />
       </div>
       <div className="wrap">
         <nav aria-label={nav.aria}>

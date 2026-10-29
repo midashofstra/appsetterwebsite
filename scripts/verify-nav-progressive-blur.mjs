@@ -12,7 +12,7 @@ await page.goto(baseUrl, { waitUntil: "domcontentloaded" });
 await page.evaluate(() => window.scrollTo(0, 420));
 await page.waitForTimeout(400);
 await page.screenshot({ path: `${outDir}/nav-progressive-blur-scroll-1440.png` });
-const layers = await page.locator(".hdr-progressive-blur > div").count();
+const layers = await page.locator("#hdr .progressive-blur__layer").count();
 const hdrPe = await page.locator("header .brand").evaluate((el) => {
   const r = el.getBoundingClientRect();
   const x = r.left + r.width / 2;
@@ -20,6 +20,6 @@ const hdrPe = await page.locator("header .brand").evaluate((el) => {
   return document.elementFromPoint(x, y) === el || el.contains(document.elementFromPoint(x, y));
 });
 console.log({ layers, brandClickableStack: hdrPe });
-if (layers !== 7) process.exitCode = 1;
+if (layers !== 5) process.exitCode = 1;
 if (!hdrPe) process.exitCode = 1;
 await browser.close();
