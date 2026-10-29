@@ -9,13 +9,34 @@ const HERO_TEXT_INTRO_EASE: [number, number, number, number] = [0, 0, 0.2, 1];
 const HERO_TEXT_INTRO_BLUR_PX = 8;
 const HERO_TEXT_BLUR_IN = `blur(${HERO_TEXT_INTRO_BLUR_PX}px)`;
 const HERO_TEXT_BLUR_OUT = "blur(0px)";
-/** Gap after hero sub before CTA buttons animate in. */
-const HERO_CTA_AFTER_SUB_DELAY_S = 0.2;
+
+/** Hero intro timeline (overlapping: next segment starts before previous ends). */
+const HERO_WORD_DURATION_S = 0.55;
+const HERO_WORD_STAGGER_S = 0.1;
+const HERO_TILE_DURATION_S = 0.55;
+const HERO_TILE_STAGGER_S = 0.1;
+/** Motion `at`: overlap with headline words. */
+const HERO_TILE_AT = "-0.45";
+const HERO_SUB_DURATION_S = 0.55;
+const HERO_SUB_AT = "-0.35";
+const HERO_CTA_DURATION_S = 0.55;
+const HERO_CTA_STAGGER_S = 0.1;
+/** Overlap CTAs with sub (still opacity-0 until this segment runs). */
+const HERO_CTA_AT = "-0.28";
+/**
+ * Fire hero-intro-complete when sub finishes (~deck dwell), not when CTAs/ticks finish.
+ * Kept as wall-clock estimate because CTAs share the same Motion sequence.
+ */
+const HERO_MARK_INTRO_COMPLETE_MS = 980;
+const HERO_TICK_DURATION_S = 0.5;
+const HERO_TICK_STAGGER_S = 0.08;
+/** Overlap tick row with CTA buttons in the second intro beat. */
+const HERO_TICK_AT = "-0.35";
 
 /** Navbar load intro (synced with hero text intro start; does not affect hero-intro-complete). */
-const NAV_INTRO_DURATION_S = 0.7;
+const NAV_INTRO_DURATION_S = 0.55;
 const NAV_INTRO_OFFSET_Y = -16;
-const NAV_INTRO_STAGGER_S = 0.06;
+const NAV_INTRO_STAGGER_S = 0.08;
 
 function clearNavIntroInlineStyles(
   targets: HTMLElement[],
@@ -256,6 +277,22 @@ export function initLandingMotion(): CleanupFn {
       w.style.willChange = "transform, opacity, filter";
     });
 
+    const heroCtaBtns = heroCtaIntroButtons();
+    heroCtaBtns.forEach((btn) => {
+      btn.style.willChange = "transform, opacity, filter";
+    });
+    q(".hero .ticks.hero-cta-intro span").forEach((span) => {
+      span.style.filter = HERO_TEXT_BLUR_IN;
+    });
+
+    let introCompleteMarked = false;
+    const markIntroOnce = () => {
+      if (introCompleteMarked) return;
+      introCompleteMarked = true;
+      markHeroIntroComplete();
+    };
+    const introCompleteTimer = setTimeout(markIntroOnce, HERO_MARK_INTRO_COMPLETE_MS);
+
     await animate([
       navIntro.blurLayer && [
         navIntro.blurLayer,
@@ -306,9 +343,23 @@ export function initLandingMotion(): CleanupFn {
           opacity: [0, 1],
           filter: [HERO_TEXT_BLUR_IN, HERO_TEXT_BLUR_OUT],
         },
-        { duration: 0.9, delay: stagger(0.06), ease: HERO_TEXT_INTRO_EASE, at: 0 },
+        {
+          duration: HERO_WORD_DURATION_S,
+          delay: stagger(HERO_WORD_STAGGER_S),
+          ease: HERO_TEXT_INTRO_EASE,
+          at: 0,
+        },
       ],
-      [introTiles, { opacity: [0, 1], scale: [0.2, 1], y: [30, 0] }, { duration: 0.8, delay: stagger(0.08), ease: [0.34, 1.56, 0.64, 1], at: "-0.75" }],
+      [
+        introTiles,
+        { opacity: [0, 1], scale: [0.2, 1], y: [30, 0] },
+        {
+          duration: HERO_TILE_DURATION_S,
+          delay: stagger(HERO_TILE_STAGGER_S),
+          ease: HERO_TEXT_INTRO_EASE,
+          at: HERO_TILE_AT,
+        },
+      ],
       [
         ".hero .sub",
         {
@@ -316,43 +367,22 @@ export function initLandingMotion(): CleanupFn {
           y: [18, 0],
           filter: [HERO_TEXT_BLUR_IN, HERO_TEXT_BLUR_OUT],
         },
-        { duration: 0.7, ease: HERO_TEXT_INTRO_EASE, at: "-0.4" },
+        { duration: HERO_SUB_DURATION_S, ease: HERO_TEXT_INTRO_EASE, at: HERO_SUB_AT },
       ],
-    ].filter(Boolean) as any);
-
-    heroWords.forEach((w) => {
-      w.style.willChange = "";
-      w.style.filter = "";
-    });
-    clearNavIntroInlineStyles(navIntro.all, navIntro.blurLayer);
-    clearHeroTextFilters([".hero .sub"]);
-
-    markHeroIntroComplete();
-
-    const heroCtaBtns = heroCtaIntroButtons();
-    heroCtaBtns.forEach((btn) => {
-      btn.style.willChange = "transform, opacity, filter";
-    });
-    q(".hero .ticks.hero-cta-intro span").forEach((span) => {
-      span.style.filter = HERO_TEXT_BLUR_IN;
-    });
-    await new Promise((r) => setTimeout(r, HERO_CTA_AFTER_SUB_DELAY_S * 1000));
-
-    await animate(
-      heroCtaBtns,
-      {
-        opacity: [0, 1],
-        y: [18, 0],
-        filter: [HERO_TEXT_BLUR_IN, HERO_TEXT_BLUR_OUT],
-      },
-      { duration: 0.6, delay: stagger(0.08), ease: HERO_TEXT_INTRO_EASE }
-    );
-    heroCtaBtns.forEach((btn) => {
-      btn.style.willChange = "";
-      btn.style.filter = "";
-    });
-
-    await animate([
+      heroCtaBtns.length && [
+        heroCtaBtns,
+        {
+          opacity: [0, 1],
+          y: [18, 0],
+          filter: [HERO_TEXT_BLUR_IN, HERO_TEXT_BLUR_OUT],
+        },
+        {
+          duration: HERO_CTA_DURATION_S,
+          delay: stagger(HERO_CTA_STAGGER_S),
+          ease: HERO_TEXT_INTRO_EASE,
+          at: HERO_CTA_AT,
+        },
+      ],
       [
         ".hero .ticks.hero-cta-intro span",
         {
@@ -360,14 +390,38 @@ export function initLandingMotion(): CleanupFn {
           y: [10, 0],
           filter: [HERO_TEXT_BLUR_IN, HERO_TEXT_BLUR_OUT],
         },
-        { duration: 0.5, delay: stagger(0.07), ease: HERO_TEXT_INTRO_EASE },
+        {
+          duration: HERO_TICK_DURATION_S,
+          delay: stagger(HERO_TICK_STAGGER_S),
+          ease: HERO_TEXT_INTRO_EASE,
+          at: HERO_TICK_AT,
+        },
       ],
       [
         ".hero .ticks.hero-cta-intro svg",
         { scale: [0, 1], rotate: [-45, 0] },
-        { duration: 0.5, delay: stagger(0.07), ease: [0.34, 1.56, 0.64, 1], at: "<" },
+        {
+          duration: HERO_TICK_DURATION_S,
+          delay: stagger(HERO_TICK_STAGGER_S),
+          ease: HERO_TEXT_INTRO_EASE,
+          at: "<",
+        },
       ],
-    ] as any);
+    ].filter(Boolean) as any);
+
+    clearTimeout(introCompleteTimer);
+    markIntroOnce();
+
+    heroWords.forEach((w) => {
+      w.style.willChange = "";
+      w.style.filter = "";
+    });
+    clearNavIntroInlineStyles(navIntro.all, navIntro.blurLayer);
+    clearHeroTextFilters([".hero .sub"]);
+    heroCtaBtns.forEach((btn) => {
+      btn.style.willChange = "";
+      btn.style.filter = "";
+    });
     q(".hero .ticks.hero-cta-intro span").forEach((span) => {
       span.style.filter = "";
     });
