@@ -26,6 +26,13 @@ export function HeroExtras({ dict }: { dict: Dictionary }) {
           </CtaButton>
         </>
       );
+      if (document.documentElement.dataset.heroIntro !== "complete") {
+        ctas.querySelectorAll(".btn, .btn-roll").forEach((el) => {
+          const node = el as HTMLElement;
+          node.style.opacity = "0";
+          node.style.transform = "translateY(18px)";
+        });
+      }
     }
 
     document.querySelectorAll(".hero .ticks span").forEach((span) => {

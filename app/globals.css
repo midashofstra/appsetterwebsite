@@ -324,6 +324,24 @@ footer .links a:hover{color:var(--ink)}
 
 /* motion */
 .gs .hero-hide{visibility:hidden}
+/* Hero CTAs/ticks: opacity 0 from first paint (not .hero-hide — avoids flash when .gs is removed) */
+.hero .ctas.hero-cta-intro .btn,
+.hero .ctas.hero-cta-intro .btn-roll{
+  opacity:0;
+  transform:translateY(18px);
+}
+.hero .ticks.hero-cta-intro span{
+  opacity:0;
+  transform:translateY(10px);
+}
+@media (prefers-reduced-motion:reduce),(scripting:none){
+.hero .ctas.hero-cta-intro .btn,
+.hero .ctas.hero-cta-intro .btn-roll,
+.hero .ticks.hero-cta-intro span{
+  opacity:1;
+  transform:none;
+}
+}
 .wm{display:inline-block;overflow:hidden;vertical-align:top;line-height:1.15;padding-bottom:.14em;margin-bottom:-.14em}
 section h2 .wm+.wm{margin-inline-start:.22em}
 .hx .wm{overflow:visible;line-height:1.12;padding-bottom:.22em;margin-bottom:-.22em}

@@ -58,6 +58,35 @@ function getNavIntroTargets(): {
   return { brand, links, cta, blurLayer, all };
 }
 
+function heroCtaIntroButtons(): HTMLElement[] {
+  return q(".hero .ctas.hero-cta-intro .btn, .hero .ctas.hero-cta-intro .btn-roll");
+}
+
+function primeHeroCtaIntroHidden() {
+  heroCtaIntroButtons().forEach((btn) => {
+    btn.style.opacity = "0";
+    btn.style.transform = "translateY(18px)";
+    btn.style.filter = HERO_TEXT_BLUR_IN;
+  });
+  q(".hero .ticks.hero-cta-intro span").forEach((span) => {
+    span.style.opacity = "0";
+    span.style.transform = "translateY(10px)";
+  });
+}
+
+function revealHeroCtaIntroImmediate() {
+  heroCtaIntroButtons().forEach((btn) => {
+    btn.style.opacity = "";
+    btn.style.transform = "";
+    btn.style.filter = "";
+  });
+  q(".hero .ticks.hero-cta-intro span").forEach((span) => {
+    span.style.opacity = "";
+    span.style.transform = "";
+    span.style.filter = "";
+  });
+}
+
 function clearHeroTextFilters(selectors: string[]) {
   selectors.forEach((sel) => {
     q(sel).forEach((el) => {
@@ -141,6 +170,7 @@ export function initLandingMotion(): CleanupFn {
     q(".hero-hide").forEach((el) => {
       el.style.visibility = "visible";
     });
+    revealHeroCtaIntroImmediate();
     markHeroIntroComplete();
     return () => cleanups.forEach((fn) => fn());
   }
@@ -217,6 +247,7 @@ export function initLandingMotion(): CleanupFn {
   q(".hero-hide").forEach((el) => {
     el.style.visibility = "visible";
   });
+  primeHeroCtaIntroHidden();
 
   void (async () => {
     primeNavIntroFromState(navIntro.all, navIntro.blurLayer);
@@ -298,12 +329,12 @@ export function initLandingMotion(): CleanupFn {
 
     markHeroIntroComplete();
 
-    const heroCtaBtns = q(".ctas.hero-hide .btn");
+    const heroCtaBtns = heroCtaIntroButtons();
     heroCtaBtns.forEach((btn) => {
-      btn.style.opacity = "0";
-      btn.style.transform = "translateY(18px)";
-      btn.style.filter = HERO_TEXT_BLUR_IN;
       btn.style.willChange = "transform, opacity, filter";
+    });
+    q(".hero .ticks.hero-cta-intro span").forEach((span) => {
+      span.style.filter = HERO_TEXT_BLUR_IN;
     });
     await new Promise((r) => setTimeout(r, HERO_CTA_AFTER_SUB_DELAY_S * 1000));
 
@@ -323,7 +354,7 @@ export function initLandingMotion(): CleanupFn {
 
     await animate([
       [
-        ".ticks span",
+        ".hero .ticks.hero-cta-intro span",
         {
           opacity: [0, 1],
           y: [10, 0],
@@ -331,9 +362,15 @@ export function initLandingMotion(): CleanupFn {
         },
         { duration: 0.5, delay: stagger(0.07), ease: HERO_TEXT_INTRO_EASE },
       ],
-      [".ticks svg", { scale: [0, 1], rotate: [-45, 0] }, { duration: 0.5, delay: stagger(0.07), ease: [0.34, 1.56, 0.64, 1], at: "<" }],
+      [
+        ".hero .ticks.hero-cta-intro svg",
+        { scale: [0, 1], rotate: [-45, 0] },
+        { duration: 0.5, delay: stagger(0.07), ease: [0.34, 1.56, 0.64, 1], at: "<" },
+      ],
     ] as any);
-    clearHeroTextFilters([".ticks span"]);
+    q(".hero .ticks.hero-cta-intro span").forEach((span) => {
+      span.style.filter = "";
+    });
 
     const legacyStage = document.querySelector(".stage");
     if (legacyStage) {
