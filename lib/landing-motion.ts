@@ -559,6 +559,8 @@ export function initLandingMotion(): CleanupFn {
   })();
   */
 
+  /* Legacy hover lift/scale on headline `.tile` (only the mascot `.as-tile` is outside `.tiles-deck`).
+     Disabled so the hero mascot keeps face-follow only — no scale/rotate on :hover.
   const hoverTiles = q(".tile", hx).filter((t) => !t.closest(".tiles-deck"));
   if (fine) {
     hoverTiles.forEach((t) => {
@@ -577,6 +579,7 @@ export function initLandingMotion(): CleanupFn {
       });
     });
   }
+  */
 
   const progress = document.getElementById("progress");
   if (progress) {
