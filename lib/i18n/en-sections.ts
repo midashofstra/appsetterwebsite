@@ -25,7 +25,8 @@ export const planHtml = `<!-- PLAN -->
   <div class="wrap">
     <div class="head rv">
       <div><span class="label"><i></i>How it works</span><h2>A full calendar in three steps.</h2></div>
-      <a class="btn btn-ghost" href="#start">Probeer 3 dagen voor â¬1</a>
+      <!-- was: Probeer 3 dagen voor €1 (nl copy left in en-sections) -->
+      <a class="btn btn-ghost" href="#start">Try 3 days for €1</a>
     </div>
     <div class="steps" id="steps">
       <div class="line" aria-hidden="true"><i></i></div>
