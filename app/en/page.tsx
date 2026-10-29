@@ -1,19 +1,12 @@
 import type { Metadata } from "next";
-import { LandingPage } from "@/components/LandingPage";
-import { en } from "@/lib/i18n/en";
+import { EnLegacyRedirect } from "@/app/en/EnLegacyRedirect";
 
 export const metadata: Metadata = {
-  title: en.meta.title,
-  description: en.meta.description,
-  alternates: {
-    canonical: "/en/",
-    languages: {
-      "nl-NL": "/",
-      en: "/en/",
-    },
-  },
+  title: "Redirecting…",
+  robots: { index: false, follow: true },
+  alternates: { canonical: "/" },
 };
 
-export default function EnglishHomePage() {
-  return <LandingPage locale="en" />;
+export default function EnglishLegacyPathPage() {
+  return <EnLegacyRedirect />;
 }

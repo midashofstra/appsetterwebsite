@@ -41,7 +41,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="nl"
+      lang="en"
       className={`gs ${plusJakartaSans.variable}`}
       style={defaultTheme as CSSProperties}
     >

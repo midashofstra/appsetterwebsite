@@ -1,19 +1,14 @@
 import type { Metadata } from "next";
 import { LandingPage } from "@/components/LandingPage";
-import { nl } from "@/lib/i18n/nl";
+import { en } from "@/lib/i18n/en";
+import { localeHomeAlternates } from "@/lib/i18n/site-alternates";
 
 export const metadata: Metadata = {
-  title: nl.meta.title,
-  description: nl.meta.description,
-  alternates: {
-    canonical: "/",
-    languages: {
-      "nl-NL": "/",
-      en: "/en/",
-    },
-  },
+  title: en.meta.title,
+  description: en.meta.description,
+  alternates: localeHomeAlternates("/"),
 };
 
 export default function HomePage() {
-  return <LandingPage locale="nl" />;
+  return <LandingPage locale="en" />;
 }

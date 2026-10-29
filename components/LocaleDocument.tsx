@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import type { Dictionary } from "@/lib/i18n/types";
 
-/** Sets document language for / vs /en/ (root layout html lang defaults to nl). */
+/** Sets document language for `/` (en) vs `/nl/` (root layout html lang defaults to en). */
 export function LocaleDocument({ dict }: { dict: Dictionary }) {
   useEffect(() => {
     document.documentElement.lang = dict.htmlLang;

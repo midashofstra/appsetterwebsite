@@ -6,7 +6,7 @@ import { getBasePath } from "@/lib/base-path";
 import type { Locale } from "@/lib/i18n/types";
 
 function localeHref(locale: Locale, base: string, hash: string): string {
-  const path = locale === "en" ? `${base}/en/` : `${base}/`;
+  const path = locale === "nl" ? `${base}/nl/` : `${base}/`;
   return `${path.replace(/\/{2,}/g, "/")}${hash}`;
 }
 

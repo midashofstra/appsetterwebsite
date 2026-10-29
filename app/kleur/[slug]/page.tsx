@@ -28,7 +28,7 @@ export default async function KleurVariantPage({ params }: PageProps) {
 
   return (
     <ThemeRoot primary={variant.primary}>
-      <LandingPage />
+      <LandingPage locale="en" />
     </ThemeRoot>
   );
 }

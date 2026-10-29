@@ -2,7 +2,7 @@ import { chromium } from "playwright";
 
 const base = process.env.VERIFY_URL || "https://appsetterwebsite.vercel.app";
 
-for (const path of ["/", "/en/"]) {
+for (const path of ["/", "/nl/"]) {
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   await page.emulateMedia({ reducedMotion: "no-preference" });

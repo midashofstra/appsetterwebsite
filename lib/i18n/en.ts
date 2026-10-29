@@ -9,7 +9,7 @@ export const en: Dictionary = {
     description:
       "An AI agent that follows up on your leads via LinkedIn, email and WhatsApp and books meetings straight into your calendar.",
   },
-  alternates: { nl: "/", en: "/en/" },
+  alternates: { nl: "/nl/", en: "/" },
   nav: {
     aria: "Main menu",
     brand: "Appointment Setter",

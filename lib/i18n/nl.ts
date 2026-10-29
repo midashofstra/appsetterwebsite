@@ -9,7 +9,7 @@ export const nl: Dictionary = {
     description:
       "Een AI-agent die je leads opvolgt via LinkedIn, e-mail en WhatsApp en afspraken direct in je agenda plant.",
   },
-  alternates: { nl: "/", en: "/en/" },
+  alternates: { nl: "/nl/", en: "/" },
   nav: {
     aria: "Hoofdmenu",
     brand: "Appointment Setter",

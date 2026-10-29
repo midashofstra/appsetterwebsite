@@ -18,7 +18,7 @@ import { SvgDefs } from "@/components/sections/SvgDefs";
 import { Why } from "@/components/sections/Why";
 import { getDictionary, type Locale } from "@/lib/i18n";
 
-export function LandingPage({ locale = "nl" }: { locale?: Locale }) {
+export function LandingPage({ locale = "en" }: { locale?: Locale }) {
   const dict = getDictionary(locale);
   return (
     <>
