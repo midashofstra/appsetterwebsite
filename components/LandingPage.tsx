@@ -16,12 +16,13 @@ import { Problem } from "@/components/sections/Problem";
 import { Progress } from "@/components/sections/Progress";
 import { SvgDefs } from "@/components/sections/SvgDefs";
 import { Why } from "@/components/sections/Why";
+import { MagneticCursorProvider } from "@/components/ui/MagneticCursor";
 import { getDictionary, type Locale } from "@/lib/i18n";
 
 export function LandingPage({ locale = "en" }: { locale?: Locale }) {
   const dict = getDictionary(locale);
   return (
-    <>
+    <MagneticCursorProvider>
       <LocaleDocument dict={dict} />
       <SvgDefs />
       <Progress />
@@ -42,6 +43,6 @@ export function LandingPage({ locale = "en" }: { locale?: Locale }) {
       </main>
       <Footer dict={dict} />
       <LandingMotion />
-    </>
+    </MagneticCursorProvider>
   );
 }

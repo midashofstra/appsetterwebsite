@@ -85,6 +85,15 @@ h2{font-size:clamp(32px,4vw,54px);line-height:1.08;letter-spacing:-.035em;font-w
 }
 .btn-chars-viewport{display:block;overflow:hidden;height:1.25em;line-height:1.25;max-width:100%;padding-bottom:.08em;margin-bottom:-.08em;box-sizing:content-box;position:relative;z-index:1}
 .btn-chars-text{white-space:nowrap;line-height:1.25}
+.magnetic-cursor-bg{border-radius:999px}
+.magnetic-cursor-bg--dot{width:.75em;height:.75em;background:color-mix(in srgb,var(--ink) 22%,transparent)}
+.magnetic-cursor-bg--fill{position:absolute;inset:0;border-radius:inherit;z-index:0;pointer-events:none}
+.magnetic-cursor-bg--fill.magnetic-cursor-bg--main{background:var(--g)}
+.magnetic-cursor-bg--fill.magnetic-cursor-bg--ghost{background:var(--btn-ghost-bg);border:1.5px solid var(--line)}
+.magnetic-cursor-bg--fill.magnetic-cursor-bg--ink{background:var(--ink);color:var(--on-g)}
+@media (prefers-color-scheme:dark){
+  .magnetic-cursor-bg--dot{background:color-mix(in srgb,var(--on-g) 28%,transparent)}
+}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .btn-main:focus-visible{outline:2px solid color-mix(in srgb,var(--btn-main-fg) 55%,var(--g-ink));outline-offset:3px;border:none;box-shadow:none}
 .btn-main:focus:not(:focus-visible){outline:none}
@@ -361,27 +370,10 @@ section{padding:130px 0}
 .faq-summary:focus-visible{outline:2px solid var(--g-ink);outline-offset:3px;border-radius:10px}
 .pl{flex:none;width:30px;height:30px;border-radius:99px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;transition:background .25s ease,border-color .25s ease,color .25s ease}
 .pl.is-open{background:var(--g);border-color:var(--g);color:var(--on-g)}
-/* FAQ — Osmo grid-rows accordion (UI unchanged) */
-.faq-accordion-css .faq-panel-outer{
-  display:grid;grid-template-rows:0fr;overflow:hidden;
-  transition:grid-template-rows .6s cubic-bezier(.625,.05,0,1);
-}
-.faq-accordion-css [data-accordion-status="active"] .faq-panel-outer{grid-template-rows:1fr}
-.faq-accordion-css .faq-panel-wrap{
-  display:flex;flex-flow:column;min-height:0;overflow:hidden;
-}
-.faq-accordion-css .faq-panel-inner{padding:0 4px 22px}
-@media (max-width:767px){.faq-accordion-css .faq-panel-inner{padding:0 4px 18px}}
-.faq-accordion-css--instant .faq-panel-outer{transition:none}
-.faq-accordion-icon{
-  position:relative;display:inline-flex;align-items:center;justify-content:center;
-  transition:transform .6s cubic-bezier(.625,.05,0,1);transform:rotate(180deg);
-}
-.faq-accordion-css [data-accordion-status="active"] .faq-accordion-icon{transform:rotate(0.001deg)}
-.faq-accordion-icon .faq-icon-minus{position:absolute;opacity:0}
-.faq-accordion-css [data-accordion-status="active"] .faq-icon-plus{opacity:0}
-.faq-accordion-css [data-accordion-status="active"] .faq-icon-minus{opacity:1}
-.faq-accordion-css [data-accordion-status="active"] .pl{background:var(--g);border-color:var(--g);color:var(--on-g)}
+.faq-panel{overflow:hidden}
+.faq-panel-outer{overflow:hidden}
+.faq-panel-inner,.faq-panel > div{padding:0 4px 22px}
+@media (max-width:767px){.faq-panel-inner,.faq-panel > div{padding:0 4px 18px}}
 .faq-panel-inner p,.faq-panel p{margin:0;font-size:17px;line-height:1.6;color:var(--text);max-width:640px}
 
 /* cta */
