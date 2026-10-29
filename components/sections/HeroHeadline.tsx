@@ -15,6 +15,7 @@ export function HeroHeadline({ dict }: { dict: Dictionary }) {
   /** NL: “vullen,” between agenda and channel decks; EN omits (tile = calendar). */
   const afterAgendaDeck = words.length >= 4 ? words[2] : null;
   const beforeChannelDeck = words.length >= 4 ? words[3]! : words[2]!;
+  const lineBreakBeforeChannel = dict.locale === "en";
   return (
     <h1 className="hx hero-hide">
       <span>{w0}</span>
@@ -54,7 +55,7 @@ export function HeroHeadline({ dict }: { dict: Dictionary }) {
         firstFlipDelayAfterIntroMs={HERO_DECK_CYCLE_MS}
       />
       {afterAgendaDeck ? <span>{afterAgendaDeck}</span> : null}
-      {/* EN legacy (redundant after agenda tile): <span>calendar,</span> */}
+      {lineBreakBeforeChannel ? <span className="hx-break" aria-hidden /> : null}
       <span>{beforeChannelDeck}</span>
       <HeroTileDeck
         cards={HERO_CHANNEL_TILES}

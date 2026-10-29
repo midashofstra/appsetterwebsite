@@ -22,8 +22,8 @@ export const en: Dictionary = {
     cta: "Try 3 days for €1",
   },
   hero: {
-    words: ["Fill", "your", "straight from"],
-    // words: ["Fill", "your", "calendar,", "straight from"],
+    words: ["Let", "fill your", "straight from"],
+    // words: ["Fill", "your", "straight from"],
     mascotAria: "Appointment Setter mascot",
     agendaDeckAria: "Google Calendar and Outlook",
     channelDeckAria: "LinkedIn, Gmail, WhatsApp and Outlook",

@@ -18,7 +18,7 @@ export type Dictionary = {
     cta: string;
   };
   hero: {
-    /** NL: 4 segments (text before/after each tile group). EN: 3 (no word after agenda deck). */
+    /** NL: 4 segments (Laat, je, vullen,, direct vanuit). EN: 3 (Let, fill your, straight from). */
     words: readonly string[];
     mascotAria: string;
     agendaDeckAria: string;
