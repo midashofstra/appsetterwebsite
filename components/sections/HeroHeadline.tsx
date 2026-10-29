@@ -9,7 +9,12 @@ import { HERO_AGENDA_TILES, HERO_CHANNEL_TILES } from "@/lib/hero-tiles";
 import type { Dictionary } from "@/lib/i18n/types";
 
 export function HeroHeadline({ dict }: { dict: Dictionary }) {
-  const [w0, w1, w2, w3] = dict.hero.words;
+  const words = dict.hero.words;
+  const w0 = words[0];
+  const w1 = words[1];
+  /** NL: “vullen,” between agenda and channel decks; EN omits (tile = calendar). */
+  const afterAgendaDeck = words.length >= 4 ? words[2] : null;
+  const beforeChannelDeck = words.length >= 4 ? words[3]! : words[2]!;
   return (
     <h1 className="hx hero-hide">
       <span>{w0}</span>
@@ -48,8 +53,9 @@ export function HeroHeadline({ dict }: { dict: Dictionary }) {
         ariaLabel={dict.hero.agendaDeckAria}
         firstFlipDelayAfterIntroMs={HERO_DECK_CYCLE_MS}
       />
-      <span>{w2}</span>
-      <span>{w3}</span>
+      {afterAgendaDeck ? <span>{afterAgendaDeck}</span> : null}
+      {/* EN legacy (redundant after agenda tile): <span>calendar,</span> */}
+      <span>{beforeChannelDeck}</span>
       <HeroTileDeck
         cards={HERO_CHANNEL_TILES}
         ariaLabel={dict.hero.channelDeckAria}

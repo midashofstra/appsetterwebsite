@@ -18,7 +18,8 @@ export type Dictionary = {
     cta: string;
   };
   hero: {
-    words: [string, string, string, string];
+    /** NL: 4 segments (text before/after each tile group). EN: 3 (no word after agenda deck). */
+    words: readonly string[];
     mascotAria: string;
     agendaDeckAria: string;
     channelDeckAria: string;
