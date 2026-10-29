@@ -1,11 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useReducedMotion } from "motion/react";
+import { useReducedMotion } from "motion/react";
+import { useMemo } from "react";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
-
-const EASE = [0.22, 1, 0.36, 1] as const;
-const DURATION = 0.3;
 
 type CtaButtonProps = {
   href: string;
@@ -13,36 +11,49 @@ type CtaButtonProps = {
   children: ReactNode;
 } & Omit<ComponentPropsWithoutRef<"a">, "href" | "className" | "children">;
 
+function splitLabel(label: string) {
+  return [...label].map((char, index) => ({
+    char,
+    key: `${index}-${char === " " ? "sp" : char}`,
+    delay: `${index * 0.01}s`,
+  }));
+}
+
 export function CtaButton({ href, className = "", children, ...rest }: CtaButtonProps) {
   const reduceMotion = useReducedMotion();
   const label = typeof children === "string" ? children : String(children);
+  const chars = useMemo(() => splitLabel(label), [label]);
 
   if (reduceMotion) {
     return (
-      <Link href={href} className={`btn ${className}`.trim()} {...rest}>
+      <Link href={href} className={`btn ${className}`.trim()} aria-label={label} {...rest}>
         {children}
       </Link>
     );
   }
 
   return (
-    <Link href={href} className={`btn btn-roll ${className}`.trim()} {...rest}>
-      <span className="btn-roll-viewport" aria-hidden="true">
-        <motion.span
-          className="btn-roll-track"
-          initial="rest"
-          whileHover="hover"
-          variants={{
-            rest: { y: "0%" },
-            hover: { y: "-50%" },
-          }}
-          transition={{ duration: DURATION, ease: EASE }}
-        >
-          <span className="btn-roll-line">{label}</span>
-          <span className="btn-roll-line">{label}</span>
-        </motion.span>
+    <Link
+      href={href}
+      className={`btn btn-roll btn-animate-chars ${className}`.trim()}
+      aria-label={label}
+      {...rest}
+    >
+      <span className="btn-chars-viewport" aria-hidden="true">
+        <span data-button-animate-chars="" className="btn-chars-text">
+          {chars.map(({ char, key, delay }) => (
+            <span
+              key={key}
+              style={{
+                transitionDelay: delay,
+                whiteSpace: char === " " ? "pre" : undefined,
+              }}
+            >
+              {char}
+            </span>
+          ))}
+        </span>
       </span>
-      <span className="sr-only">{label}</span>
     </Link>
   );
 }
