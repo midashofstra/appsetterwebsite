@@ -1,9 +1,10 @@
 "use client";
 
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
+import { HeroVimeoPlayer } from "@/components/sections/HeroVimeoPlayer";
 import { SiteIcon } from "@/components/icons/SiteIcon";
 import { getBasePath } from "@/lib/base-path";
-import { VIDEO_POSTER, VIDEO_SRC } from "@/lib/hero-video-config";
+import { VIDEO_POSTER, VIMEO_VIDEO_ID } from "@/lib/hero-video-config";
 import type { Dictionary } from "@/lib/i18n/types";
 
 function resolveMediaUrl(path: string): string {
@@ -14,21 +15,20 @@ function resolveMediaUrl(path: string): string {
 }
 
 export function HeroVideo({ dict }: { dict: Dictionary }) {
-  const src = resolveMediaUrl(VIDEO_SRC);
   const poster = resolveMediaUrl(VIDEO_POSTER);
+  const hasVimeo = Boolean(VIMEO_VIDEO_ID);
 
   return (
     <section className="hero-video" id="hero-demo" aria-label={dict.hero.videoSectionAria}>
       <div className="wrap">
-        <div className="hero-video__frame">
-          {src ? (
-            <video
-              className="hero-video__player"
-              src={src}
-              controls
-              playsInline
-              preload="metadata"
-              poster={poster || undefined}
+        <div className={`hero-video__frame${hasVimeo ? " hero-video__frame--vimeo" : ""}`}>
+          {hasVimeo ? (
+            <HeroVimeoPlayer
+              videoId={VIMEO_VIDEO_ID}
+              posterUrl={poster}
+              placeholderLabel={dict.hero.videoPlaceholder}
+              autoplay={false}
+              updateSize
             />
           ) : (
             <div className="hero-video__placeholder" aria-hidden="true">

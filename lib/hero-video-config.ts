@@ -1,8 +1,12 @@
 /**
- * Hero demo video — set `VIDEO_SRC` to a path under `public/` (e.g. `/videos/demo.mp4`)
- * or a full HTTPS URL. Leave empty until the file is ready.
+ * Hero demo video — Vimeo (preferred) or legacy file under `public/`.
  */
-export const VIDEO_SRC = "";
 
-/** Optional poster image (same path rules as VIDEO_SRC). */
+/** TODO: set `NEXT_PUBLIC_VIMEO_VIDEO_ID` in env when the Vimeo upload is ready. */
+export const VIMEO_VIDEO_ID = (process.env.NEXT_PUBLIC_VIMEO_VIDEO_ID ?? "").trim();
+
+/** Optional poster image (path under `public/` or HTTPS URL). Used as Vimeo placeholder. */
 export const VIDEO_POSTER = "";
+
+/** Legacy MP4 — superseded by Vimeo when `VIMEO_VIDEO_ID` is set. */
+export const VIDEO_SRC = "";
