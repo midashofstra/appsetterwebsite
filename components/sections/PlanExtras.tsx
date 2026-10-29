@@ -23,7 +23,16 @@ export function PlanExtras({ dict }: { dict: Dictionary }) {
     const mini = document.querySelector("#plan .step .mini");
     if (mini && !mini.hasAttribute("data-integrations")) {
       mini.setAttribute("data-integrations", "true");
-      mini.innerHTML = INTEGRATION_LOGOS.map(
+      const planConnectLogos = [...INTEGRATION_LOGOS];
+      const whatsappIdx = planConnectLogos.findIndex((l) => l.label === "WhatsApp");
+      const outlookIdx = planConnectLogos.findIndex((l) => l.label === "Outlook");
+      if (whatsappIdx >= 0 && outlookIdx >= 0) {
+        [planConnectLogos[whatsappIdx], planConnectLogos[outlookIdx]] = [
+          planConnectLogos[outlookIdx],
+          planConnectLogos[whatsappIdx],
+        ];
+      }
+      mini.innerHTML = planConnectLogos.map(
         ({ label, src }) =>
           `<div class="r"><img draggable="false" src="${src}" alt="${label}">${label}<span class="tag g">${dict.planExtras.connected}</span></div>`
       ).join("");
