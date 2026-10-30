@@ -16,7 +16,7 @@ export const nl: Dictionary = {
     problem: "Probleem",
     why: "Waarom wij",
     plan: "Hoe het werkt",
-    channels: "Kanalen",
+    channels: "De agent",
     pricing: "Prijzen",
     faq: "Vragen",
     cta: "Probeer voor €1",
@@ -47,22 +47,31 @@ export const nl: Dictionary = {
     ],
   },
   channels: {
+    label: "Zo werkt het",
+    title: "Zo voert je agent het gesprek.",
+    subtitle: "Eén agent. Overal waar je klanten zijn.",
+    tabsAria: "Stappen: zo werkt de agent",
+    panelCta: "Probeer 3 dagen voor €1",
+    /* Legacy channels tabs (LinkedIn / E-mail / WhatsApp):
     label: "Kanalen",
     title: "Eén agent. Overal waar je klanten zijn.",
-    tabsAria: "Communicatiekanalen",
-    panelCta: "Probeer 3 dagen voor €1",
-    cards: [
+    cards: [ ... ],
+    */
+    steps: [
       {
-        title: "LinkedIn",
-        text: "Reageert op connecties en antwoorden, en stuurt het gesprek richting een afspraak.",
+        tabLabel: "1 · Antwoord",
+        title: "Leest en antwoordt in jouw toon",
+        text: "De agent pakt binnenkomende WhatsApp-, e-mail-, LinkedIn- en andere berichten op en antwoordt zoals jij dat zou doen—in jouw stem en met jouw kaders. Eén agent. Overal waar je klanten zijn.",
       },
       {
-        title: "E-mail",
-        text: "Volgt op na een offerte of formulier, op het juiste moment, zonder te pushen.",
+        tabLabel: "2 · Agenda",
+        title: "Checkt je agenda",
+        text: "Hij kijkt naar je echte beschikbaarheid en biedt alleen tijden aan die echt vrij zijn—geen dubbele boekingen of gedoe over slots die niet lukken.",
       },
       {
-        title: "WhatsApp",
-        text: "Snel en persoonlijk. Precies waar je leads het liefst antwoorden.",
+        tabLabel: "3 · Boeken",
+        title: "Boekt de afspraak—jij houdt de regie",
+        text: "Is iemand klaar, dan plant hij de afspraak in je agenda. Jij ziet elk gesprek en neemt over wanneer je wilt.",
       },
     ],
   },

@@ -1,6 +1,7 @@
 import { ChannelsBouncyTabs } from "@/components/sections/ChannelsBouncyTabs";
 import type { Dictionary } from "@/lib/i18n/types";
 
+/** How it works (in-conversation flow) — same #kanalen anchor; Osmo bouncy tabs. */
 export function Channels({ dict }: { dict: Dictionary }) {
   const { channels } = dict;
   return (
@@ -13,6 +14,7 @@ export function Channels({ dict }: { dict: Dictionary }) {
               {channels.label}
             </span>
             <h2>{channels.title}</h2>
+            <p className="chan-sub rv d1">{channels.subtitle}</p>
           </div>
         </div>
 
