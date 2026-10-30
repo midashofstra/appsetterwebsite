@@ -198,6 +198,10 @@ type SplitWordsOptions = {
   wordGap?: "none" | "space";
 };
 
+/** Scroll reveals below the hero: fade + slight lift — no spin or large clip-slide. */
+const SCROLL_REVEAL_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+const SCROLL_REVEAL_Y = 10;
+
 function splitWords(el: HTMLElement, options?: SplitWordsOptions): HTMLElement[] {
   const words = el.textContent?.trim().split(/\s+/) ?? [];
   const parts = words.map((w) => `<span class="wm"><span class="wi">${w}</span></span>`);
@@ -205,15 +209,125 @@ function splitWords(el: HTMLElement, options?: SplitWordsOptions): HTMLElement[]
   return q(".wi", el);
 }
 
-/** Scroll reveals below the hero: fade + slight lift — no spin or large clip-slide. */
-const SCROLL_REVEAL_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
-const SCROLL_REVEAL_Y = 10;
-
 function parseMargin(start: string): string {
   const m = start.match(/top\s+(\d+)%/);
   if (!m) return "0px 0px -10% 0px";
   const pct = Number(m[1]);
   return `0px 0px -${100 - pct}% 0px`;
+}
+
+const MOTION_REVEALED_ATTR = "data-motion-revealed";
+
+function parseStartTopPercent(start: string): number {
+  const m = start.match(/top\s+(\d+)%/);
+  return m ? Number(m[1]) / 100 : 0.88;
+}
+
+/** True when the trigger element has already crossed the scroll-reveal start line (e.g. top 88%). */
+function isRevealStartPassed(triggerEl: Element, start: string): boolean {
+  const lineY = window.innerHeight * parseStartTopPercent(start);
+  return triggerEl.getBoundingClientRect().top <= lineY;
+}
+
+function resolveRevealTargets(target: Element | Element[] | string): HTMLElement[] {
+  if (typeof target === "string") return q(target);
+  return (Array.isArray(target) ? target : [target]).filter(
+    (el): el is HTMLElement => el instanceof HTMLElement
+  );
+}
+
+function cssTransformFromRevealInitial(initial: {
+  x?: number;
+  y?: number;
+  scale?: number;
+}): string | null {
+  const parts: string[] = [];
+  if (initial.x !== undefined) parts.push(`translateX(${initial.x}px)`);
+  if (initial.y !== undefined) parts.push(`translateY(${initial.y}px)`);
+  if (initial.scale !== undefined) parts.push(`scale(${initial.scale})`);
+  return parts.length ? parts.join(" ") : null;
+}
+
+function readRevealInitial(keyframes: Record<string, unknown>): {
+  opacity?: number;
+  x?: number;
+  y?: number;
+  scale?: number;
+  filter?: string;
+} {
+  const initial: {
+    opacity?: number;
+    x?: number;
+    y?: number;
+    scale?: number;
+    filter?: string;
+  } = {};
+  for (const [key, val] of Object.entries(keyframes)) {
+    if (!Array.isArray(val) || val.length < 1) continue;
+    const from = val[0];
+    if (key === "opacity" && typeof from === "number") initial.opacity = from;
+    if (key === "x" && typeof from === "number") initial.x = from;
+    if (key === "y" && typeof from === "number") initial.y = from;
+    if (key === "scale" && typeof from === "number") initial.scale = from;
+    if (key === "filter" && typeof from === "string") initial.filter = from;
+  }
+  return initial;
+}
+
+function primeRevealHidden(el: HTMLElement, keyframes: Record<string, unknown>) {
+  if (el.getAttribute(MOTION_REVEALED_ATTR) === "true") return;
+  el.setAttribute("data-landing-reveal", "");
+  const initial = readRevealInitial(keyframes);
+  if (initial.opacity !== undefined) el.style.opacity = String(initial.opacity);
+  const transform = cssTransformFromRevealInitial(initial);
+  if (transform) el.style.transform = transform;
+  if (initial.filter !== undefined) el.style.filter = initial.filter;
+}
+
+function finalizeRevealVisible(el: HTMLElement) {
+  el.setAttribute(MOTION_REVEALED_ATTR, "true");
+  el.style.opacity = "";
+  el.style.transform = "";
+  el.style.filter = "";
+}
+
+/** Reduced motion / teardown: leave scroll targets in final visible state. */
+function finalizeAllScrollRevealTargets() {
+  const selectors = [
+    "section h2",
+    ".label",
+    "section .sub",
+    ".head .btn",
+    ".guide .copy .btn",
+    ".cards .card",
+    ".feat",
+    ".chan-bouncy .bouncy-tabs__collection",
+    ".how-it-works-flow__step",
+    ".why-showcase__photo",
+    ".quote",
+    ".quote figcaption",
+    ".stat",
+    ".clogos span",
+    ".step",
+    ".col.no",
+    ".col.yes",
+    ".pricing-card",
+    ".faq-item",
+    ".cta-mascot-3d",
+    ".cta .btn",
+    ".hero-video__frame",
+    ".col .it",
+    ".col .it svg",
+  ];
+  selectors.forEach((sel) => {
+    q(sel).forEach((el) => {
+      if (sel === "section h2" && el.closest(".manifest")) return;
+      finalizeRevealVisible(el);
+    });
+  });
+  q(".manifest .wi").forEach((w) => {
+    (w as HTMLElement).style.opacity = "1";
+  });
 }
 
 function revealOnScroll(
@@ -228,24 +342,82 @@ function revealOnScroll(
     staggerEach?: number;
   }
 ): CleanupFn {
+  const start = opts.start ?? "top 88%";
   const triggerEl =
     typeof opts.trigger === "string"
       ? document.querySelector(opts.trigger)
-      : opts.trigger ?? (typeof target === "string" ? document.querySelector(target) : null);
+      : opts.trigger ??
+        (typeof target === "string"
+          ? document.querySelector(target)
+          : Array.isArray(target)
+            ? target[0]
+            : target);
   if (!triggerEl) return () => {};
 
-  const margin = parseMargin(opts.start ?? "top 88%");
+  const margin = parseMargin(start);
+  const elements = resolveRevealTargets(target);
+
+  if (isRevealStartPassed(triggerEl, start)) {
+    elements.forEach((el) => finalizeRevealVisible(el));
+    return () => {};
+  }
+
+  elements.forEach((el) => primeRevealHidden(el, keyframes));
+
   return inView(
     target,
     (el) => {
-      void animate(el, keyframes as any, {
+      const node = el as HTMLElement;
+      if (node.getAttribute(MOTION_REVEALED_ATTR) === "true") return;
+      node.setAttribute(MOTION_REVEALED_ATTR, "true");
+      void animate(node, keyframes as any, {
         duration: opts.duration ?? 0.8,
         ease: opts.ease ?? [0.22, 1, 0.36, 1],
         delay: opts.delay,
         delayChildren: opts.staggerEach ? stagger(opts.staggerEach) : undefined,
-      });
+      }).then(() => finalizeRevealVisible(node));
     },
     { root: document, margin: margin as `${number}px` }
+  );
+}
+
+function bindInViewReveal(
+  el: HTMLElement,
+  keyframes: Record<string, unknown>,
+  opts: {
+    margin?: string;
+    trigger?: Element;
+    start?: string;
+    duration?: number;
+    ease?: [number, number, number, number];
+    /** Multi-part timeline (plan steps); caller must call finalizeRevealVisible when done. */
+    onEnter?: () => void;
+  } = {}
+): CleanupFn {
+  const triggerEl = opts.trigger ?? el;
+  const start = opts.start ?? "top 88%";
+  if (isRevealStartPassed(triggerEl, start)) {
+    finalizeRevealVisible(el);
+    return () => {};
+  }
+
+  primeRevealHidden(el, keyframes);
+
+  return inView(
+    el,
+    () => {
+      if (el.getAttribute(MOTION_REVEALED_ATTR) === "true") return;
+      el.setAttribute(MOTION_REVEALED_ATTR, "true");
+      if (opts.onEnter) {
+        opts.onEnter();
+        return;
+      }
+      void animate(el, keyframes as any, {
+        duration: opts.duration ?? 0.75,
+        ease: opts.ease ?? SCROLL_REVEAL_EASE,
+      }).then(() => finalizeRevealVisible(el));
+    },
+    { margin: (opts.margin ?? parseMargin(start)) as `${number}px` }
   );
 }
 
@@ -372,6 +544,10 @@ export function initLandingMotion(): CleanupFn {
       el.style.visibility = "visible";
     });
     revealHeroCtaIntroImmediate();
+    finalizeAllScrollRevealTargets();
+    q(".manifest .wi").forEach((w) => {
+      (w as HTMLElement).style.opacity = "1";
+    });
     markHeroIntroComplete();
     return () => cleanups.forEach((fn) => fn());
   }
@@ -765,9 +941,6 @@ export function initLandingMotion(): CleanupFn {
 
   const heroVideoFrame = document.querySelector(".hero-video__frame") as HTMLElement | null;
   if (heroVideoFrame) {
-    heroVideoFrame.style.opacity = "0";
-    heroVideoFrame.style.transform = "translateY(28px)";
-    heroVideoFrame.style.filter = "blur(10px)";
     cleanups.push(
       revealOnScroll(
         heroVideoFrame,
@@ -781,18 +954,11 @@ export function initLandingMotion(): CleanupFn {
   requestAnimationFrame(() => refreshArcScrollLayout());
 
   q(".cards .card").forEach((card) => {
-    card.style.opacity = "0";
-    card.style.transform = `translateY(${SCROLL_REVEAL_Y + 14}px)`;
     cleanups.push(
-      inView(
+      bindInViewReveal(
         card,
-        () => {
-          /* Legacy spin-in cards: translateY(60px) rotate(±2deg)
-          void animate(card, { opacity: 1, y: 0, rotate: 0 }, { duration: 0.9, ease: [0.22, 1, 0.36, 1] });
-          */
-          void animate(card, { opacity: 1, y: 0 }, { duration: 0.75, ease: SCROLL_REVEAL_EASE });
-        },
-        { margin: "0px 0px -12% 0px" }
+        { opacity: [0, 1], y: [SCROLL_REVEAL_Y + 14, 0] },
+        { margin: "0px 0px -12% 0px", duration: 0.75, ease: SCROLL_REVEAL_EASE }
       )
     );
   });
@@ -824,12 +990,12 @@ export function initLandingMotion(): CleanupFn {
   );
 
   q(".feat").forEach((f) => {
-    f.style.opacity = "0";
-    f.style.transform = "translateY(12px)";
     cleanups.push(
-      inView(f, () => {
-        void animate(f, { opacity: 1, y: 0 }, { duration: 0.75, ease: SCROLL_REVEAL_EASE });
-      }, { margin: "0px 0px -10% 0px" })
+      bindInViewReveal(
+        f,
+        { opacity: [0, 1], y: [12, 0] },
+        { margin: "0px 0px -10% 0px", duration: 0.75, ease: SCROLL_REVEAL_EASE }
+      )
     );
   });
 
@@ -858,6 +1024,9 @@ export function initLandingMotion(): CleanupFn {
     if (!manifestWords.length) {
       manifestWords = splitWords(manifestH2, { wordGap: "space" });
     }
+    manifestWords.forEach((w) => {
+      w.style.opacity = "0.15";
+    });
     /* Legacy range (finished too late; tracked whole section):
     scroll(animate(...), { target: manifest, offset: ["start 0.75", "end 0.45"] })
     */
@@ -892,9 +1061,12 @@ export function initLandingMotion(): CleanupFn {
 
   q(".step").forEach((st, i) => {
     cleanups.push(
-      inView(
+      bindInViewReveal(
         st,
-        () => {
+        { opacity: [0, 1], y: [SCROLL_REVEAL_Y + 8, 0] },
+        {
+        margin: "0px 0px -18% 0px",
+        onEnter: () => {
           void animate([
             [st, { opacity: [0, 1], y: [SCROLL_REVEAL_Y + 8, 0] }, { duration: 0.75, delay: i * 0.1, ease: SCROLL_REVEAL_EASE }],
             /* Legacy step number spin-in: rotate(-90deg)
@@ -908,9 +1080,9 @@ export function initLandingMotion(): CleanupFn {
             [q(".mini .r", st), { opacity: [0, 1], y: [6, 0] }, { duration: 0.45, delay: stagger(0.08), at: "-0.2" }],
             [q(".mini .r .tag", st), { opacity: [0, 1], y: [4, 0] }, { duration: 0.4, delay: stagger(0.08), at: "-0.25" }],
             [q(".cal i", st), { opacity: [0, 1], y: [4, 0] }, { duration: 0.35, delay: stagger(0.03), at: "-0.35" }],
-          ] as any);
+          ] as any).then(() => finalizeRevealVisible(st));
         },
-        { margin: "0px 0px -18% 0px" }
+      }
       )
     );
   });
@@ -919,15 +1091,11 @@ export function initLandingMotion(): CleanupFn {
   cleanups.push(revealOnScroll(".col.yes", { opacity: [0, 1], x: [50, 0] }, { trigger: ".compare", start: "top 85%", duration: 0.9 }));
 
   q(".pricing-card").forEach((card) => {
-    card.style.opacity = "0";
-    card.style.transform = `translateY(${SCROLL_REVEAL_Y + 12}px)`;
     cleanups.push(
-      inView(
+      bindInViewReveal(
         card,
-        () => {
-          void animate(card, { opacity: 1, y: 0 }, { duration: 0.72, ease: SCROLL_REVEAL_EASE });
-        },
-        { margin: "0px 0px -12% 0px" }
+        { opacity: [0, 1], y: [SCROLL_REVEAL_Y + 12, 0] },
+        { margin: "0px 0px -12% 0px", duration: 0.72, ease: SCROLL_REVEAL_EASE }
       )
     );
   });

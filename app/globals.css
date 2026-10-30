@@ -866,6 +866,44 @@ footer .links a:hover{color:var(--ink)}
 
 /* motion */
 .gs .hero-hide{visibility:hidden}
+/* Scroll-reveal initial state at first paint (before landing-motion hydrates). Matches revealOnScroll / bindInViewReveal. */
+@media (prefers-reduced-motion:no-preference){
+html.gs section:not(.manifest) h2,
+html.gs .label,
+html.gs section .sub,
+html.gs .head .btn,
+html.gs .guide .copy .btn,
+html.gs .cards .card,
+html.gs .feat,
+html.gs .chan-bouncy .bouncy-tabs__collection,
+html.gs .how-it-works-flow__step,
+html.gs .why-showcase__photo,
+html.gs .quote,
+html.gs .quote figcaption,
+html.gs .stat,
+html.gs .clogos span,
+html.gs .step,
+html.gs .col.no,
+html.gs .col.yes,
+html.gs .pricing-card,
+html.gs .faq-item,
+html.gs .cta-mascot-3d,
+html.gs .cta .btn,
+html.gs .hero-video__frame{
+  opacity:0;
+  transform:translateY(10px);
+}
+html.gs .col.no{transform:translateX(-50px)}
+html.gs .col.yes{transform:translateX(50px)}
+html.gs .quote figcaption{transform:translateX(20px)}
+html.gs .hero-video__frame{transform:translateY(28px);filter:blur(10px)}
+html.gs .manifest h2 .wi{opacity:.15}
+html.gs [data-motion-revealed="true"]{
+  opacity:1;
+  transform:none;
+  filter:none;
+}
+}
 /* Hero CTAs/ticks: opacity 0 from first paint (not .hero-hide — avoids flash when .gs is removed) */
 .hero .ctas.hero-cta-intro .btn,
 .hero .ctas.hero-cta-intro .btn-roll{
