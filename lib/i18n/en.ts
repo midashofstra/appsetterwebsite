@@ -103,27 +103,32 @@ export const en: Dictionary = {
         text: "Every lead lands in a single list with context attached. No copy-paste, no tabs, no “where did that DM go?”",
       },
       {
-        tabLabel: "3 · Contact",
+        tabLabel: "3 · Research",
+        title: "Know the lead before you write",
+        text: "The agent looks up their company, role, and recent activity so your first line references something real—not a generic template.",
+      },
+      {
+        tabLabel: "4 · Contact",
         title: "First outreach in your voice",
         text: "It opens the thread on WhatsApp, email, LinkedIn, and the rest—fast, on-brand, and within the guardrails you set.",
       },
       {
-        tabLabel: "4 · Conversation",
+        tabLabel: "5 · Conversation",
         title: "Reads and replies in your tone",
         text: "It picks up incoming WhatsApp, email, LinkedIn, and other messages and responds the way you would—with your voice and guardrails. One agent. Everywhere your customers are.",
       },
       {
-        tabLabel: "5 · Book",
+        tabLabel: "6 · Book",
         title: "Books the meeting—you stay in control",
         text: "It reads your real availability, offers slots that are actually free, and schedules the appointment when they say yes. You see every thread and can take over whenever you want.",
       },
       {
-        tabLabel: "6 · Learn",
+        tabLabel: "7 · Learn",
         title: "Sharper after every thread",
         text: "Each conversation feeds what works—objections handled, tone that converts—so the next reply lands closer to how you would write it.",
       },
       {
-        tabLabel: "7 · CRM",
+        tabLabel: "8 · CRM",
         title: "Notes and context stay synced",
         text: "Summaries, status, and history flow back to your CRM so your team picks up the story without asking you what happened.",
       },

@@ -7,8 +7,8 @@ import { HOW_IT_WORKS_VISUALS } from "@/lib/how-it-works-tab-visuals";
 import { initBouncyContentTabs } from "@/lib/osmo/bouncy-content-tabs";
 import type { Dictionary } from "@/lib/i18n/types";
 
-/** Book step (1-based step 5) — panel CTA lives here. */
-const BOOK_STEP_INDEX = 4;
+/** Book step (1-based step 6) — panel CTA lives here. */
+const BOOK_STEP_INDEX = 5;
 
 export function ChannelsBouncyTabs({
   dict,
@@ -32,7 +32,7 @@ export function ChannelsBouncyTabs({
       ref={rootRef}
       data-bouncy-tabs-init=""
       data-bouncy-tabs-instance={reactId}
-      className="bouncy-tabs chan-bouncy bouncy-tabs--seven-steps"
+      className="bouncy-tabs chan-bouncy bouncy-tabs--eight-steps"
     >
       <div
         data-bouncy-tabs-nav=""

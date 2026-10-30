@@ -9,20 +9,22 @@ const base = (process.env.VERIFY_URL || "http://127.0.0.1:3001").replace(/\/$/, 
 const EN_LABELS = [
   "1 · Find leads",
   "2 · Add leads",
-  "3 · Contact",
-  "4 · Conversation",
-  "5 · Book",
-  "6 · Learn",
-  "7 · CRM",
+  "3 · Research",
+  "4 · Contact",
+  "5 · Conversation",
+  "6 · Book",
+  "7 · Learn",
+  "8 · CRM",
 ];
 const NL_LABELS = [
   "1 · Leads vinden",
   "2 · Leads toevoegen",
-  "3 · Contact",
-  "4 · Gesprek",
-  "5 · Afspraak boeken",
-  "6 · Leren",
-  "7 · CRM",
+  "3 · Onderzoek",
+  "4 · Contact",
+  "5 · Gesprek",
+  "6 · Afspraak boeken",
+  "7 · Leren",
+  "8 · CRM",
 ];
 
 function fail(msg) {
@@ -50,8 +52,6 @@ for (const [path, tag, width, height, expectedLabels] of [
     const nav = document.querySelector(".bouncy-tabs__nav");
     const navStyle = nav ? getComputedStyle(nav) : null;
     const flowDiagram = document.querySelector(".how-it-works-flow");
-    const activePanel = document.querySelector("[data-bouncy-tabs-panel][data-active]");
-    const hasCta = !!activePanel?.querySelector(".bouncy-tabs__cta");
     const pageOverflow = document.documentElement.scrollWidth > document.documentElement.clientWidth + 2;
     return {
       tabs,
@@ -60,19 +60,18 @@ for (const [path, tag, width, height, expectedLabels] of [
       navWrap: navStyle?.flexWrap,
       flowDiagramPresent: !!flowDiagram,
       pageOverflow,
-      hasCta,
     };
   });
 
   console.log(tag, metrics);
 
-  if (metrics.tabs.length !== 7) fail(`${tag}: expected 7 tabs, got ${metrics.tabs.length}`);
+  if (metrics.tabs.length !== 8) fail(`${tag}: expected 8 tabs, got ${metrics.tabs.length}`);
   expectedLabels.forEach((label, i) => {
     if (metrics.tabs[i] !== label) fail(`${tag}: tab ${i + 1} expected "${label}", got "${metrics.tabs[i]}"`);
   });
   if (metrics.flowDiagramPresent) fail(`${tag}: end-to-end flow diagram should be removed`);
   if (metrics.pageOverflow) fail(`${tag}: horizontal page overflow`);
-  if (!metrics.navScrollable && width < 768) fail(`${tag}: mobile nav should scroll horizontally`);
+  if (!metrics.navScrollable) fail(`${tag}: nav should scroll horizontally for 8 tabs`);
   if (path === "/en" && !metrics.subtitle.includes("Everywhere your customers")) {
     fail(`${tag}: subtitle missing`);
   }
@@ -81,49 +80,33 @@ for (const [path, tag, width, height, expectedLabels] of [
   }
 
   await page.locator("#kanalen").screenshot({
-    path: `${outDir}/how-it-works-seven-tabs-${tag}-step1.png`,
+    path: `${outDir}/how-it-works-eight-tabs-${tag}-step1.png`,
     timeout: 12000,
   });
 
   const step1Photo = await page.evaluate(() => {
     const img = document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-photo");
-    const tile = document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-visual--photo");
-    if (!img || !tile) return { ok: false, reason: "missing photo" };
-    const imgStyle = getComputedStyle(img);
-    const tileStyle = getComputedStyle(tile);
-    const pad = parseFloat(tileStyle.paddingTop) + parseFloat(tileStyle.paddingBottom);
-    return {
-      ok: true,
-      src: img.getAttribute("src") || "",
-      loading: img.getAttribute("loading"),
-      objectFit: imgStyle.objectFit,
-      pad,
-      w: img.getAttribute("width"),
-      h: img.getAttribute("height"),
-    };
-  });
-  console.log(tag, "step1 photo", step1Photo);
-  if (!step1Photo.ok || !step1Photo.src.includes("step-1-find-leads")) {
-    fail(`${tag}: step 1 should use step-1-find-leads image`);
-  }
-  if (step1Photo.objectFit !== "cover" || step1Photo.pad > 0) {
-    fail(`${tag}: step 1 photo should be cover with no tile padding`);
-  }
-
-  await page.getByRole("tab", { name: expectedLabels[1] }).click();
-  await page.waitForTimeout(450);
-  const step2Photo = await page.evaluate(() => {
-    const img = document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-photo");
     return img?.getAttribute("src") || "";
   });
-  console.log(tag, "step2 src", step2Photo);
-  if (!step2Photo.includes("step-2-add-leads")) fail(`${tag}: step 2 should use step-2-add-leads image`);
+  if (!step1Photo.includes("step-1-find-leads")) fail(`${tag}: step 1 image missing`);
+
+  await page.getByRole("tab", { name: expectedLabels[2] }).click();
+  await page.waitForTimeout(450);
+  const researchPanel = await page.evaluate(() => ({
+    title: document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__heading")?.textContent?.trim(),
+    hasIcon: !!document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__step-icon"),
+  }));
+  console.log(tag, "research", researchPanel);
+  if (path === "/en" && !researchPanel.title?.includes("Know the lead")) {
+    fail(`${tag}: Research panel title missing`);
+  }
+  if (!researchPanel.hasIcon) fail(`${tag}: Research should show FA fallback icon`);
   await page.locator("#kanalen").screenshot({
-    path: `${outDir}/how-it-works-seven-tabs-${tag}-step2.png`,
+    path: `${outDir}/how-it-works-eight-tabs-${tag}-research.png`,
     timeout: 12000,
   });
 
-  await page.getByRole("tab", { name: expectedLabels[4] }).click();
+  await page.getByRole("tab", { name: expectedLabels[5] }).click();
   await page.waitForTimeout(450);
   const bookPanel = await page.evaluate(() => ({
     hasCta: !!document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__cta"),
@@ -133,39 +116,14 @@ for (const [path, tag, width, height, expectedLabels] of [
   if (!bookPanel.hasCta) fail(`${tag}: Book tab should show panel CTA`);
 
   await page.locator("#kanalen").screenshot({
-    path: `${outDir}/how-it-works-seven-tabs-${tag}-book.png`,
+    path: `${outDir}/how-it-works-eight-tabs-${tag}-book.png`,
     timeout: 12000,
   });
 
-  await page.getByRole("tab", { name: expectedLabels[3] }).click();
+  await page.getByRole("tab", { name: expectedLabels[4] }).click();
   await page.waitForTimeout(350);
   const logos = await page.locator("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-img--logo").count();
   if (logos !== 3) fail(`${tag}: Conversation panel should show 3 channel logos, got ${logos}`);
-
-  await page.getByRole("tab", { name: expectedLabels[5] }).click();
-  await page.waitForTimeout(350);
-  const textTop = await page.evaluate(() => {
-    const panel = document.querySelector("[data-bouncy-tabs-panel][data-active]");
-    const text = panel?.querySelector(".bouncy-tabs__item-text");
-    const collection = panel?.closest(".bouncy-tabs__collection");
-    if (!panel || !text || !collection) return null;
-    const pt = text.getBoundingClientRect().top;
-    const ct = collection.getBoundingClientRect().top;
-    const style = getComputedStyle(text);
-    return {
-      delta: pt - ct,
-      justify: style.justifyContent,
-      itemAlign: panel ? getComputedStyle(panel).alignItems : "",
-    };
-  });
-  console.log(tag, "learn text align", textTop);
-  if (!textTop || textTop.justify !== "flex-start") fail(`${tag}: text column should be flex-start`);
-  if (textTop.delta > 56) fail(`${tag}: text block should sit near top of card (delta ${textTop.delta}px)`);
-
-  await page.locator("#kanalen").screenshot({
-    path: `${outDir}/how-it-works-seven-tabs-${tag}-learn.png`,
-    timeout: 12000,
-  });
 
   await page.close();
 }

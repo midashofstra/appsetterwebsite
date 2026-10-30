@@ -94,27 +94,32 @@ export const nl: Dictionary = {
         text: "Elke lead komt in één lijst met context erbij. Geen copy-paste, geen losse tabbladen, geen “waar was die DM ook alweer?”",
       },
       {
-        tabLabel: "3 · Contact",
+        tabLabel: "3 · Onderzoek",
+        title: "Ken de lead voordat je schrijft",
+        text: "De agent zoekt bedrijf, rol en recente signalen op, zodat je eerste zin iets concreets noemt—geen generiek sjabloon.",
+      },
+      {
+        tabLabel: "4 · Contact",
         title: "Eerste opvolging in jouw toon",
         text: "Hij opent het gesprek via WhatsApp, e-mail, LinkedIn en de rest—snel, on-brand en binnen de kaders die jij zet.",
       },
       {
-        tabLabel: "4 · Gesprek",
+        tabLabel: "5 · Gesprek",
         title: "Leest en antwoordt in jouw toon",
         text: "De agent pakt binnenkomende WhatsApp-, e-mail-, LinkedIn- en andere berichten op en antwoordt zoals jij dat zou doen—in jouw stem en met jouw kaders. Eén agent. Overal waar je klanten zijn.",
       },
       {
-        tabLabel: "5 · Afspraak boeken",
+        tabLabel: "6 · Afspraak boeken",
         title: "Boekt de afspraak—jij houdt de regie",
         text: "Hij kijkt naar je echte beschikbaarheid, biedt alleen vrije slots aan en plant de afspraak zodra ze ja zeggen. Jij ziet elk gesprek en neemt over wanneer je wilt.",
       },
       {
-        tabLabel: "6 · Leren",
+        tabLabel: "7 · Leren",
         title: "Scherper na elk gesprek",
         text: "Elk thread leert wat werkt—bezwaren, toon die converteert—zodat het volgende antwoord dichter bij jouw manier van schrijven komt.",
       },
       {
-        tabLabel: "7 · CRM",
+        tabLabel: "8 · CRM",
         title: "Notities en context blijven sync",
         text: "Samenvattingen, status en historie gaan terug naar je CRM, zodat je team het verhaal voortzet zonder jou te vragen wat er gebeurde.",
       },

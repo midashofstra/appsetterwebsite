@@ -1,6 +1,9 @@
 import fs from "fs";
 import path from "path";
-import { HOW_IT_WORKS_STEP_IMAGE_SLUGS } from "@/lib/how-it-works-tab-visuals";
+import {
+  HOW_IT_WORKS_STEP_IMAGE_LEGACY_SLUGS,
+  HOW_IT_WORKS_STEP_IMAGE_SLUGS,
+} from "@/lib/how-it-works-tab-visuals";
 
 const IMAGE_EXTENSIONS = [".webp", ".png", ".jpg", ".jpeg"] as const;
 
@@ -13,7 +16,7 @@ function publicBasePath(): string {
 
 /**
  * Optional hard-coded paths (with or without basePath). When set, skips filesystem lookup for that step.
- * Example: "/how-it-works/step-4-conversation.webp"
+ * Example: "/how-it-works/step-5-conversation.webp"
  */
 export const HOW_IT_WORKS_STEP_IMAGE_OVERRIDES: (string | undefined)[] = [
   undefined,
@@ -23,7 +26,18 @@ export const HOW_IT_WORKS_STEP_IMAGE_OVERRIDES: (string | undefined)[] = [
   undefined,
   undefined,
   undefined,
+  undefined,
 ];
+
+function findImageForSlug(dir: string, slug: string): string | null {
+  for (const ext of IMAGE_EXTENSIONS) {
+    const filePath = path.join(dir, `${slug}${ext}`);
+    if (fs.existsSync(filePath)) {
+      return `${slug}${ext}`;
+    }
+  }
+  return null;
+}
 
 /** Resolve image URL per step at build time (static export). Null → use icon/logo fallback. */
 export function resolveHowItWorksStepImageSrcs(): (string | null)[] {
@@ -36,10 +50,11 @@ export function resolveHowItWorksStepImageSrcs(): (string | null)[] {
       return override.startsWith("http") ? override : `${base}${override.startsWith("/") ? override : `/${override}`}`;
     }
 
-    for (const ext of IMAGE_EXTENSIONS) {
-      const filePath = path.join(dir, `${slug}${ext}`);
-      if (fs.existsSync(filePath)) {
-        return `${base}/how-it-works/${slug}${ext}`;
+    const candidates = [slug, ...(HOW_IT_WORKS_STEP_IMAGE_LEGACY_SLUGS[i] ?? [])];
+    for (const candidate of candidates) {
+      const match = findImageForSlug(dir, candidate);
+      if (match) {
+        return `${base}/how-it-works/${match}`;
       }
     }
     return null;

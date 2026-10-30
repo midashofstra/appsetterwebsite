@@ -63,7 +63,7 @@ Section components preserve the prototype markup (including inline SVGs and data
 
 ### How it works — step panel images
 
-Upload one square image per tab under [`public/how-it-works/`](public/how-it-works/README.md) (e.g. `step-6-learn.webp`, 1:1, ~960×960px). Missing files keep the Font Awesome / channel-logo fallback. Rebuild after adding assets.
+Upload one square image per tab under [`public/how-it-works/`](public/how-it-works/README.md) (eight steps, e.g. `step-3-research.webp`, `step-6-book.jpg`; 1:1, ~960×960px). Missing files keep the Font Awesome / channel-logo fallback. Rebuild after adding assets.
 
 ## Deploy
 

@@ -3,6 +3,7 @@ import {
   faDatabase,
   faLightbulb,
   faMagnifyingGlass,
+  faMagnifyingGlassChart,
   faPaperPlane,
   faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
@@ -22,14 +23,27 @@ export const HOW_IT_WORKS_STEP_IMAGE_PX = 1692;
 export const HOW_IT_WORKS_STEP_IMAGE_SLUGS = [
   "step-1-find-leads",
   "step-2-add-leads",
-  "step-3-contact",
-  "step-4-conversation",
-  "step-5-book",
-  "step-6-learn",
-  "step-7-crm",
+  "step-3-research",
+  "step-4-contact",
+  "step-5-conversation",
+  "step-6-book",
+  "step-7-learn",
+  "step-8-crm",
 ] as const;
 
-/** Unaltered integration SVGs for Contact / Conversation panels. */
+/** Pre–Research-step filenames (7-step layout) still resolve to the matching panel. */
+export const HOW_IT_WORKS_STEP_IMAGE_LEGACY_SLUGS: readonly (readonly string[])[] = [
+  [],
+  [],
+  [],
+  ["step-3-contact"],
+  ["step-4-conversation"],
+  ["step-5-book"],
+  ["step-6-learn"],
+  ["step-7-crm"],
+] as const;
+
+/** Unaltered integration SVGs for Conversation panel. */
 export const HOW_IT_WORKS_CHANNEL_LOGOS = [
   { src: LINKEDIN_LOGO, alt: "LinkedIn" },
   { src: gmail.src, alt: gmail.alt || "Gmail" },
@@ -40,27 +54,14 @@ export type HowItWorksVisual =
   | { kind: "logos"; items: { src: string; alt: string }[] }
   | { kind: "icon"; icon: IconDefinition };
 
-/** One visual per step tab: Find → Add → Contact → Conversation → Book → Learn → CRM */
+/** One visual per step tab: Find → Add → Research → Contact → Conversation → Book → Learn → CRM */
 export const HOW_IT_WORKS_VISUALS: HowItWorksVisual[] = [
   { kind: "icon", icon: faMagnifyingGlass },
   { kind: "icon", icon: faUserPlus },
+  { kind: "icon", icon: faMagnifyingGlassChart },
   { kind: "icon", icon: faPaperPlane },
   { kind: "logos", items: [...HOW_IT_WORKS_CHANNEL_LOGOS] },
   { kind: "icon", icon: faCalendarCheck },
   { kind: "icon", icon: faLightbulb },
   { kind: "icon", icon: faDatabase },
 ];
-
-/* Legacy four-tab visuals (flow diagram + calendar + book + logos):
-export type HowItWorksVisual = | { kind: "flow" } | ...
-export const HOW_IT_WORKS_VISUALS = [
-  { kind: "flow" },
-  { kind: "icon", icon: faCalendarDays },
-  { kind: "icon", icon: faCalendarCheck },
-  { kind: "logos", items: [...HOW_IT_WORKS_CHANNEL_LOGOS] },
-];
-*/
-
-/* Legacy per-channel tab visuals (LinkedIn / Gmail / WhatsApp only):
-import { CHANNEL_TAB_VISUALS } from "@/lib/channel-tab-visuals";
-*/
