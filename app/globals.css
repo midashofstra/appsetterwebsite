@@ -199,10 +199,15 @@ nav{display:flex;align-items:center;justify-content:space-between;gap:20px;heigh
 .hero .wrap{position:relative;z-index:1}
 .pill{display:inline-flex;align-items:center;gap:10px;height:36px;padding:0 16px 0 8px;border-radius:999px;background:#fff;border:1px solid var(--line);font-weight:600;font-size:14.5px;color:var(--text);box-shadow:var(--shadow)}
 .pill i{width:22px;height:22px;border-radius:99px;background:var(--g)}
-.hx{display:flex;flex-direction:column;flex-wrap:nowrap;justify-content:center;align-items:center;gap:.06em;max-width:1140px;margin:0 auto;font-size:clamp(46px,7.4vw,108px);line-height:1.06;letter-spacing:-.046em;font-weight:800;-webkit-user-select:none;user-select:none;overflow:visible}
-.hx-line{display:inline-flex;flex-wrap:nowrap;align-items:center;justify-content:center;gap:.14em .24em;max-width:100%;white-space:nowrap}
+.hx{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.14em .24em;max-width:1140px;margin:0 auto;font-size:clamp(46px,7.4vw,108px);line-height:1.06;letter-spacing:-.046em;font-weight:800;-webkit-user-select:none;user-select:none;overflow:visible}
+.hx-line{display:contents}
 .hx-line-text{overflow:visible;padding-bottom:.1em;margin-bottom:-.1em}
 .hx .hx-break{flex-basis:100%;width:0;height:0;overflow:hidden}
+@media (max-width:767px){
+.hx{flex-direction:column;flex-wrap:nowrap;align-items:center;gap:.06em}
+.hx-line{display:inline-flex;flex-wrap:nowrap;align-items:center;justify-content:center;gap:.14em .24em;max-width:100%;white-space:nowrap}
+.hx .hx-break{display:none}
+}
 .hx>.tiles,.hx-line .tiles{margin-inline:.05em}
 .hx>span:not(.tiles):not(.hx-line){overflow:visible;padding-bottom:.1em;margin-bottom:-.1em}
 .hx .wm+.wm{margin-inline-start:.24em}

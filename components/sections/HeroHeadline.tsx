@@ -28,6 +28,7 @@ export function HeroHeadline({ dict }: { dict: Dictionary }) {
             firstFlipDelayAfterIntroMs={HERO_DECK_CYCLE_MS}
           />
         </span>
+        <span className="hx-break" aria-hidden />
         <span className="hx-line">
           <span className="hx-line-text">{words[2]}</span>
           <HeroTileDeck
