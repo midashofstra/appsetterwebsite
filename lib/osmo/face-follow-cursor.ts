@@ -41,10 +41,12 @@ function setSvgGroupPivot(el: Element, mode: "viewBox" | "fillBox") {
   });
 }
 
-function createMascotFaceMotion(section: Element): MascotFaceMotion {
-  const baseIntensity = parseFloat(section.getAttribute("data-face") ?? "") || 30;
-  const bodyTiltDeg = 4;
-  const bodyShiftPct = 4;
+export function createMascotFaceMotion(section: Element): MascotFaceMotion {
+  const scale = parseFloat(section.getAttribute("data-motion-scale") ?? "") || 1;
+  const baseIntensity =
+    (parseFloat(section.getAttribute("data-face") ?? "") || 30) * scale;
+  const bodyTiltDeg = 4 * scale;
+  const bodyShiftPct = 4 * scale;
 
   const targetEls = section.querySelectorAll("[data-face-target]");
   const targets: FaceTarget[] = Array.from(targetEls).map((el) => {
@@ -114,9 +116,7 @@ function heroScrollBindings(
   });
 }
 
-export function initFaceFollowCursor(section: Element, heroScrollTrigger: Element): () => void {
-  const motion = createMascotFaceMotion(section);
-
+function bindFaceFollowPointer(section: Element, motion: MascotFaceMotion) {
   let isTracking = false;
   let isRafRunning = false;
   const lastMouse = { x: 0, y: 0 };
@@ -164,6 +164,13 @@ export function initFaceFollowCursor(section: Element, heroScrollTrigger: Elemen
     motion.resetAll();
   };
 
+  return { startTracking, stopTracking };
+}
+
+export function initFaceFollowCursor(section: Element, heroScrollTrigger: Element): () => void {
+  const motion = createMascotFaceMotion(section);
+  const { startTracking, stopTracking } = bindFaceFollowPointer(section, motion);
+
   const st = heroScrollBindings(heroScrollTrigger, startTracking, stopTracking);
 
   return () => {
@@ -172,8 +179,15 @@ export function initFaceFollowCursor(section: Element, heroScrollTrigger: Elemen
   };
 }
 
-/** Touch / hover:none: idle glance loop while hero is in view. */
-export function initFaceIdleGlance(section: Element, heroScrollTrigger: Element): () => void {
+/** Nav / always-visible mascot: global pointer, no scroll gating. */
+export function initFaceFollowCursorGlobal(section: Element): () => void {
+  const motion = createMascotFaceMotion(section);
+  const { startTracking, stopTracking } = bindFaceFollowPointer(section, motion);
+  startTracking();
+  return stopTracking;
+}
+
+function bindFaceIdleGlance(section: Element) {
   const { targets, body, bodyTiltDeg, bodyShiftPct, resetAll } = createMascotFaceMotion(section);
 
   const state = { nx: 0, ny: 0 };
@@ -236,12 +250,35 @@ export function initFaceIdleGlance(section: Element, heroScrollTrigger: Element)
     resetAll();
   };
 
+  return { startIdle, stopIdle };
+}
+
+/** Touch / hover:none: idle glance loop while hero is in view. */
+export function initFaceIdleGlance(section: Element, heroScrollTrigger: Element): () => void {
+  const { startIdle, stopIdle } = bindFaceIdleGlance(section);
   const st = heroScrollBindings(heroScrollTrigger, startIdle, stopIdle);
 
   return () => {
     stopIdle();
     st.kill();
   };
+}
+
+/** Nav / always-visible mascot: idle glance without scroll gating. */
+export function initFaceIdleGlanceGlobal(section: Element): () => void {
+  const { startIdle, stopIdle } = bindFaceIdleGlance(section);
+  startIdle();
+  return stopIdle;
+}
+
+/** Scale face/body motion to match hero mascot tile size (nav icon is smaller). */
+export function mascotMotionScaleVsHero(section: Element): number {
+  const navW = section.getBoundingClientRect().width;
+  if (navW < 1) return 38 / 85;
+  const heroTile = document.querySelector(".hero-mascot-tile");
+  const heroW = heroTile?.getBoundingClientRect().width;
+  if (!heroW || heroW < 1) return navW / 85;
+  return navW / heroW;
 }
 
 export function prefersMascotCursorFollow(): boolean {
