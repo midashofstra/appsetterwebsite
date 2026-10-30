@@ -93,26 +93,49 @@ export const en: Dictionary = {
     */
     steps: [
       {
-        tabLabel: "1 · End to end",
-        title: "From lead to booked meeting",
-        text: "Seven steps, one agent—see how it runs without handoffs.",
+        tabLabel: "1 · Find leads",
+        title: "Spot interest before it goes cold",
+        text: "The agent watches the places your buyers already show up—social, inbox, and more—so you see warm intent without another manual hunt.",
       },
       {
-        tabLabel: "2 · Calendar",
-        title: "Checks your calendar",
-        text: "It reads your real availability and only offers slots that are actually free—no double bookings or back-and-forth about times that do not work.",
+        tabLabel: "2 · Add leads",
+        title: "One queue, zero spreadsheet chaos",
+        text: "Every lead lands in a single list with context attached. No copy-paste, no tabs, no “where did that DM go?”",
       },
       {
-        tabLabel: "3 · Book",
-        title: "Books the meeting—you stay in control",
-        text: "When someone is ready, it schedules the appointment in your calendar. You see every thread and can take over whenever you want.",
+        tabLabel: "3 · Contact",
+        title: "First outreach in your voice",
+        text: "It opens the thread on WhatsApp, email, LinkedIn, and the rest—fast, on-brand, and within the guardrails you set.",
       },
       {
-        tabLabel: "4 · Channels",
+        tabLabel: "4 · Conversation",
         title: "Reads and replies in your tone",
         text: "It picks up incoming WhatsApp, email, LinkedIn, and other messages and responds the way you would—with your voice and guardrails. One agent. Everywhere your customers are.",
       },
+      {
+        tabLabel: "5 · Book",
+        title: "Books the meeting—you stay in control",
+        text: "It reads your real availability, offers slots that are actually free, and schedules the appointment when they say yes. You see every thread and can take over whenever you want.",
+      },
+      {
+        tabLabel: "6 · Learn",
+        title: "Sharper after every thread",
+        text: "Each conversation feeds what works—objections handled, tone that converts—so the next reply lands closer to how you would write it.",
+      },
+      {
+        tabLabel: "7 · CRM",
+        title: "Notes and context stay synced",
+        text: "Summaries, status, and history flow back to your CRM so your team picks up the story without asking you what happened.",
+      },
     ],
+    /* Legacy four bouncy tabs (End to end / Calendar / Book / Channels + flow diagram on tab 1):
+    steps: [
+      { tabLabel: "1 · End to end", title: "From lead to booked meeting", text: "..." },
+      { tabLabel: "2 · Calendar", title: "Checks your calendar", text: "..." },
+      { tabLabel: "3 · Book", title: "Books the meeting—you stay in control", text: "..." },
+      { tabLabel: "4 · Channels", title: "Reads and replies in your tone", text: "..." },
+    ],
+    */
   },
   compare: {
     label: "The difference",

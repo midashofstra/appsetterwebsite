@@ -84,26 +84,49 @@ export const nl: Dictionary = {
     */
     steps: [
       {
-        tabLabel: "1 · Overzicht",
-        title: "Van lead tot ingeplande afspraak",
-        text: "Zeven stappen, één agent—zo loopt het zonder overdracht.",
+        tabLabel: "1 · Leads vinden",
+        title: "Zie interesse voordat het afkoelt",
+        text: "De agent kijkt waar je kopers al actief zijn—social, inbox en meer—zodat je warme signalen ziet zonder handmatig speuren.",
       },
       {
-        tabLabel: "2 · Agenda",
-        title: "Checkt je agenda",
-        text: "Hij kijkt naar je echte beschikbaarheid en biedt alleen tijden aan die echt vrij zijn—geen dubbele boekingen of gedoe over slots die niet lukken.",
+        tabLabel: "2 · Leads toevoegen",
+        title: "Eén rij, geen spreadsheet-gedoe",
+        text: "Elke lead komt in één lijst met context erbij. Geen copy-paste, geen losse tabbladen, geen “waar was die DM ook alweer?”",
       },
       {
-        tabLabel: "3 · Boeken",
-        title: "Boekt de afspraak—jij houdt de regie",
-        text: "Is iemand klaar, dan plant hij de afspraak in je agenda. Jij ziet elk gesprek en neemt over wanneer je wilt.",
+        tabLabel: "3 · Contact",
+        title: "Eerste opvolging in jouw toon",
+        text: "Hij opent het gesprek via WhatsApp, e-mail, LinkedIn en de rest—snel, on-brand en binnen de kaders die jij zet.",
       },
       {
-        tabLabel: "4 · Kanalen",
+        tabLabel: "4 · Gesprek",
         title: "Leest en antwoordt in jouw toon",
         text: "De agent pakt binnenkomende WhatsApp-, e-mail-, LinkedIn- en andere berichten op en antwoordt zoals jij dat zou doen—in jouw stem en met jouw kaders. Eén agent. Overal waar je klanten zijn.",
       },
+      {
+        tabLabel: "5 · Afspraak boeken",
+        title: "Boekt de afspraak—jij houdt de regie",
+        text: "Hij kijkt naar je echte beschikbaarheid, biedt alleen vrije slots aan en plant de afspraak zodra ze ja zeggen. Jij ziet elk gesprek en neemt over wanneer je wilt.",
+      },
+      {
+        tabLabel: "6 · Leren",
+        title: "Scherper na elk gesprek",
+        text: "Elk thread leert wat werkt—bezwaren, toon die converteert—zodat het volgende antwoord dichter bij jouw manier van schrijven komt.",
+      },
+      {
+        tabLabel: "7 · CRM",
+        title: "Notities en context blijven sync",
+        text: "Samenvattingen, status en historie gaan terug naar je CRM, zodat je team het verhaal voortzet zonder jou te vragen wat er gebeurde.",
+      },
     ],
+    /* Legacy vier bouncy tabs (Overzicht / Agenda / Boeken / Kanalen + flow op tab 1):
+    steps: [
+      { tabLabel: "1 · Overzicht", title: "Van lead tot ingeplande afspraak", text: "..." },
+      { tabLabel: "2 · Agenda", title: "Checkt je agenda", text: "..." },
+      { tabLabel: "3 · Boeken", title: "Boekt de afspraak—jij houdt de regie", text: "..." },
+      { tabLabel: "4 · Kanalen", title: "Leest en antwoordt in jouw toon", text: "..." },
+    ],
+    */
   },
   compare: {
     label: "Het verschil",

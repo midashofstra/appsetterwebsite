@@ -156,10 +156,12 @@ export function initBouncyContentTabs(root: HTMLElement): () => void {
     if (reduceMotion.matches) {
       place(index);
       swapPanelsInstant();
+      scrollActiveTabIntoView(buttons[index]);
       return;
     }
 
     transitionCard(prevIndex, movingRight);
+    scrollActiveTabIntoView(buttons[index]);
     const target = rectFor(buttons[index]);
     gsap.killTweensOf(pos);
     gsap.killTweensOf(indicatorEl);
@@ -245,9 +247,19 @@ export function initBouncyContentTabs(root: HTMLElement): () => void {
     event.preventDefault();
     if (next !== activeIndex) {
       goTo(next);
-      buttons[next].focus();
+      buttons[next].focus({ preventScroll: true });
+      scrollActiveTabIntoView(buttons[next]);
     }
   };
+
+  function scrollActiveTabIntoView(button: HTMLElement) {
+    if (!navEl.classList.contains("bouncy-tabs__nav--scroll")) return;
+    button.scrollIntoView({
+      inline: "center",
+      block: "nearest",
+      behavior: reduceMotion.matches ? "auto" : "smooth",
+    });
+  }
 
   buttons.forEach((button, index) => {
     const onClick = () => goTo(index);

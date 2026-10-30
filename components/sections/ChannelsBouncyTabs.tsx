@@ -3,10 +3,12 @@
 import { useEffect, useId, useRef } from "react";
 import { SiteIcon } from "@/components/icons/SiteIcon";
 import { CtaButton } from "@/components/ui/CtaButton";
-import { HowItWorksFlowSteps } from "@/components/sections/HowItWorksFlowSteps";
 import { HOW_IT_WORKS_VISUALS } from "@/lib/how-it-works-tab-visuals";
 import { initBouncyContentTabs } from "@/lib/osmo/bouncy-content-tabs";
 import type { Dictionary } from "@/lib/i18n/types";
+
+/** Book step (1-based step 5) — panel CTA lives here. */
+const BOOK_STEP_INDEX = 4;
 
 export function ChannelsBouncyTabs({ dict }: { dict: Dictionary }) {
   const { channels: c } = dict;
@@ -24,9 +26,14 @@ export function ChannelsBouncyTabs({ dict }: { dict: Dictionary }) {
       ref={rootRef}
       data-bouncy-tabs-init=""
       data-bouncy-tabs-instance={reactId}
-      className="bouncy-tabs chan-bouncy"
+      className="bouncy-tabs chan-bouncy bouncy-tabs--seven-steps"
     >
-      <div data-bouncy-tabs-nav="" role="tablist" aria-label={c.tabsAria} className="bouncy-tabs__nav">
+      <div
+        data-bouncy-tabs-nav=""
+        role="tablist"
+        aria-label={c.tabsAria}
+        className="bouncy-tabs__nav bouncy-tabs__nav--scroll"
+      >
         <div data-bouncy-tabs-ghost="" className="bouncy-tabs__ghost" aria-hidden />
         <div data-bouncy-tabs-indicator="" className="bouncy-tabs__indicator" aria-hidden />
         {c.steps.map(({ tabLabel }, i) => (
@@ -51,27 +58,23 @@ export function ChannelsBouncyTabs({ dict }: { dict: Dictionary }) {
             const visual = HOW_IT_WORKS_VISUALS[i];
             return (
               <div
-                key={title}
+                key={tabLabelKey(c.steps[i].tabLabel, i)}
                 data-bouncy-tabs-panel=""
                 role="tabpanel"
                 {...(i === 0 ? { "data-active": true } : {})}
-                className={`bouncy-tabs__item${visual?.kind === "flow" ? " bouncy-tabs__item--flow" : ""}`}
+                className="bouncy-tabs__item"
               >
                 <div className="bouncy-tabs__item-text">
                   <h3 className="bouncy-tabs__heading">{title}</h3>
                   <p className="bouncy-tabs__para">{text}</p>
-                  {c.panelCta && i === 2 ? (
+                  {c.panelCta && i === BOOK_STEP_INDEX ? (
                     <CtaButton href="#start" className="bouncy-tabs__cta btn-main btn-sm">
                       {c.panelCta}
                     </CtaButton>
                   ) : null}
                 </div>
-                <div
-                  className={`bouncy-tabs__item-visual${visual?.kind === "flow" ? " bouncy-tabs__item-visual--flow" : ""}`}
-                >
-                  {visual?.kind === "flow" ? (
-                    <HowItWorksFlowSteps dict={dict} />
-                  ) : visual?.kind === "logos" ? (
+                <div className="bouncy-tabs__item-visual">
+                  {visual?.kind === "logos" ? (
                     <div className="bouncy-tabs__logo-row" aria-hidden>
                       {visual.items.map((logo) => (
                         <img
@@ -102,3 +105,13 @@ export function ChannelsBouncyTabs({ dict }: { dict: Dictionary }) {
     </div>
   );
 }
+
+function tabLabelKey(tabLabel: string, index: number) {
+  return `${index}-${tabLabel}`;
+}
+
+/* Legacy tab 1 end-to-end flow diagram (HowItWorksFlowSteps):
+import { HowItWorksFlowSteps } from "@/components/sections/HowItWorksFlowSteps";
+{visual?.kind === "flow" ? <HowItWorksFlowSteps dict={dict} /> : ...}
+CTA was on index 2 (old Calendar tab).
+*/
