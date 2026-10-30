@@ -1,4 +1,5 @@
 // import { LangSwitcher } from "@/components/LangSwitcher";
+import { NavMascotIcon } from "@/components/NavMascotIcon";
 import { CtaButton } from "@/components/ui/CtaButton";
 import type { Dictionary } from "@/lib/i18n/types";
 
@@ -25,10 +26,13 @@ export function Header({ dict }: { dict: Dictionary }) {
       <div className="wrap">
         <nav aria-label={nav.aria}>
           <a href="#top" className="brand">
+            <NavMascotIcon />
+            {/* Legacy nav logo (#agent sprite, 38×38):
             <svg width="38" height="38" viewBox="0 0 120 120" aria-hidden="true">
               <rect width="120" height="120" rx="30" fill="var(--g)" />
               <use href="#agent" transform="rotate(-8 60 64)" />
             </svg>
+            */}
             <span>{nav.brand}</span>
           </a>
           <div className="navlinks">

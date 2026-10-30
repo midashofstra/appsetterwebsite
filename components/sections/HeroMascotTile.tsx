@@ -3,13 +3,14 @@
 import { useReducedMotion } from "motion/react";
 import { useEffect, useRef } from "react";
 import {
+  MASCOT_FACE_BASE_INTENSITY,
+  MascotInlineSvg,
+} from "@/components/mascot/MascotInlineSvg";
+import {
   initFaceFollowCursor,
   initFaceIdleGlance,
   prefersMascotCursorFollow,
 } from "@/lib/osmo/face-follow-cursor";
-
-const BASE_INTENSITY = 30;
-const HIGHLIGHT_FACTOR = 1.5;
 
 /** User mascot SVG (444×444); eyes/inner eyes + body follow cursor while hero is in view. */
 export function HeroMascotTile({ ariaLabel }: { ariaLabel: string }) {
@@ -32,59 +33,9 @@ export function HeroMascotTile({ ariaLabel }: { ariaLabel: string }) {
       <span
         className="tile t1 as-tile hero-mascot-tile"
         ref={sectionRef}
-        data-face={BASE_INTENSITY}
+        data-face={MASCOT_FACE_BASE_INTENSITY}
       >
-        <svg
-          className="as-icon hero-mascot-svg"
-          viewBox="0 0 444 444"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden
-        >
-          <rect width="444" height="444" fill="#FF0050" />
-          <g className="hero-mascot-body">
-            <path
-              d="M272.968 144.884L177.704 158.272C141.28 163.391 115.902 197.069 121.021 233.493L131.32 306.773C136.439 343.197 170.116 368.575 206.54 363.456L301.804 350.067C338.228 344.948 363.606 311.271 358.487 274.846L348.188 201.567C343.069 165.142 309.392 139.765 272.968 144.884Z"
-              fill="black"
-            />
-            <path
-              d="M247.905 125.993L152.641 139.381C116.217 144.501 90.8393 178.178 95.9584 214.602L106.257 287.882C111.376 324.306 145.054 349.684 181.478 344.565L276.742 331.177C313.166 326.057 338.544 292.38 333.425 255.956L323.126 182.676C318.007 146.252 284.329 120.874 247.905 125.993Z"
-              fill="white"
-              strokeWidth="22.2"
-              stroke="black"
-            />
-            <path
-              d="M166.836 107.493C165.414 97.375 156.059 90.3256 145.941 91.7476C135.823 93.1695 128.774 102.524 130.196 112.642L136.375 156.61C137.797 166.728 147.152 173.777 157.27 172.355C167.388 170.933 174.437 161.579 173.015 151.461L166.836 107.493Z"
-              fill="black"
-            />
-            <path
-              d="M262.111 94.1081C260.689 83.9902 251.334 76.9408 241.216 78.3628C231.099 79.7848 224.049 89.1396 225.471 99.2575L231.65 143.225C233.072 153.343 242.427 160.393 252.545 158.971C262.663 157.549 269.712 148.194 268.29 138.076L262.111 94.1081Z"
-              fill="black"
-            />
-          </g>
-          <g id="eyes">
-            <g id="eyes_2" data-face-target="1">
-              <path
-                d="M194.699 279.189C208.864 277.198 218.041 259.18 215.197 238.944C212.353 218.709 198.565 203.918 184.4 205.909C170.235 207.9 161.057 225.918 163.901 246.154C166.745 266.389 180.534 281.18 194.699 279.189Z"
-                fill="black"
-              />
-              <path
-                d="M264.306 269.404C278.471 267.413 287.649 249.395 284.805 229.159C281.961 208.924 268.172 194.133 254.007 196.124C239.842 198.115 230.665 216.133 233.509 236.368C236.353 256.604 250.141 271.395 264.306 269.404Z"
-                fill="black"
-              />
-            </g>
-            <g id="innereyes" data-face-target={String(HIGHLIGHT_FACTOR)}>
-              <path
-                d="M199.837 235.87C205.098 235.131 208.764 230.266 208.024 225.005C207.285 219.744 202.42 216.078 197.159 216.817C191.898 217.557 188.232 222.421 188.972 227.683C189.711 232.944 194.576 236.61 199.837 235.87Z"
-                fill="white"
-              />
-              <path
-                d="M269.442 226.085C274.704 225.346 278.369 220.481 277.63 215.22C276.89 209.959 272.026 206.293 266.765 207.032C261.503 207.772 257.838 212.636 258.577 217.897C259.317 223.159 264.181 226.824 269.442 226.085Z"
-                fill="white"
-              />
-            </g>
-          </g>
-        </svg>
+        <MascotInlineSvg className="as-icon hero-mascot-svg" />
       </span>
     </span>
   );

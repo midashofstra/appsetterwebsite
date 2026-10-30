@@ -187,6 +187,8 @@ nav{display:flex;align-items:center;justify-content:space-between;gap:20px;heigh
 .lang-switch-icon{color:var(--muted)}
 @media (max-width:880px){.lang-switch{font-size:13px}}
 .brand{display:flex;align-items:center;gap:11px;text-decoration:none;font-weight:800;font-size:18px;letter-spacing:-.02em}
+.nav-mascot-icon{display:block;width:38px;height:38px;flex-shrink:0;border-radius:9.5px;overflow:hidden;background:var(--g);border:1px solid var(--g-border);box-sizing:border-box}
+.nav-mascot-icon .nav-mascot-svg,.nav-mascot-icon .hero-mascot-svg{width:100%;height:100%;display:block;border-radius:0}
 .navlinks{display:flex;gap:30px;font-size:15px;font-weight:500}
 .navlinks a{text-decoration:none;color:var(--text)}
 .navlinks a:hover{color:var(--ink)}
