@@ -136,6 +136,16 @@ function destroyInstance(instance: ArcInstance) {
   instance.shape.remove();
 }
 
+let layoutRefreshTimer: ReturnType<typeof setTimeout> | undefined;
+
+/** Debounced ScrollTrigger.refresh after hero video / layout shifts. */
+export function refreshArcScrollLayout(): void {
+  clearTimeout(layoutRefreshTimer);
+  layoutRefreshTimer = setTimeout(() => {
+    requestAnimationFrame(() => ScrollTrigger.refresh());
+  }, 80);
+}
+
 /** Osmo Arc Scroll Transition — single wrapper; no-op under prefers-reduced-motion. */
 export function mountArcScrollTransition(wrapper: HTMLElement): () => void {
   if (!wrapper.hasAttribute("data-arc-scroll-transition")) {
@@ -149,13 +159,29 @@ export function mountArcScrollTransition(wrapper: HTMLElement): () => void {
     return () => destroyInstance(instance);
   });
 
-  const onRefresh = () => ScrollTrigger.refresh();
+  const onRefresh = () => refreshArcScrollLayout();
   window.addEventListener("load", onRefresh);
   window.addEventListener("orientationchange", onRefresh);
+  window.addEventListener("resize", onRefresh);
+
+  const vimeoRoot = document.querySelector("[data-vimeo-player-init]");
+  const layoutObserver = new MutationObserver(onRefresh);
+  if (vimeoRoot) {
+    layoutObserver.observe(vimeoRoot, {
+      attributes: true,
+      attributeFilter: ["data-vimeo-loaded", "data-vimeo-activated", "data-vimeo-playing"],
+    });
+  }
+  const heroVideo = document.querySelector(".hero-video");
+  if (heroVideo) {
+    layoutObserver.observe(heroVideo, { childList: true, subtree: true, attributes: true });
+  }
 
   return () => {
     window.removeEventListener("load", onRefresh);
     window.removeEventListener("orientationchange", onRefresh);
+    window.removeEventListener("resize", onRefresh);
+    layoutObserver.disconnect();
     mm.revert();
   };
 }

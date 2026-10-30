@@ -6,8 +6,8 @@ export function Logos({ dict }: { dict: Dictionary }) {
   return (
     <div className="logos">
       <div className="wrap">
-        <p className="rv">{dict.logos.title}</p>
-        <div className="logo-row rv d1">
+        <p>{dict.logos.title}</p>
+        <div className="logo-row">
           {INTEGRATION_LOGOS.map(({ label, src, alt }) => {
             const displayLabel =
               dict.locale === "en" && label === "Google Agenda" ? "Google Calendar" : label;

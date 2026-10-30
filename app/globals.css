@@ -414,8 +414,10 @@ nav{display:flex;align-items:center;justify-content:space-between;gap:20px;heigh
 
 /* logos */
 .logos{position:relative;z-index:2;padding-top:32px;text-align:center}
+.logos .wrap{position:relative;z-index:11;isolation:isolate}
+.logos p,.logo-row span{opacity:1;transform:none}
 .problem-arc-scroll-transition{
-  z-index:10;pointer-events:none;color:var(--bg);position:absolute;inset:auto 0 0;
+  z-index:1;pointer-events:none;color:var(--bg);position:absolute;inset:auto 0 0;
   width:100%;max-width:100%;height:clamp(120px,22vh,280px);transform:translateY(55%);
   overflow:hidden;contain:layout paint style;
 }

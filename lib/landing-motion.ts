@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { markHeroIntroComplete } from "@/lib/hero-deck-timing";
+import { refreshArcScrollLayout } from "@/lib/osmo/arc-scroll-transition";
 import { animate, inView, scroll, stagger } from "motion";
 
 type CleanupFn = () => void;
@@ -246,6 +247,105 @@ function revealOnScroll(
     },
     { root: document, margin: margin as `${number}px` }
   );
+}
+
+const LOGOS_REVEALED_ATTR = "data-logos-revealed";
+
+function finalizeLogosReveal(el: HTMLElement) {
+  el.setAttribute(LOGOS_REVEALED_ATTR, "true");
+  el.style.opacity = "";
+  el.style.transform = "";
+}
+
+function forceLogosVisible(el: HTMLElement) {
+  el.setAttribute(LOGOS_REVEALED_ATTR, "true");
+  el.style.opacity = "1";
+  el.style.transform = "none";
+}
+
+/** Integration logos: default visible in CSS; animate only after the band enters view; IO fallback. */
+function revealLogosStrip(): CleanupFn {
+  const band = document.querySelector(".logos");
+  const title = document.querySelector(".logos p") as HTMLElement | null;
+  const row = document.querySelector(".logo-row");
+  const spans = q(".logo-row span") as HTMLElement[];
+  if (!band || !row || !spans.length) return () => {};
+
+  const targets = (title ? [title, ...spans] : spans) as HTMLElement[];
+  const cleanups: CleanupFn[] = [];
+  let revealed = false;
+
+  const runReveal = () => {
+    if (revealed) return;
+    revealed = true;
+
+    if (title && title.getAttribute(LOGOS_REVEALED_ATTR) !== "true") {
+      void animate(
+        title,
+        { opacity: [0.72, 1], y: [12, 0] },
+        { duration: 0.6, ease: SCROLL_REVEAL_EASE }
+      ).then(() => finalizeLogosReveal(title));
+    }
+
+    spans.forEach((sp, i) => {
+      if (sp.getAttribute(LOGOS_REVEALED_ATTR) === "true") return;
+      void animate(
+        sp,
+        { opacity: [0.72, 1], y: [SCROLL_REVEAL_Y, 0] },
+        { duration: 0.55, delay: i * 0.06, ease: SCROLL_REVEAL_EASE }
+      ).then(() => finalizeLogosReveal(sp));
+    });
+  };
+
+  cleanups.push(
+    inView(
+      band,
+      () => {
+        runReveal();
+      },
+      { margin: parseMargin("top 85%") as `${number}px` }
+    )
+  );
+
+  cleanups.push(
+    inView(
+      row,
+      () => {
+        runReveal();
+      },
+      { margin: parseMargin("top 88%") as `${number}px` }
+    )
+  );
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting || entry.intersectionRatio < 0.12) return;
+        const el = entry.target as HTMLElement;
+        if (el.getAttribute(LOGOS_REVEALED_ATTR) === "true") return;
+        const op = parseFloat(getComputedStyle(el).opacity);
+        if (Number.isFinite(op) && op < 0.2) {
+          forceLogosVisible(el);
+        }
+      });
+    },
+    { root: null, threshold: [0, 0.12, 0.35] }
+  );
+  targets.forEach((el) => io.observe(el));
+  cleanups.push(() => io.disconnect());
+
+  const safety = window.setTimeout(() => {
+    targets.forEach((el) => {
+      const r = el.getBoundingClientRect();
+      const inViewport = r.bottom > 0 && r.top < window.innerHeight;
+      if (!inViewport) return;
+      const op = parseFloat(getComputedStyle(el).opacity);
+      if (Number.isFinite(op) && op < 0.2) forceLogosVisible(el);
+    });
+  }, 6000);
+  cleanups.push(() => clearTimeout(safety));
+
+  return () => cleanups.forEach((fn) => fn());
 }
 
 export function initLandingMotion(): CleanupFn {
@@ -677,14 +777,8 @@ export function initLandingMotion(): CleanupFn {
     );
   }
 
-  cleanups.push(revealOnScroll(".logos p", { opacity: [0, 1], y: [12, 0] }, { trigger: ".logos", start: "top 85%", duration: 0.6 }));
-  cleanups.push(
-    revealOnScroll(
-      ".logo-row span",
-      { opacity: [0, 1], y: [SCROLL_REVEAL_Y, 0] },
-      { trigger: ".logo-row", start: "top 88%", duration: 0.55, staggerEach: 0.06, ease: SCROLL_REVEAL_EASE }
-    )
-  );
+  cleanups.push(revealLogosStrip());
+  requestAnimationFrame(() => refreshArcScrollLayout());
 
   q(".cards .card").forEach((card) => {
     card.style.opacity = "0";
