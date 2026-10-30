@@ -76,9 +76,9 @@ export type Dictionary = {
     mascotAlt: string;
   };
   planExtras: { connected: string };
+  manifest: { wordsBeforeLogo: string[] };
   sections: {
     problemHtml: string;
-    manifestHtml: string;
     planHtml: string;
     footerHtml: string;
   };

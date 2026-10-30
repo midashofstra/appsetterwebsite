@@ -59,12 +59,14 @@ export const planHtml = `<!-- PLAN -->
     </div>
   </div>
 </section>`;
+/* Legacy manifest (static HTML, no inline mascot):
 export const manifestHtml = `<!-- FILOSOFISCH -->
 <section class="manifest">
   <div class="wrap">
     <h2>Jouw werk is de afspraak. Alles wat daaraan voorafgaat, hoort niet op jouw bord.</h2>
   </div>
 </section>`;
+*/
 export const footerHtml = `<footer>
   <div class="wrap">
     <a href="#top" class="brand" style="color:var(--ink);font-size:16px">

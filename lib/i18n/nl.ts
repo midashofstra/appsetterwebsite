@@ -133,9 +133,21 @@ export const nl: Dictionary = {
       "3D-mascotte van appointmentsetter.app: een wit kalenderblok met twee ringen en grote zwarte ogen",
   },
   planExtras: { connected: "Gekoppeld" },
+  manifest: {
+    wordsBeforeLogo: [
+      "Jouw",
+      "werk",
+      "is",
+      "de",
+      "afspraak.",
+      "Alles",
+      "daarvoor",
+      "is",
+      "van",
+    ],
+  },
   sections: {
     problemHtml: sections.problemHtml,
-    manifestHtml: sections.manifestHtml,
     planHtml: sections.planHtml,
     footerHtml: sections.footerHtml,
   },
