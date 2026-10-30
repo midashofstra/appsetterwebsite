@@ -159,10 +159,18 @@ for (const [path, tag, width, height, expectedLabels] of [
 
   await page.getByRole("tab", { name: expectedLabels[5] }).click();
   await page.waitForTimeout(450);
-  const meetingPanel = await page.evaluate(() => ({
-    hasCta: !!document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__cta"),
-    title: document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__heading")?.textContent?.trim(),
-  }));
+  const meetingPanel = await page.evaluate(() => {
+    const img = document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-photo");
+    return {
+      hasCta: !!document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__cta"),
+      title: document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__heading")?.textContent?.trim(),
+      src: img?.getAttribute("src") || "",
+      hasPhoto: !!img,
+      photoVisual: !!document.querySelector(
+        "[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-visual--photo"
+      ),
+    };
+  });
   console.log(tag, "meeting panel", meetingPanel);
   if (!meetingPanel.hasCta) fail(`${tag}: Meeting tab should show panel CTA`);
   if (path === "/en" && !meetingPanel.title?.includes("The meeting")) {
@@ -171,11 +179,21 @@ for (const [path, tag, width, height, expectedLabels] of [
   if (path === "/nl" && !meetingPanel.title?.includes("De afspraak")) {
     fail(`${tag}: NL Meeting panel title missing`);
   }
+  if (!meetingPanel.hasPhoto || !meetingPanel.src.includes("step-6-meeting")) {
+    fail(`${tag}: Meeting tab should show step-6-meeting photo`);
+  }
+  if (!meetingPanel.photoVisual) fail(`${tag}: Meeting photo should use photo tile styling`);
 
   await page.locator("#kanalen").screenshot({
     path: `${outDir}/how-it-works-eight-tabs-${tag}-meeting.png`,
     timeout: 12000,
   });
+  if (tag === "desktop-en") {
+    await page.locator("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-visual--photo").screenshot({
+      path: `${outDir}/how-it-works-step-6-meeting-tab-en.png`,
+      timeout: 12000,
+    });
+  }
 
   await page.getByRole("tab", { name: expectedLabels[4] }).click();
   await page.waitForTimeout(350);
