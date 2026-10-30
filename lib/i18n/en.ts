@@ -63,6 +63,16 @@ export const en: Dictionary = {
     flowAria: "End-to-end flow from lead to learning",
     panelCta: "Try 3 days for €1",
     flowSteps: [
+      { label: "Find leads", description: "Spot interest where your buyers already are." },
+      { label: "Add leads", description: "Pull them into one queue—no spreadsheet chaos." },
+      { label: "Contact", description: "First outreach in your voice, fast." },
+      { label: "Conversation", description: "Back-and-forth until they're ready." },
+      { label: "Book", description: "On your calendar when they say yes." },
+      { label: "Learn", description: "Gets sharper from every thread." },
+      { label: "CRM", description: "Notes and context stay synced." },
+    ],
+    /* Legacy six-step flow (tab 1):
+    flowSteps: [
       { label: "Leads", description: "New interest lands in one place." },
       { label: "First contact", description: "Outreach in your voice, fast." },
       { label: "Conversation", description: "Back-and-forth until they're ready." },
@@ -70,6 +80,7 @@ export const en: Dictionary = {
       { label: "CRM", description: "Notes and context stay synced." },
       { label: "Learn", description: "Gets sharper from every thread." },
     ],
+    */
     /* Legacy tab 1 (channel logos panel — now tab 4):
     tabLabel: "1 · Reply",
     title: "Reads and replies in your tone",
@@ -84,7 +95,7 @@ export const en: Dictionary = {
       {
         tabLabel: "1 · End to end",
         title: "From lead to booked meeting",
-        text: "Six steps, one agent—see how it runs without handoffs.",
+        text: "Seven steps, one agent—see how it runs without handoffs.",
       },
       {
         tabLabel: "2 · Calendar",

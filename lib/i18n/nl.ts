@@ -54,6 +54,16 @@ export const nl: Dictionary = {
     flowAria: "Flow van lead tot leren",
     panelCta: "Probeer 3 dagen voor €1",
     flowSteps: [
+      { label: "Leads vinden", description: "Vind interesse waar je kopers al zitten." },
+      { label: "Leads toevoegen", description: "Zet ze in één rij—zonder spreadsheet-gedoe." },
+      { label: "Contact", description: "Eerste opvolging in jouw toon, snel." },
+      { label: "Gesprek", description: "Heen en weer tot ze klaar zijn." },
+      { label: "Afspraak boeken", description: "In je agenda zodra ze ja zeggen." },
+      { label: "Leren", description: "Wordt scherper na elk gesprek." },
+      { label: "CRM", description: "Notities en context blijven sync." },
+    ],
+    /* Legacy zes stappen (tab 1):
+    flowSteps: [
       { label: "Leads", description: "Nieuwe interesse komt binnen." },
       { label: "Eerste contact", description: "Opvolging in jouw toon, snel." },
       { label: "Gesprek", description: "Heen en weer tot ze klaar zijn." },
@@ -61,6 +71,7 @@ export const nl: Dictionary = {
       { label: "CRM", description: "Notities en context blijven sync." },
       { label: "Leren", description: "Wordt scherper na elk gesprek." },
     ],
+    */
     /* Legacy tab 1 (kanaallogo's — nu tab 4):
     tabLabel: "1 · Antwoord",
     title: "Leest en antwoordt in jouw toon",
@@ -75,7 +86,7 @@ export const nl: Dictionary = {
       {
         tabLabel: "1 · Overzicht",
         title: "Van lead tot ingeplande afspraak",
-        text: "Zes stappen, één agent—zo loopt het zonder overdracht.",
+        text: "Zeven stappen, één agent—zo loopt het zonder overdracht.",
       },
       {
         tabLabel: "2 · Agenda",

@@ -32,19 +32,30 @@ for (const [path, tag, width, height] of [
     const tabs = [...document.querySelectorAll(".bouncy-tabs__button")].map((b) => b.textContent?.trim());
     const activePanel = document.querySelector("[data-bouncy-tabs-panel][data-active]");
     const flowVisible = !!activePanel?.querySelector(".how-it-works-flow");
-    const isColumn = flowVisible
-      ? getComputedStyle(document.querySelector(".how-it-works-flow")).flexDirection === "column"
-      : null;
-    return { stepCount: steps.length, labels, tabs, flowVisible, isColumn };
+    const flowEl = document.querySelector(".how-it-works-flow");
+    const isColumn = flowVisible && flowEl ? getComputedStyle(flowEl).flexDirection === "column" : null;
+    const overflowX =
+      flowVisible && flowEl
+        ? flowEl.scrollWidth > flowEl.clientWidth + 2
+        : false;
+    const learnLabel = labels[5];
+    return { stepCount: steps.length, labels, tabs, flowVisible, isColumn, overflowX, learnLabel };
   });
 
   console.log(tag, flow);
 
   if (!flow.flowVisible) fail(`${tag}: tab 1 should show flow`);
-  if (flow.stepCount !== 6) fail(`${tag}: expected 6 flow steps, got ${flow.stepCount}`);
+  if (flow.stepCount !== 7) fail(`${tag}: expected 7 flow steps, got ${flow.stepCount}`);
+  if (path === "/en" && flow.learnLabel !== "Learn") {
+    fail(`${tag}: step 6 label must be "Learn", got "${flow.learnLabel}"`);
+  }
+  if (path === "/nl" && flow.learnLabel !== "Leren") {
+    fail(`${tag}: step 6 label must be "Leren", got "${flow.learnLabel}"`);
+  }
   if (flow.tabs.length !== 4) fail(`${tag}: expected 4 tabs, got ${flow.tabs.length}`);
-  if (width >= 768 && flow.isColumn) fail(`${tag}: desktop flow should be horizontal`);
+  if (width >= 768 && flow.isColumn) fail(`${tag}: desktop flow should be horizontal grid`);
   if (width < 768 && !flow.isColumn) fail(`${tag}: mobile flow should be vertical`);
+  if (flow.overflowX) fail(`${tag}: flow causes horizontal overflow`);
 
   await page.locator("#kanalen").screenshot({
     path: `${outDir}/how-it-works-flow-${tag}.png`,
