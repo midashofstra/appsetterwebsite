@@ -15,12 +15,12 @@ export function HeroHeadline({ dict }: { dict: Dictionary }) {
 
   if (dict.locale === "en") {
     return (
-      <h1 className="hx hero-hide">
-        <span className="hx-line">
+      <h1 className="hx hx-en hero-hide">
+        <span className="hx-line hx-line-1">
           <span className="hx-line-text">{words[0]}</span>
           <HeroMascotTile ariaLabel={dict.hero.mascotAria} />
         </span>
-        <span className="hx-line">
+        <span className="hx-line hx-line-2">
           <span className="hx-line-text">{words[1]}</span>
           <HeroTileDeck
             cards={HERO_AGENDA_TILES}
@@ -28,8 +28,7 @@ export function HeroHeadline({ dict }: { dict: Dictionary }) {
             firstFlipDelayAfterIntroMs={HERO_DECK_CYCLE_MS}
           />
         </span>
-        <span className="hx-break" aria-hidden />
-        <span className="hx-line">
+        <span className="hx-line hx-line-3 hx-line--full">
           <span className="hx-line-text">{words[2]}</span>
           <HeroTileDeck
             cards={HERO_CHANNEL_TILES}
@@ -43,14 +42,14 @@ export function HeroHeadline({ dict }: { dict: Dictionary }) {
     );
   }
 
-  /** NL: Laat {mascot} / je {agenda} vullen, / direct vanuit {channels} */
+  /** NL mobile: 3 lines — Laat {mascot} / je {agenda} vullen, / direct vanuit {channels} */
   return (
-    <h1 className="hx hero-hide">
-      <span className="hx-line">
+    <h1 className="hx hx-nl hero-hide">
+      <span className="hx-line hx-line-1">
         <span className="hx-line-text">{words[0]}</span>
         <HeroMascotTile ariaLabel={dict.hero.mascotAria} />
       </span>
-      <span className="hx-line">
+      <span className="hx-line hx-line-2">
         <span className="hx-line-text">{words[1]}</span>
         <HeroTileDeck
           cards={HERO_AGENDA_TILES}
@@ -59,7 +58,7 @@ export function HeroHeadline({ dict }: { dict: Dictionary }) {
         />
         <span className="hx-line-text">{words[2]}</span>
       </span>
-      <span className="hx-line">
+      <span className="hx-line hx-line-3 hx-line--full">
         <span className="hx-line-text">{words[3]}</span>
         <HeroTileDeck
           cards={HERO_CHANNEL_TILES}
