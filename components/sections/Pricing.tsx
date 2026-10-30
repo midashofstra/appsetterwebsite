@@ -72,6 +72,7 @@ export function Pricing({ dict }: { dict: Dictionary }) {
           ))}
         </div>
 
+        {/* Pricing section footer (cancel / history / contact) — hidden per product request:
         <div className="pricing-foot rv">
           <ul className="pricing-foot__items">
             <li>
@@ -92,6 +93,7 @@ export function Pricing({ dict }: { dict: Dictionary }) {
             <a href="mailto:hello@appointmentsetter.app">{p.footer.contactUs}</a>
           </p>
         </div>
+        */}
       </div>
     </section>
   );

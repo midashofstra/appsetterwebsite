@@ -921,9 +921,11 @@ export function initLandingMotion(): CleanupFn {
       )
     );
   });
+  /* Pricing foot reveal — disabled while .pricing-foot markup is commented out in Pricing.tsx
   cleanups.push(
     revealOnScroll(".pricing-foot", { opacity: [0, 1], y: [SCROLL_REVEAL_Y, 0] }, { trigger: ".pricing-foot", start: "top 90%", duration: 0.65, ease: SCROLL_REVEAL_EASE })
   );
+  */
 
   q(".col").forEach((c) => {
     cleanups.push(

@@ -689,9 +689,9 @@ section{padding:64px 0}
   .pricing-card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
 }
 .pricing-card__tab{
-  align-self:center;margin-bottom:-1px;padding:6px 14px;border-radius:10px 10px 0 0;
+  align-self:center;margin-bottom:-1px;padding:3px 10px;border-radius:8px 8px 0 0;
   background:var(--g-soft);border:1px solid var(--g-mid);border-bottom:none;
-  font-size:13px;font-weight:700;color:var(--g-ink);letter-spacing:.01em;
+  font-size:11px;font-weight:700;color:var(--g-ink);letter-spacing:.02em;line-height:1.25;
 }
 .pricing-card__inner{
   flex:1;display:flex;flex-direction:column;gap:16px;background:var(--card-bg);
@@ -736,7 +736,6 @@ section{padding:64px 0}
 @media (max-width:960px){
   .pricing-grid{grid-template-columns:minmax(0,1fr);display:flex;flex-direction:column;gap:20px}
   .pricing-card--popular{order:-1}
-  .pricing-card__tab{align-self:flex-start;margin-left:24px}
 }
 
 /* faq */
