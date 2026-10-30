@@ -219,7 +219,7 @@ for (const [path, tag, width, height, expectedLabels] of [
     };
   });
   console.log(tag, "meeting panel", meetingPanel);
-  if (!meetingPanel.hasCta) fail(`${tag}: Meeting tab should show panel CTA`);
+  if (meetingPanel.hasCta) fail(`${tag}: Meeting tab should not show panel CTA`);
   if (path === "/en" && !meetingPanel.title?.includes("The meeting")) {
     fail(`${tag}: Meeting panel title should not use legacy Book wording`);
   }
@@ -238,6 +238,12 @@ for (const [path, tag, width, height, expectedLabels] of [
   if (tag === "desktop-en") {
     await page.locator("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-visual--photo").screenshot({
       path: `${outDir}/how-it-works-step-6-meeting-tab-en.png`,
+      timeout: 12000,
+    });
+  }
+  if (tag === "mobile-nl") {
+    await page.locator("#kanalen").screenshot({
+      path: `${outDir}/how-it-works-step-6-meeting-tab-nl.png`,
       timeout: 12000,
     });
   }

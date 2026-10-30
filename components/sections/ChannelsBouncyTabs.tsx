@@ -1,15 +1,18 @@
 "use client";
 
 import { useEffect, useId, useRef } from "react";
+/* Legacy Meeting panel CTA:
 import { CtaButton } from "@/components/ui/CtaButton";
+*/
 import { HowItWorksStepVisual } from "@/components/sections/HowItWorksStepVisual";
 import { HOW_IT_WORKS_VISUALS } from "@/lib/how-it-works-tab-visuals";
 import { initBouncyContentTabs } from "@/lib/osmo/bouncy-content-tabs";
 import type { Dictionary } from "@/lib/i18n/types";
 
-/** Meeting step (1-based step 6) — panel CTA lives here. */
+/* Legacy Meeting step index (1-based step 6) — panel CTA lived here:
 const MEETING_STEP_INDEX = 5;
-/* Legacy name: BOOK_STEP_INDEX (step was labeled "Book" / "Afspraak boeken"). */
+Legacy name: BOOK_STEP_INDEX (step was labeled "Book" / "Afspraak boeken").
+*/
 
 export function ChannelsBouncyTabs({
   dict,
@@ -74,11 +77,13 @@ export function ChannelsBouncyTabs({
                 <div className="bouncy-tabs__item-text">
                   <h3 className="bouncy-tabs__heading">{title}</h3>
                   <p className="bouncy-tabs__para">{text}</p>
+                  {/* Legacy Meeting tab panel CTA (EN/NL via c.panelCta):
                   {c.panelCta && i === MEETING_STEP_INDEX ? (
                     <CtaButton href="#start" className="bouncy-tabs__cta btn-main btn-sm">
                       {c.panelCta}
                     </CtaButton>
                   ) : null}
+                  */}
                 </div>
                 <HowItWorksStepVisual
                   visual={visual}
