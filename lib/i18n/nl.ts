@@ -58,7 +58,8 @@ export const nl: Dictionary = {
       { label: "Leads toevoegen", description: "Zet ze in één rij—zonder spreadsheet-gedoe." },
       { label: "Contact", description: "Eerste opvolging in jouw toon, snel." },
       { label: "Gesprek", description: "Heen en weer tot ze klaar zijn." },
-      { label: "Afspraak boeken", description: "In je agenda zodra ze ja zeggen." },
+      { label: "Afspraak", description: "In je agenda zodra ze ja zeggen." },
+      /* flowSteps legacy: { label: "Afspraak boeken", description: "..." }, */
       { label: "Leren", description: "Wordt scherper na elk gesprek." },
       { label: "CRM", description: "Notities en context blijven sync." },
     ],
@@ -109,10 +110,13 @@ export const nl: Dictionary = {
         text: "De agent pakt binnenkomende WhatsApp-, e-mail-, LinkedIn- en andere berichten op en antwoordt zoals jij dat zou doen—in jouw stem en met jouw kaders. Eén agent. Overal waar je klanten zijn.",
       },
       {
-        tabLabel: "6 · Afspraak boeken",
-        title: "Boekt de afspraak—jij houdt de regie",
+        tabLabel: "6 · Afspraak",
+        title: "De afspraak—jij houdt de regie",
         text: "Hij kijkt naar je echte beschikbaarheid, biedt alleen vrije slots aan en plant de afspraak zodra ze ja zeggen. Jij ziet elk gesprek en neemt over wanneer je wilt.",
       },
+      /* Legacy step 6 tab (Afspraak boeken):
+      { tabLabel: "6 · Afspraak boeken", title: "Boekt de afspraak—jij houdt de regie", text: "..." },
+      */
       {
         tabLabel: "7 · Leren",
         title: "Scherper na elk gesprek",

@@ -12,7 +12,7 @@ const EN_LABELS = [
   "3 · Research",
   "4 · Contact",
   "5 · Conversation",
-  "6 · Book",
+  "6 · Meeting",
   "7 · Learn",
   "8 · CRM",
 ];
@@ -22,7 +22,7 @@ const NL_LABELS = [
   "3 · Onderzoek",
   "4 · Contact",
   "5 · Gesprek",
-  "6 · Afspraak boeken",
+  "6 · Afspraak",
   "7 · Leren",
   "8 · CRM",
 ];
@@ -108,15 +108,21 @@ for (const [path, tag, width, height, expectedLabels] of [
 
   await page.getByRole("tab", { name: expectedLabels[5] }).click();
   await page.waitForTimeout(450);
-  const bookPanel = await page.evaluate(() => ({
+  const meetingPanel = await page.evaluate(() => ({
     hasCta: !!document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__cta"),
     title: document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__heading")?.textContent?.trim(),
   }));
-  console.log(tag, "book panel", bookPanel);
-  if (!bookPanel.hasCta) fail(`${tag}: Book tab should show panel CTA`);
+  console.log(tag, "meeting panel", meetingPanel);
+  if (!meetingPanel.hasCta) fail(`${tag}: Meeting tab should show panel CTA`);
+  if (path === "/en" && !meetingPanel.title?.includes("The meeting")) {
+    fail(`${tag}: Meeting panel title should not use legacy Book wording`);
+  }
+  if (path === "/nl" && !meetingPanel.title?.includes("De afspraak")) {
+    fail(`${tag}: NL Meeting panel title missing`);
+  }
 
   await page.locator("#kanalen").screenshot({
-    path: `${outDir}/how-it-works-eight-tabs-${tag}-book.png`,
+    path: `${outDir}/how-it-works-eight-tabs-${tag}-meeting.png`,
     timeout: 12000,
   });
 

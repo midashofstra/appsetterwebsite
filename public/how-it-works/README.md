@@ -11,7 +11,7 @@ Each of the **eight** bouncy tabs can show a **photo or mockup** in the right-ha
 | 3 | Research | `step-3-research` |
 | 4 | Contact | `step-4-contact` |
 | 5 | Conversation | `step-5-conversation` |
-| 6 | Book | `step-6-book` |
+| 6 | Meeting | `step-6-meeting` |
 | 7 | Learn | `step-7-learn` |
 | 8 | CRM | `step-8-crm` |
 
@@ -21,23 +21,26 @@ Examples:
 
 - `step-1-find-leads.webp`
 - `step-3-research.jpg`
-- `step-5-conversation.png`
+- `step-6-meeting.png`
 
 If no file exists for a step, the site keeps the **Font Awesome icon** fallback (Conversation uses **LinkedIn / Gmail / WhatsApp logos** until `step-5-conversation.*` is added).
 
-### Legacy filenames (7-step layout)
+### Legacy filenames
 
-If you still have files from before the **Research** step was added, they are picked up automatically:
+These still resolve to the correct step if the new name is missing:
 
 | Old file | Maps to step |
 |----------|----------------|
 | `step-3-contact.*` | 4 · Contact |
 | `step-4-conversation.*` | 5 · Conversation |
-| `step-5-book.*` | 6 · Book |
+| `step-6-book.*` | 6 · Meeting |
+| `step-5-book.*` | 6 · Meeting (pre–Research layout) |
 | `step-6-learn.*` | 7 · Learn |
 | `step-7-crm.*` | 8 · CRM |
 
-Renaming to the new `step-N-…` names above is recommended for clarity.
+<!-- Legacy step 6 basename before Meeting rename: `step-6-book` -->
+
+Renaming to the current `step-N-…` names above is recommended for clarity.
 
 ## Recommended size
 

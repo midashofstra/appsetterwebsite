@@ -26,7 +26,7 @@ export const HOW_IT_WORKS_STEP_IMAGE_SLUGS = [
   "step-3-research",
   "step-4-contact",
   "step-5-conversation",
-  "step-6-book",
+  "step-6-meeting",
   "step-7-learn",
   "step-8-crm",
 ] as const;
@@ -38,7 +38,7 @@ export const HOW_IT_WORKS_STEP_IMAGE_LEGACY_SLUGS: readonly (readonly string[])[
   [],
   ["step-3-contact"],
   ["step-4-conversation"],
-  ["step-5-book"],
+  ["step-6-book", "step-5-book"],
   ["step-6-learn"],
   ["step-7-crm"],
 ] as const;
@@ -54,7 +54,7 @@ export type HowItWorksVisual =
   | { kind: "logos"; items: { src: string; alt: string }[] }
   | { kind: "icon"; icon: IconDefinition };
 
-/** One visual per step tab: Find → Add → Research → Contact → Conversation → Book → Learn → CRM */
+/** One visual per step tab: Find → Add → Research → Contact → Conversation → Meeting → Learn → CRM */
 export const HOW_IT_WORKS_VISUALS: HowItWorksVisual[] = [
   { kind: "icon", icon: faMagnifyingGlass },
   { kind: "icon", icon: faUserPlus },

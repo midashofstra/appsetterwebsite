@@ -67,7 +67,8 @@ export const en: Dictionary = {
       { label: "Add leads", description: "Pull them into one queue—no spreadsheet chaos." },
       { label: "Contact", description: "First outreach in your voice, fast." },
       { label: "Conversation", description: "Back-and-forth until they're ready." },
-      { label: "Book", description: "On your calendar when they say yes." },
+      { label: "Meeting", description: "On your calendar when they say yes." },
+      /* flowSteps legacy: { label: "Book", description: "..." }, */
       { label: "Learn", description: "Gets sharper from every thread." },
       { label: "CRM", description: "Notes and context stay synced." },
     ],
@@ -118,10 +119,13 @@ export const en: Dictionary = {
         text: "It picks up incoming WhatsApp, email, LinkedIn, and other messages and responds the way you would—with your voice and guardrails. One agent. Everywhere your customers are.",
       },
       {
-        tabLabel: "6 · Book",
-        title: "Books the meeting—you stay in control",
+        tabLabel: "6 · Meeting",
+        title: "The meeting—you stay in control",
         text: "It reads your real availability, offers slots that are actually free, and schedules the appointment when they say yes. You see every thread and can take over whenever you want.",
       },
+      /* Legacy step 6 tab label (Book):
+      { tabLabel: "6 · Book", title: "Books the meeting—you stay in control", text: "..." },
+      */
       {
         tabLabel: "7 · Learn",
         title: "Sharper after every thread",
