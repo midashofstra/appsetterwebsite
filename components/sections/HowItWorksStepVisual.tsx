@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import { SiteIcon } from "@/components/icons/SiteIcon";
+import { HOW_IT_WORKS_STEP_IMAGE_PX } from "@/lib/how-it-works-tab-visuals";
 import type { HowItWorksVisual } from "@/lib/how-it-works-tab-visuals";
 
 type Props = {
@@ -15,10 +18,16 @@ export function HowItWorksStepVisual({ visual, imageSrc, alt }: Props) {
         <Image
           src={imageSrc}
           alt={alt}
-          fill
+          width={HOW_IT_WORKS_STEP_IMAGE_PX}
+          height={HOW_IT_WORKS_STEP_IMAGE_PX}
+          loading="lazy"
+          decoding="async"
           sizes="(max-width: 767px) 100vw, 320px"
           className="bouncy-tabs__item-photo"
           draggable={false}
+          onLoad={() => {
+            window.dispatchEvent(new Event("resize"));
+          }}
         />
       </div>
     );

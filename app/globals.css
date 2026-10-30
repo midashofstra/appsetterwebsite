@@ -585,11 +585,12 @@ section{padding:64px 0}
 .bouncy-tabs__logo-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:clamp(12px,3vw,20px);width:100%;height:100%;padding:8px}
 .bouncy-tabs__item-img--logo{max-width:64px;max-height:64px;width:64px;height:64px;flex:none}
 .bouncy-tabs__step-icon{display:block;margin:0 auto}
-.bouncy-tabs__item-visual--photo{
-  padding:0;position:relative;flex-shrink:0;
+.bouncy-tabs__item-visual.bouncy-tabs__item-visual--photo{
+  padding:0;display:block;flex-shrink:0;position:relative;
+  background:transparent;border:none;box-shadow:none;
 }
 .bouncy-tabs__item-photo{
-  object-fit:cover;border-radius:20px;
+  display:block;width:100%;height:100%;object-fit:cover;border-radius:inherit;
 }
 .bouncy-tabs__item--flow{flex-flow:column;align-items:stretch;gap:1.5em}
 .bouncy-tabs__item-visual--flow{

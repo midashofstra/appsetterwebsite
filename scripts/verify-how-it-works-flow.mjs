@@ -85,6 +85,44 @@ for (const [path, tag, width, height, expectedLabels] of [
     timeout: 12000,
   });
 
+  const step1Photo = await page.evaluate(() => {
+    const img = document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-photo");
+    const tile = document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-visual--photo");
+    if (!img || !tile) return { ok: false, reason: "missing photo" };
+    const imgStyle = getComputedStyle(img);
+    const tileStyle = getComputedStyle(tile);
+    const pad = parseFloat(tileStyle.paddingTop) + parseFloat(tileStyle.paddingBottom);
+    return {
+      ok: true,
+      src: img.getAttribute("src") || "",
+      loading: img.getAttribute("loading"),
+      objectFit: imgStyle.objectFit,
+      pad,
+      w: img.getAttribute("width"),
+      h: img.getAttribute("height"),
+    };
+  });
+  console.log(tag, "step1 photo", step1Photo);
+  if (!step1Photo.ok || !step1Photo.src.includes("step-1-find-leads")) {
+    fail(`${tag}: step 1 should use step-1-find-leads image`);
+  }
+  if (step1Photo.objectFit !== "cover" || step1Photo.pad > 0) {
+    fail(`${tag}: step 1 photo should be cover with no tile padding`);
+  }
+
+  await page.getByRole("tab", { name: expectedLabels[1] }).click();
+  await page.waitForTimeout(450);
+  const step2Photo = await page.evaluate(() => {
+    const img = document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-photo");
+    return img?.getAttribute("src") || "";
+  });
+  console.log(tag, "step2 src", step2Photo);
+  if (!step2Photo.includes("step-2-add-leads")) fail(`${tag}: step 2 should use step-2-add-leads image`);
+  await page.locator("#kanalen").screenshot({
+    path: `${outDir}/how-it-works-seven-tabs-${tag}-step2.png`,
+    timeout: 12000,
+  });
+
   await page.getByRole("tab", { name: expectedLabels[4] }).click();
   await page.waitForTimeout(450);
   const bookPanel = await page.evaluate(() => ({

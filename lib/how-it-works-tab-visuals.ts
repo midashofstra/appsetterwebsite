@@ -16,6 +16,9 @@ const whatsapp = INTEGRATION_LOGOS.find((l) => l.label === "WhatsApp")!;
  * Drop files in `public/how-it-works/` using these basenames (first match wins: .webp, .png, .jpg, .jpeg).
  * See `public/how-it-works/README.md` for sizes and upload notes.
  */
+/** Native pixel size of uploaded step art (1:1). Used for width/height on panel images. */
+export const HOW_IT_WORKS_STEP_IMAGE_PX = 1692;
+
 export const HOW_IT_WORKS_STEP_IMAGE_SLUGS = [
   "step-1-find-leads",
   "step-2-add-leads",
