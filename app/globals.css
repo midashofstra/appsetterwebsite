@@ -571,6 +571,11 @@ footer .links a:hover{color:var(--ink)}
 .manifest h2 .wi{display:inline;vertical-align:baseline;padding:0;margin:0}
 .hx .wi{display:inline-block;line-height:inherit;overflow:visible;padding-bottom:.1em;margin-bottom:-.1em;vertical-align:baseline;will-change:transform}
 .wi{display:inline-block;line-height:inherit;will-change:transform}
+/* Headings: split words/letters must not spin or lift on hover (scroll/intro motion only). */
+@media (hover:hover) and (pointer:fine){
+  h1 .wi:hover,h2 .wi:hover,h3 .wi:hover,
+  h1 .wm:hover,h2 .wm:hover,h3 .wm:hover{transform:none!important;transition:none!important}
+}
 .typing{align-self:flex-end;display:none;gap:5px;padding:14px 16px;border-radius:18px;border-bottom-right-radius:6px;background:var(--g)}
 .typing i{width:7px;height:7px;border-radius:9px;background:var(--on-g);opacity:.55}
 .progress{position:fixed;left:0;top:0;height:3px;width:100%;background:var(--g);transform-origin:left center;transform:scaleX(0);z-index:60}

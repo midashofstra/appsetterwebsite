@@ -618,6 +618,30 @@ export function initLandingMotion(): CleanupFn {
     );
   });
 
+  /* Legacy hover spin/lift on split heading words (.wm / .wi — e.g. plan/manifest h2 when split).
+     Disabled: no letter/word rotation or bounce on :hover in headings.
+  if (fine) {
+    q("section h2 .wi, .manifest h2 .wi, .hx .wi").forEach((w) => {
+      const onEnter = () => {
+        void animate(
+          w,
+          { rotate: 360, y: "-0.12em", scale: 1.08 },
+          { duration: 0.55, ease: [0.34, 1.56, 0.64, 1] }
+        );
+      };
+      const onLeave = () => {
+        void animate(w, { rotate: 0, y: 0, scale: 1 }, { duration: 0.45, ease: [0.22, 1, 0.36, 1] });
+      };
+      w.addEventListener("mouseenter", onEnter);
+      w.addEventListener("mouseleave", onLeave);
+      cleanups.push(() => {
+        w.removeEventListener("mouseenter", onEnter);
+        w.removeEventListener("mouseleave", onLeave);
+      });
+    });
+  }
+  */
+
   q(".label").forEach((l) => {
     cleanups.push(revealOnScroll(l, { opacity: [0, 1], x: [-16, 0] }, { trigger: l, start: "top 88%", duration: 0.6 }));
     const icon = l.querySelector("i");
