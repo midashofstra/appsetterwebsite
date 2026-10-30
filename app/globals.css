@@ -230,7 +230,7 @@ nav{display:flex;align-items:center;justify-content:space-between;gap:20px;heigh
 .hero-mascot-body{transform-box:view-box;transform-origin:50% 50%}
 .hero-mascot-svg [id="eyes_2"],.hero-mascot-svg [id="innereyes"]{transform-box:fill-box;transform-origin:50% 50%}
 .as-happy,.as-sleepy{opacity:0}
-.hero .sub{max-width:580px;margin:26px auto 0;-webkit-user-select:none;user-select:none}
+.hero .sub{max-width:580px;margin:26px auto 0;font-weight:600;-webkit-user-select:none;user-select:none}
 .ctas{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:44px}
 .hero .ctas.hero-cta-intro{margin-top:32px}
 @media (max-width:767px){
