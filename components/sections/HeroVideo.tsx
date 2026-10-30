@@ -4,7 +4,11 @@ import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { HeroVimeoPlayer } from "@/components/sections/HeroVimeoPlayer";
 import { SiteIcon } from "@/components/icons/SiteIcon";
 import { getBasePath } from "@/lib/base-path";
-import { VIDEO_POSTER, VIMEO_VIDEO_ID } from "@/lib/hero-video-config";
+import {
+  VIDEO_POSTER,
+  VIMEO_VIDEO_ID,
+  vimeoThumbnailUrl,
+} from "@/lib/hero-video-config";
 import type { Dictionary } from "@/lib/i18n/types";
 
 function resolveMediaUrl(path: string): string {
@@ -15,7 +19,9 @@ function resolveMediaUrl(path: string): string {
 }
 
 export function HeroVideo({ dict }: { dict: Dictionary }) {
-  const poster = resolveMediaUrl(VIDEO_POSTER);
+  const poster =
+    resolveMediaUrl(VIDEO_POSTER) ||
+    (VIMEO_VIDEO_ID ? vimeoThumbnailUrl(VIMEO_VIDEO_ID) : "");
   const hasVimeo = Boolean(VIMEO_VIDEO_ID);
 
   return (
