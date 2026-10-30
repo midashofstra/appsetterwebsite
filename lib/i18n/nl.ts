@@ -17,6 +17,7 @@ export const nl: Dictionary = {
     why: "Waarom wij",
     plan: "Hoe het werkt",
     channels: "Kanalen",
+    pricing: "Prijzen",
     faq: "Vragen",
     cta: "Probeer voor €1",
   },
@@ -82,6 +83,19 @@ export const nl: Dictionary = {
       "Geen setter meer nodig, dus lagere kosten",
       "Een stabielere business",
     ],
+  },
+  pricing: {
+    title: "Probeer 3 dagen voor €1",
+    mostPopular: "Meest gekozen",
+    perMonth: "/ maand",
+    cta: "Probeer 3 dagen voor €1",
+    paymentNote: "Betaalkaart vereist",
+    footer: {
+      cancelAnytime: "Altijd opzegbaar",
+      historyIncluded: "30 dagen gespreksgeschiedenis inbegrepen",
+      needMore: "Meer nodig?",
+      contactUs: "Neem contact op",
+    },
   },
   faq: {
     title: "Vragen die we vaak krijgen",

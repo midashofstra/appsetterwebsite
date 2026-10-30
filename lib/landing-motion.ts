@@ -797,6 +797,23 @@ export function initLandingMotion(): CleanupFn {
   cleanups.push(revealOnScroll(".col.no", { opacity: [0, 1], x: [-50, 0] }, { trigger: ".compare", start: "top 85%", duration: 0.9 }));
   cleanups.push(revealOnScroll(".col.yes", { opacity: [0, 1], x: [50, 0] }, { trigger: ".compare", start: "top 85%", duration: 0.9 }));
 
+  q(".pricing-card").forEach((card) => {
+    card.style.opacity = "0";
+    card.style.transform = `translateY(${SCROLL_REVEAL_Y + 12}px)`;
+    cleanups.push(
+      inView(
+        card,
+        () => {
+          void animate(card, { opacity: 1, y: 0 }, { duration: 0.72, ease: SCROLL_REVEAL_EASE });
+        },
+        { margin: "0px 0px -12% 0px" }
+      )
+    );
+  });
+  cleanups.push(
+    revealOnScroll(".pricing-foot", { opacity: [0, 1], y: [SCROLL_REVEAL_Y, 0] }, { trigger: ".pricing-foot", start: "top 90%", duration: 0.65, ease: SCROLL_REVEAL_EASE })
+  );
+
   q(".col").forEach((c) => {
     cleanups.push(
       revealOnScroll(q(".it", c), { opacity: [0, 1], y: [14, 0] }, { trigger: c, start: "top 85%", duration: 0.5, staggerEach: 0.1, delay: 0.35 })

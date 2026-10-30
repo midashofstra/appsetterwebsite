@@ -36,6 +36,7 @@ export function Header({ dict }: { dict: Dictionary }) {
             <a href="#waarom">{nav.why}</a>
             <a href="#plan">{nav.plan}</a>
             <a href="#kanalen">{nav.channels}</a>
+            <a href="#pricing">{nav.pricing}</a>
             <a href="#faq">{nav.faq}</a>
           </div>
           <div className="nav-end">

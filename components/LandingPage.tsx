@@ -12,6 +12,7 @@ import { PlanExtras } from "@/components/sections/PlanExtras";
 import { Logos } from "@/components/sections/Logos";
 import { Manifest } from "@/components/sections/Manifest";
 import { Plan } from "@/components/sections/Plan";
+import { Pricing } from "@/components/sections/Pricing";
 import { Problem } from "@/components/sections/Problem";
 import { Progress } from "@/components/sections/Progress";
 import { SvgDefs } from "@/components/sections/SvgDefs";
@@ -38,6 +39,7 @@ export function LandingPage({ locale = "en" }: { locale?: Locale }) {
         <PlanExtras dict={dict} />
         <Channels dict={dict} />
         <Compare dict={dict} />
+        <Pricing dict={dict} />
         <Faq dict={dict} />
         <Cta dict={dict} />
       </main>

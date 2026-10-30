@@ -14,6 +14,7 @@ export type Dictionary = {
     why: string;
     plan: string;
     channels: string;
+    pricing: string;
     faq: string;
     cta: string;
   };
@@ -50,6 +51,19 @@ export type Dictionary = {
     yesTitle: string;
     noItems: string[];
     yesItems: string[];
+  };
+  pricing: {
+    title: string;
+    mostPopular: string;
+    perMonth: string;
+    cta: string;
+    paymentNote: string;
+    footer: {
+      cancelAnytime: string;
+      historyIncluded: string;
+      needMore: string;
+      contactUs: string;
+    };
   };
   faq: { title: string; items: FaqItem[] };
   cta: {

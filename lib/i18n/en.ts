@@ -17,6 +17,7 @@ export const en: Dictionary = {
     why: "Why us",
     plan: "How it works",
     channels: "Channels",
+    pricing: "Pricing",
     faq: "FAQ",
     // cta: "Try for €1",
     cta: "Try 3 days for €1",
@@ -91,6 +92,19 @@ export const en: Dictionary = {
       "No setter needed, lower cost",
       "A more stable business",
     ],
+  },
+  pricing: {
+    title: "Try 3 days for €1",
+    mostPopular: "Most popular",
+    perMonth: "/ month",
+    cta: "Try 3 days for €1",
+    paymentNote: "Payment card required",
+    footer: {
+      cancelAnytime: "Cancel anytime",
+      historyIncluded: "30 days of conversation history included",
+      needMore: "Need more?",
+      contactUs: "Contact us",
+    },
   },
   faq: {
     title: "Questions we hear often",
