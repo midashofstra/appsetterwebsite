@@ -717,31 +717,24 @@ export function initLandingMotion(): CleanupFn {
   );
 
   const manifest = document.querySelector(".manifest");
-  const manifestWords = q(".manifest .wi");
-  if (manifest && manifestWords.length) {
-    manifestWords.forEach((w) => {
-      w.style.opacity = "0.15";
-    });
+  const manifestH2 = manifest?.querySelector("h2") ?? null;
+  if (manifest && manifestH2) {
+    let manifestWords = q(".manifest .wi");
+    if (!manifestWords.length) {
+      manifestWords = splitWords(manifestH2, { wordGap: "space" });
+    }
+    /* Legacy range (finished too late; tracked whole section):
+    scroll(animate(...), { target: manifest, offset: ["start 0.75", "end 0.45"] })
+    */
     cleanups.push(
       scroll(
         animate(manifestWords, { opacity: [0.15, 1] }, { ease: "linear", delay: stagger(0.1) }),
-        { target: manifest, offset: ["start 0.75", "end 0.45"] }
+        {
+          target: manifestH2,
+          offset: ["start 0.85", "center center"],
+        }
       )
     );
-  } else if (manifest) {
-    const h2 = manifest.querySelector("h2");
-    if (h2) {
-      const ws = splitWords(h2, { wordGap: "space" });
-      ws.forEach((w) => {
-        w.style.opacity = "0.15";
-      });
-      cleanups.push(
-        scroll(
-          animate(ws, { opacity: [0.15, 1] }, { ease: "linear", delay: stagger(0.1) }),
-          { target: manifest, offset: ["start 0.75", "end 0.45"] }
-        )
-      );
-    }
   }
 
   const stepsSection = document.getElementById("steps");
