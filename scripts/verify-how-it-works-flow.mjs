@@ -230,6 +230,68 @@ for (const [path, tag, width, height, expectedLabels] of [
     });
   }
 
+  await page.getByRole("tab", { name: expectedLabels[7] }).click();
+  await page.waitForTimeout(450);
+  const crmPanel = await page.evaluate(() => {
+    const img = document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-photo");
+    return {
+      title: document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__heading")?.textContent?.trim(),
+      src: img?.getAttribute("src") || "",
+      hasPhoto: !!img,
+      photoVisual: !!document.querySelector(
+        "[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-visual--photo"
+      ),
+    };
+  });
+  console.log(tag, "crm", crmPanel);
+  if (path === "/en" && !crmPanel.title?.includes("Notes and context")) {
+    fail(`${tag}: CRM panel title missing`);
+  }
+  if (path === "/nl" && !crmPanel.title?.includes("Notities en context")) {
+    fail(`${tag}: NL CRM panel title missing`);
+  }
+  if (!crmPanel.hasPhoto || !crmPanel.src.includes("step-8-crm")) {
+    fail(`${tag}: CRM tab should show step-8-crm photo`);
+  }
+  if (!crmPanel.photoVisual) fail(`${tag}: CRM photo should use photo tile styling`);
+  if (tag === "desktop-en") {
+    await page.locator("#kanalen").screenshot({
+      path: `${outDir}/how-it-works-eight-tabs-${tag}-crm.png`,
+      timeout: 12000,
+    });
+    await page.locator("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-visual--photo").screenshot({
+      path: `${outDir}/how-it-works-step-8-crm-tab-en.png`,
+      timeout: 12000,
+    });
+    await page.locator(".bouncy-tabs__nav").screenshot({
+      path: `${outDir}/how-it-works-all-eight-tabs-nav-en.png`,
+      timeout: 12000,
+    });
+    const photoSlugs = [
+      "step-1-find-leads",
+      "step-2-add-leads",
+      "step-3-research",
+      "step-4-contact",
+      null,
+      "step-6-meeting",
+      "step-7-learn",
+      "step-8-crm",
+    ];
+    for (let i = 0; i < 8; i++) {
+      await page.getByRole("tab", { name: expectedLabels[i] }).click();
+      await page.waitForTimeout(280);
+      if (photoSlugs[i] === null) {
+        const logos = await page.locator("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-img--logo").count();
+        if (logos !== 3) fail(`${tag}: tab ${i + 1} should show 3 channel logos`);
+        continue;
+      }
+      const src = await page.evaluate(() =>
+        document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-photo")?.getAttribute("src")
+      );
+      if (!src?.includes(photoSlugs[i])) fail(`${tag}: tab ${i + 1} missing ${photoSlugs[i]}`);
+    }
+  }
+
   await page.getByRole("tab", { name: expectedLabels[4] }).click();
   await page.waitForTimeout(350);
   const logos = await page.locator("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-img--logo").count();
