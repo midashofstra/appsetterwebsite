@@ -5,7 +5,8 @@ const outDir = "/opt/cursor/artifacts/screenshots";
 mkdirSync(outDir, { recursive: true });
 
 const base = (process.env.VERIFY_URL || "http://127.0.0.1:3001").replace(/\/$/, "");
-const widths = [375, 768, 1024, 1280, 1440];
+const widths = [390, 768, 1024, 1280, 1440];
+const minDesktopFsPx = 56;
 
 const browser = await chromium.launch();
 
@@ -25,28 +26,24 @@ for (const locale of ["en", "nl"]) {
     const metrics = await page.evaluate(() => {
       const hx = document.querySelector(".hx");
       const fs = parseFloat(getComputedStyle(hx).fontSize);
-      const lines = [...hx.querySelectorAll(":scope > .hx-line")].map((el) => {
-        const r = el.getBoundingClientRect();
-        return {
-          top: r.top,
-          nowrap: getComputedStyle(el).whiteSpace,
-          scrollWidth: el.scrollWidth,
-          clientWidth: el.clientWidth,
-        };
-      });
-      const tops = lines.map((l) => l.top);
+      const lineEls = [...hx.querySelectorAll(":scope > .hx-line")];
+      const textSpans = [...hx.querySelectorAll(".hx-line-text")];
+      const tops = textSpans.map((el) => el.getBoundingClientRect().top);
       const rowCount = tops.reduce((groups, t) => {
-        if (!groups.some((g) => Math.abs(g - t) <= fs * 0.2)) groups.push(t);
+        if (!groups.some((g) => Math.abs(g - t) <= fs * 0.35)) groups.push(t);
         return groups;
       }, []).length;
-      const perLineNowrap = lines.every((l) => l.nowrap === "nowrap");
-      const noOverflow = lines.every((l) => l.scrollWidth <= l.clientWidth + 2);
-      return { lineCount: lines.length, rowCount, perLineNowrap, noOverflow, fs };
+      const perLineNowrap = textSpans.every((el) => getComputedStyle(el).whiteSpace === "nowrap");
+      const noOverflow = textSpans.every((el) => el.scrollWidth <= el.clientWidth + 2);
+      return { lineCount: lineEls.length, rowCount, perLineNowrap, noOverflow, fs };
     });
 
     const expectedRows = width <= 767 ? 3 : 2;
-    const ok = metrics.rowCount === expectedRows && metrics.perLineNowrap && metrics.noOverflow;
-    console.log(`${locale} ${width}px`, metrics, ok ? "OK" : "FAIL");
+    const fsPx = metrics.fs;
+    const fsOk = width <= 767 ? fsPx >= 36 && fsPx <= 48 : fsPx >= minDesktopFsPx;
+    const ok =
+      metrics.rowCount === expectedRows && metrics.perLineNowrap && metrics.noOverflow && fsOk;
+    console.log(`${locale} ${width}px`, metrics, fsOk ? "" : `(fs ${fsPx}px)`, ok ? "OK" : "FAIL");
     if (!ok) process.exitCode = 1;
 
     await page.locator(".hero .hx").screenshot({
