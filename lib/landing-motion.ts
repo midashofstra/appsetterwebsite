@@ -192,13 +192,21 @@ function q(sel: string, ctx?: ParentNode): HTMLElement[] {
   return Array.from((ctx ?? document).querySelectorAll(sel)) as HTMLElement[];
 }
 
-function splitWords(el: HTMLElement): HTMLElement[] {
+type SplitWordsOptions = {
+  /** Normal text spacing between words (section/manifest headings). Hero uses none + CSS gap. */
+  wordGap?: "none" | "space";
+};
+
+function splitWords(el: HTMLElement, options?: SplitWordsOptions): HTMLElement[] {
   const words = el.textContent?.trim().split(/\s+/) ?? [];
-  el.innerHTML = words
-    .map((w) => `<span class="wm"><span class="wi">${w}</span></span>`)
-    .join("");
+  const parts = words.map((w) => `<span class="wm"><span class="wi">${w}</span></span>`);
+  el.innerHTML = options?.wordGap === "space" ? parts.join(" ") : parts.join("");
   return q(".wi", el);
 }
+
+/** Scroll reveals below the hero: fade + slight lift — no spin or large clip-slide. */
+const SCROLL_REVEAL_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+const SCROLL_REVEAL_Y = 10;
 
 function parseMargin(start: string): string {
   const m = start.match(/top\s+(\d+)%/);
@@ -594,9 +602,19 @@ export function initLandingMotion(): CleanupFn {
   }
 
   q("section h2").forEach((h) => {
+    if (h.closest(".manifest")) return;
+    /* Legacy per-word clip-slide (looked like boxed words + wrapped-line indent):
     const ws = splitWords(h);
     cleanups.push(
       revealOnScroll(ws, { y: ["115%", "0%"] }, { trigger: h, start: "top 85%", duration: 0.9, staggerEach: 0.045 })
+    );
+    */
+    cleanups.push(
+      revealOnScroll(
+        h,
+        { opacity: [0, 1], y: [SCROLL_REVEAL_Y, 0] },
+        { trigger: h, start: "top 85%", duration: 0.65, ease: SCROLL_REVEAL_EASE }
+      )
     );
   });
 
@@ -604,7 +622,16 @@ export function initLandingMotion(): CleanupFn {
     cleanups.push(revealOnScroll(l, { opacity: [0, 1], x: [-16, 0] }, { trigger: l, start: "top 88%", duration: 0.6 }));
     const icon = l.querySelector("i");
     if (icon) {
+      /* Legacy spin-in dot: scale pop with overshoot ease
       cleanups.push(revealOnScroll(icon, { scale: [0, 1] }, { trigger: l, start: "top 88%", duration: 0.5, delay: 0.2, ease: [0.34, 1.56, 0.64, 1] }));
+      */
+      cleanups.push(
+        revealOnScroll(
+          icon,
+          { opacity: [0, 1], scale: [0.85, 1] },
+          { trigger: l, start: "top 88%", duration: 0.45, delay: 0.15, ease: SCROLL_REVEAL_EASE }
+        )
+      );
     }
   });
 
@@ -628,22 +655,42 @@ export function initLandingMotion(): CleanupFn {
 
   cleanups.push(revealOnScroll(".logos p", { opacity: [0, 1], y: [12, 0] }, { trigger: ".logos", start: "top 85%", duration: 0.6 }));
   cleanups.push(
-    revealOnScroll(".logo-row span", { opacity: [0, 1], y: [24, 0], scale: [0.9, 1] }, { trigger: ".logo-row", start: "top 88%", duration: 0.6, staggerEach: 0.08 })
+    revealOnScroll(
+      ".logo-row span",
+      { opacity: [0, 1], y: [SCROLL_REVEAL_Y, 0] },
+      { trigger: ".logo-row", start: "top 88%", duration: 0.55, staggerEach: 0.06, ease: SCROLL_REVEAL_EASE }
+    )
   );
 
-  q(".cards .card").forEach((card, i) => {
+  q(".cards .card").forEach((card) => {
     card.style.opacity = "0";
-    card.style.transform = `translateY(60px) rotate(${i % 2 ? 2 : -2}deg)`;
+    card.style.transform = `translateY(${SCROLL_REVEAL_Y + 14}px)`;
     cleanups.push(
-      inView(card, () => {
-        void animate(card, { opacity: 1, y: 0, rotate: 0 }, { duration: 0.9, ease: [0.22, 1, 0.36, 1] });
-      }, { margin: "0px 0px -12% 0px" })
+      inView(
+        card,
+        () => {
+          /* Legacy spin-in cards: translateY(60px) rotate(±2deg)
+          void animate(card, { opacity: 1, y: 0, rotate: 0 }, { duration: 0.9, ease: [0.22, 1, 0.36, 1] });
+          */
+          void animate(card, { opacity: 1, y: 0 }, { duration: 0.75, ease: SCROLL_REVEAL_EASE });
+        },
+        { margin: "0px 0px -12% 0px" }
+      )
     );
   });
 
   q(".chan .card svg").forEach((ic) => {
+    /* Legacy icon spin-in: scale + rotate(-30deg)
     cleanups.push(
       revealOnScroll(ic, { scale: [0, 1], rotate: [-30, 0] }, { trigger: ic, start: "top 85%", duration: 0.6, delay: 0.3, ease: [0.34, 1.56, 0.64, 1] })
+    );
+    */
+    cleanups.push(
+      revealOnScroll(
+        ic,
+        { opacity: [0, 1], y: [6, 0] },
+        { trigger: ic, start: "top 85%", duration: 0.5, delay: 0.2, ease: SCROLL_REVEAL_EASE }
+      )
     );
   });
 
@@ -684,7 +731,7 @@ export function initLandingMotion(): CleanupFn {
   } else if (manifest) {
     const h2 = manifest.querySelector("h2");
     if (h2) {
-      const ws = splitWords(h2);
+      const ws = splitWords(h2, { wordGap: "space" });
       ws.forEach((w) => {
         w.style.opacity = "0.15";
       });
@@ -711,11 +758,18 @@ export function initLandingMotion(): CleanupFn {
         st,
         () => {
           void animate([
-            [st, { opacity: [0, 1], y: [40, 0] }, { duration: 0.8, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }],
+            [st, { opacity: [0, 1], y: [SCROLL_REVEAL_Y + 8, 0] }, { duration: 0.75, delay: i * 0.1, ease: SCROLL_REVEAL_EASE }],
+            /* Legacy step number spin-in: rotate(-90deg)
             [st.querySelector(".num")!, { scale: [0, 1], rotate: [-90, 0] }, { duration: 0.6, ease: [0.34, 1.56, 0.64, 1], at: "-0.5" }],
-            [q(".mini .r", st), { opacity: [0, 1], x: [-20, 0] }, { duration: 0.45, delay: stagger(0.1), at: "-0.2" }],
-            [q(".mini .r .tag", st), { scale: [0.5, 1], opacity: [0, 1] }, { duration: 0.4, delay: stagger(0.1), at: "-0.3" }],
-            [q(".cal i", st), { scale: [0, 1] }, { duration: 0.35, delay: stagger(0.03), at: "-0.4" }],
+            */
+            [
+              st.querySelector(".num")!,
+              { opacity: [0, 1], scale: [0.92, 1] },
+              { duration: 0.5, ease: SCROLL_REVEAL_EASE, at: "-0.45" },
+            ],
+            [q(".mini .r", st), { opacity: [0, 1], y: [6, 0] }, { duration: 0.45, delay: stagger(0.08), at: "-0.2" }],
+            [q(".mini .r .tag", st), { opacity: [0, 1], y: [4, 0] }, { duration: 0.4, delay: stagger(0.08), at: "-0.25" }],
+            [q(".cal i", st), { opacity: [0, 1], y: [4, 0] }, { duration: 0.35, delay: stagger(0.03), at: "-0.35" }],
           ] as any);
         },
         { margin: "0px 0px -18% 0px" }
@@ -730,8 +784,17 @@ export function initLandingMotion(): CleanupFn {
     cleanups.push(
       revealOnScroll(q(".it", c), { opacity: [0, 1], y: [14, 0] }, { trigger: c, start: "top 85%", duration: 0.5, staggerEach: 0.1, delay: 0.35 })
     );
+    /* Legacy compare icon spin-in: rotate(-60deg)
     cleanups.push(
       revealOnScroll(q(".it svg", c), { scale: [0, 1], rotate: [-60, 0] }, { trigger: c, start: "top 85%", duration: 0.5, staggerEach: 0.1, delay: 0.45, ease: [0.34, 1.56, 0.64, 1] })
+    );
+    */
+    cleanups.push(
+      revealOnScroll(
+        q(".it svg", c),
+        { opacity: [0, 1], y: [4, 0] },
+        { trigger: c, start: "top 85%", duration: 0.45, staggerEach: 0.08, delay: 0.35, ease: SCROLL_REVEAL_EASE }
+      )
     );
   });
 
@@ -747,8 +810,17 @@ export function initLandingMotion(): CleanupFn {
         { target: cta, offset: ["start 0.95", "start 0.55"] }
       )
     );
+    /* Legacy CTA mascot spin-in: scale + rotate(-30deg)
     cleanups.push(
       revealOnScroll(".cta-mascot-3d", { opacity: [0, 1], scale: [0.4, 1], rotate: [-30, 0], y: [40, 0] }, { trigger: ".cta", start: "top 70%", duration: 1, ease: [0.34, 1.56, 0.64, 1] })
+    );
+    */
+    cleanups.push(
+      revealOnScroll(
+        ".cta-mascot-3d",
+        { opacity: [0, 1], y: [SCROLL_REVEAL_Y + 6, 0] },
+        { trigger: ".cta", start: "top 70%", duration: 0.7, ease: SCROLL_REVEAL_EASE }
+      )
     );
     cleanups.push(revealOnScroll(".cta .btn", { opacity: [0, 1], y: [16, 0] }, { trigger: ".cta", start: "top 70%", duration: 0.6, staggerEach: 0.1 }));
   }
@@ -801,6 +873,7 @@ export function initLandingMotion(): CleanupFn {
       });
     });
 
+    /* Legacy hover spin on step numbers
     q(".num").forEach((n) => {
       const onEnter = () => {
         void animate(n, { rotate: 360 }, { duration: 0.7, ease: [0.34, 1.56, 0.64, 1] });
@@ -808,6 +881,7 @@ export function initLandingMotion(): CleanupFn {
       n.addEventListener("mouseenter", onEnter);
       cleanups.push(() => n.removeEventListener("mouseenter", onEnter));
     });
+    */
 
     const mf = document.querySelector(".mascot-float") as HTMLElement | null;
     if (mf) {

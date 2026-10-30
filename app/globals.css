@@ -210,7 +210,6 @@ nav{display:flex;align-items:center;justify-content:space-between;gap:20px;heigh
 }
 .hx>.tiles,.hx-line .tiles{margin-inline:.05em}
 .hx>span:not(.tiles):not(.hx-line){overflow:visible;padding-bottom:.1em;margin-bottom:-.1em}
-.hx .wm+.wm{margin-inline-start:.24em}
 .tiles{display:inline-flex;align-items:center}
 /* Hero headline slots: one inline width; tiles stacked (prototype deck) */
 .hx .tiles{position:relative;display:inline-flex;width:1.04em;height:1.04em;vertical-align:middle;flex:none}
@@ -409,7 +408,7 @@ nav{display:flex;align-items:center;justify-content:space-between;gap:20px;heigh
 /* sections */
 section{padding:130px 0}
 .head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:52px}
-.head h2{max-width:760px}
+.head h2{max-width:760px;text-align:left}
 .cards{display:flex;flex-wrap:wrap;gap:20px}
 .card{flex:1 1 300px;background:var(--card-bg);border:1px solid var(--line);border-radius:24px;padding:30px;display:flex;flex-direction:column;gap:12px;transition:box-shadow .3s ease;will-change:transform}
 .card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
@@ -558,8 +557,10 @@ footer .links a:hover{color:var(--ink)}
 }
 }
 .wm{display:inline-block;overflow:hidden;vertical-align:top;line-height:1.15;padding-bottom:.14em;margin-bottom:-.14em}
-section h2 .wm+.wm{margin-inline-start:.22em}
 .hx .wm{overflow:visible;line-height:1.12;padding-bottom:.22em;margin-bottom:-.22em}
+.hx .wm+.wm{margin-inline-start:.24em}
+.manifest h2 .wm{display:inline;overflow:visible;vertical-align:baseline;padding:0;margin:0;line-height:inherit}
+.manifest h2 .wi{display:inline;vertical-align:baseline;padding:0;margin:0}
 .hx .wi{display:inline-block;line-height:inherit;overflow:visible;padding-bottom:.1em;margin-bottom:-.1em;vertical-align:baseline;will-change:transform}
 .wi{display:inline-block;line-height:inherit;will-change:transform}
 .typing{align-self:flex-end;display:none;gap:5px;padding:14px 16px;border-radius:18px;border-bottom-right-radius:6px;background:var(--g)}
