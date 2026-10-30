@@ -61,6 +61,7 @@ export const planHtml = `<!-- PLAN -->
     </div>
   </div>
 </section>`;
+/* Legacy manifest (static HTML, no inline mascot):
 export const manifestHtml = `<!-- MANIFEST -->
 <section class="manifest">
   <div class="wrap">
@@ -68,6 +69,7 @@ export const manifestHtml = `<!-- MANIFEST -->
   </div>
 </section>
 `;
+*/
 export const footerHtml = `<footer>
   <div class="wrap">
     <a href="#top" class="brand" style="color:var(--ink);font-size:16px">

@@ -143,9 +143,22 @@ export const en: Dictionary = {
       "3D mascot of appointmentsetter.app: a white calendar block with two rings and large black eyes",
   },
   planExtras: { connected: "Connected" },
+  manifest: {
+    wordsBeforeLogo: [
+      "Your",
+      "job",
+      "is",
+      "the",
+      "meeting.",
+      "Everything",
+      "before",
+      "that",
+      "belongs",
+      "to",
+    ],
+  },
   sections: {
     problemHtml: sections.problemHtml,
-    manifestHtml: sections.manifestHtml,
     planHtml: sections.planHtml,
     footerHtml: sections.footerHtml,
   },
