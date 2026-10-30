@@ -186,14 +186,18 @@ nav{display:flex;align-items:center;justify-content:space-between;gap:20px;heigh
 .lang-switch-sep{color:var(--line)}
 .lang-switch-icon{color:var(--muted)}
 @media (max-width:880px){.lang-switch{font-size:13px}}
-.brand{display:flex;align-items:center;gap:11px;text-decoration:none;font-weight:800;font-size:18px;letter-spacing:-.02em}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;font-weight:800;font-size:18px;letter-spacing:-.02em;min-width:0;flex:0 1 auto}
+.brand-wordmark{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .nav-mascot-icon{display:block;width:38px;height:38px;flex-shrink:0;border-radius:9.5px;overflow:hidden;background:var(--g);border:1px solid var(--g-border);box-sizing:border-box}
 .nav-mascot-icon .nav-mascot-svg,.nav-mascot-icon .hero-mascot-svg{width:100%;height:100%;display:block;border-radius:0}
 .navlinks{display:flex;gap:30px;font-size:15px;font-weight:500}
 .navlinks a{text-decoration:none;color:var(--text)}
 .navlinks a:hover{color:var(--ink)}
 @media (max-width:880px){.navlinks{display:none}}
+/* Legacy: hid every .brand span (including .nav-mascot-icon) on narrow viewports:
 @media (max-width:440px){.brand span{display:none}}
+*/
+@media (max-width:360px){.brand-wordmark{display:none}}
 
 /* hero */
 .hero{position:relative;padding:clamp(96px,12vw,132px) 0 clamp(48px,6vw,64px);text-align:center;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:80px 80px;background-position:center top}

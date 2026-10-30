@@ -33,7 +33,7 @@ export function Header({ dict }: { dict: Dictionary }) {
               <use href="#agent" transform="rotate(-8 60 64)" />
             </svg>
             */}
-            <span>{nav.brand}</span>
+            <span className="brand-wordmark">{nav.brand}</span>
           </a>
           <div className="navlinks">
             <a href="#probleem">{nav.problem}</a>
