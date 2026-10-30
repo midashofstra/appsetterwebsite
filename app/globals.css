@@ -546,8 +546,17 @@ section{padding:64px 0}
   background:#ECEEE8;color:var(--text);
   transition:none;transform:none;
 }
+#plan .step--connect .mini .r .tag.g.plan-connect-tag{
+  width:26px;height:26px;min-width:26px;padding:0;border-radius:8px;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:0;line-height:0;
+}
+#plan .step--connect .mini .r .tag.g.plan-connect-tag .plan-connect-tag__icon{
+  display:block;flex:none;
+}
 @media (prefers-color-scheme:dark){
   #plan .step--connect .mini .r .tag.g{background:var(--line);color:var(--text)}
+  #plan .step--connect .mini .r .tag.g.plan-connect-tag .plan-connect-tag__icon{color:var(--text)}
 }
 /* Plan step 2 ("Tell us about your business") value pills — scoped; step 1 uses .tag.g */
 /* Legacy (inherited from .tag): background #ECEEE8; color var(--text) */
