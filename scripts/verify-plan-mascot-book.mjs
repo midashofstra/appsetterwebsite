@@ -38,6 +38,7 @@ for (const [path, tag, width, height] of viewports) {
     const hr = host.getBoundingClientRect();
     const mr = mini?.getBoundingClientRect();
     const figStyle = getComputedStyle(fig);
+    const imgStyle = getComputedStyle(img);
     const overlapsMini =
       mr &&
       !(ir.bottom < mr.top - 4 || ir.top > mr.bottom + 4 || ir.right < mr.left - 4 || ir.left > mr.right + 4);
@@ -53,6 +54,7 @@ for (const [path, tag, width, height] of viewports) {
       visible: ir.width > 40 && ir.height > 40 && parseFloat(figStyle.opacity) > 0.85,
       overlapsMini: !!overlapsMini,
       hostRight: hr.right,
+      imgTransform: imgStyle.transform,
       pageOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 2,
     };
   });
@@ -66,6 +68,10 @@ for (const [path, tag, width, height] of viewports) {
     if (metrics.alt !== "Appointment Setter mascot reading") process.exitCode = 1;
     if (!metrics.visible) {
       console.error(`${tag}: mascot not visible`, metrics);
+      process.exitCode = 1;
+    }
+    if (!metrics.imgTransform?.startsWith("matrix(-1")) {
+      console.error(`${tag}: mascot img should be mirrored with scaleX(-1), got`, metrics.imgTransform);
       process.exitCode = 1;
     }
     if (metrics.pageOverflow) process.exitCode = 1;
