@@ -703,12 +703,8 @@ export function initLandingMotion(): CleanupFn {
     );
   });
 
+  /* Legacy chan card icon reveals (three-card layout):
   q(".chan .card svg").forEach((ic) => {
-    /* Legacy icon spin-in: scale + rotate(-30deg)
-    cleanups.push(
-      revealOnScroll(ic, { scale: [0, 1], rotate: [-30, 0] }, { trigger: ic, start: "top 85%", duration: 0.6, delay: 0.3, ease: [0.34, 1.56, 0.64, 1] })
-    );
-    */
     cleanups.push(
       revealOnScroll(
         ic,
@@ -717,6 +713,14 @@ export function initLandingMotion(): CleanupFn {
       )
     );
   });
+  */
+  cleanups.push(
+    revealOnScroll(
+      ".chan-bouncy .bouncy-tabs__collection",
+      { opacity: [0, 1], y: [SCROLL_REVEAL_Y + 4, 0] },
+      { trigger: ".chan-bouncy", start: "top 85%", duration: 0.65, ease: SCROLL_REVEAL_EASE }
+    )
+  );
 
   q(".feat").forEach((f) => {
     f.style.opacity = "0";

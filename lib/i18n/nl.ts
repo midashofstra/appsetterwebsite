@@ -49,6 +49,8 @@ export const nl: Dictionary = {
   channels: {
     label: "Kanalen",
     title: "Eén agent. Overal waar je klanten zijn.",
+    tabsAria: "Communicatiekanalen",
+    panelCta: "Probeer 3 dagen voor €1",
     cards: [
       {
         title: "LinkedIn",
