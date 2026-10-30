@@ -1,3 +1,4 @@
+import { ProblemArcScrollTransition } from "@/components/sections/ProblemArcScrollTransition";
 import { INTEGRATION_LOGOS } from "@/lib/integration-logos";
 import type { Dictionary } from "@/lib/i18n/types";
 
@@ -20,6 +21,7 @@ export function Logos({ dict }: { dict: Dictionary }) {
           })}
         </div>
       </div>
+      <ProblemArcScrollTransition />
     </div>
   );
 }
