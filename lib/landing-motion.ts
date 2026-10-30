@@ -330,9 +330,16 @@ export function initLandingMotion(): CleanupFn {
   }
 
   let heroWords: HTMLElement[] = [];
-  q(":scope > span:not(.tiles)", hx).forEach((sp) => {
-    heroWords = heroWords.concat(splitWords(sp));
-  });
+  const lineTextSpans = q(".hx .hx-line-text", hx);
+  if (lineTextSpans.length) {
+    lineTextSpans.forEach((sp) => {
+      heroWords = heroWords.concat(splitWords(sp));
+    });
+  } else {
+    q(":scope > span:not(.tiles)", hx).forEach((sp) => {
+      heroWords = heroWords.concat(splitWords(sp));
+    });
+  }
   const introTiles = q(".hx .tiles-deck", hx).concat(
     q(".hx .tiles:not(.tiles-deck) .tile", hx)
   );
