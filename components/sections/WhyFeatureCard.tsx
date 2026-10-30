@@ -11,14 +11,16 @@ type WhyFeatureCardProps = {
   icon: IconDefinition;
   title: string;
   text: string;
+  className?: string;
 };
 
-export function WhyFeatureCard({ icon, title, text }: WhyFeatureCardProps) {
+export function WhyFeatureCard({ icon, title, text, className }: WhyFeatureCardProps) {
+  const rootClass = className ? `feat rv ${className}` : "feat rv";
   const reduceMotion = useReducedMotion();
 
   if (reduceMotion) {
     return (
-      <div className="feat rv">
+      <div className={rootClass}>
         <span className="ico">
           <SiteIcon icon={icon} size={22} style={{ color: "var(--g-ink)" }} />
         </span>
@@ -32,13 +34,13 @@ export function WhyFeatureCard({ icon, title, text }: WhyFeatureCardProps) {
 
   return (
     <motion.div
-      className="feat rv"
+      className={rootClass}
       initial="rest"
       whileHover="hover"
       variants={{
         rest: {
           y: 0,
-          backgroundColor: "#ffffff",
+          backgroundColor: "var(--card-bg)",
           borderColor: "var(--line)",
           boxShadow: "0 1px 2px rgba(21,22,19,.04), 0 4px 16px -8px rgba(21,22,19,.08)",
         },

@@ -724,15 +724,21 @@ export function initLandingMotion(): CleanupFn {
 
   q(".feat").forEach((f) => {
     f.style.opacity = "0";
-    f.style.transform = "translateX(40px)";
+    f.style.transform = "translateY(12px)";
     cleanups.push(
       inView(f, () => {
-        void animate(f, { opacity: 1, x: 0 }, { duration: 0.8, ease: [0.22, 1, 0.36, 1] });
-        const ico = f.querySelector(".ico");
-        if (ico) void animate(ico, { opacity: [0, 1], scale: [0.96, 1] }, { duration: 0.45, delay: 0.15, ease: [0.22, 1, 0.36, 1] });
+        void animate(f, { opacity: 1, y: 0 }, { duration: 0.75, ease: SCROLL_REVEAL_EASE });
       }, { margin: "0px 0px -10% 0px" })
     );
   });
+
+  cleanups.push(
+    revealOnScroll(
+      ".why-showcase__photo",
+      { opacity: [0, 1], y: [SCROLL_REVEAL_Y, 0] },
+      { trigger: ".why-showcase", start: "top 85%", duration: 0.75, ease: SCROLL_REVEAL_EASE }
+    )
+  );
 
   cleanups.push(revealOnScroll(".quote", { opacity: [0, 1], y: [40, 0] }, { trigger: ".quote", start: "top 88%", duration: 0.9 }));
   cleanups.push(revealOnScroll(".quote figcaption", { opacity: [0, 1], x: [20, 0] }, { trigger: ".quote", start: "top 88%", duration: 0.7, delay: 0.3 }));
