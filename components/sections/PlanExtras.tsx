@@ -20,7 +20,7 @@ export function PlanExtras({ dict }: { dict: Dictionary }) {
       );
     }
 
-    const mini = document.querySelector("#plan .step .mini");
+    const mini = document.querySelector("#plan .step--connect .mini");
     if (mini && !mini.hasAttribute("data-integrations")) {
       mini.setAttribute("data-integrations", "true");
       const planConnectLogos = [...INTEGRATION_LOGOS];

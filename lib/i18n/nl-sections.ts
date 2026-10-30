@@ -28,7 +28,7 @@ export const planHtml = `<!-- PLAN -->
     </div>
     <div class="steps" id="steps">
       <div class="line" aria-hidden="true"><i></i></div>
-      <div class="step rv">
+      <div class="step step--connect rv">
         <span class="num">1</span>
         <h3>Koppel je kanalen</h3>
         <p>Koppel je LinkedIn, e-mail en agenda. Klaar in een paar klikken.</p>

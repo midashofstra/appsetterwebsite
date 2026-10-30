@@ -52,7 +52,7 @@ for (const t of step2TagStyles) {
 }
 
 const connectedBg = await page.evaluate(() => {
-  const el = document.querySelector("#plan .step:not(.step--business) .tag.g");
+  const el = document.querySelector("#plan .step--connect .tag.g");
   if (!el) return null;
   return getComputedStyle(el).backgroundColor;
 });

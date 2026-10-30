@@ -30,7 +30,7 @@ export const planHtml = `<!-- PLAN -->
     </div>
     <div class="steps" id="steps">
       <div class="line" aria-hidden="true"><i></i></div>
-      <div class="step rv">
+      <div class="step step--connect rv">
         <span class="num">1</span>
         <h3>Connect your channels</h3>
         <p>Connect LinkedIn, email and your calendar. Ready in a few clicks.</p>
