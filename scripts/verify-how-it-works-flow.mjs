@@ -122,6 +122,41 @@ for (const [path, tag, width, height, expectedLabels] of [
     });
   }
 
+  await page.getByRole("tab", { name: expectedLabels[3] }).click();
+  await page.waitForTimeout(450);
+  const contactPanel = await page.evaluate(() => {
+    const img = document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-photo");
+    return {
+      title: document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__heading")?.textContent?.trim(),
+      src: img?.getAttribute("src") || "",
+      hasPhoto: !!img,
+      photoVisual: !!document.querySelector(
+        "[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-visual--photo"
+      ),
+    };
+  });
+  console.log(tag, "contact", contactPanel);
+  if (path === "/en" && !contactPanel.title?.includes("First outreach")) {
+    fail(`${tag}: Contact panel title missing`);
+  }
+  if (path === "/nl" && !contactPanel.title?.includes("Eerste opvolging")) {
+    fail(`${tag}: NL Contact panel title missing`);
+  }
+  if (!contactPanel.hasPhoto || !contactPanel.src.includes("step-4-contact")) {
+    fail(`${tag}: Contact tab should show step-4-contact photo`);
+  }
+  if (!contactPanel.photoVisual) fail(`${tag}: Contact photo should use photo tile styling`);
+  if (tag === "desktop-en") {
+    await page.locator("#kanalen").screenshot({
+      path: `${outDir}/how-it-works-eight-tabs-${tag}-contact.png`,
+      timeout: 12000,
+    });
+    await page.locator("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-visual--photo").screenshot({
+      path: `${outDir}/how-it-works-step-4-contact-tab-en.png`,
+      timeout: 12000,
+    });
+  }
+
   await page.getByRole("tab", { name: expectedLabels[5] }).click();
   await page.waitForTimeout(450);
   const meetingPanel = await page.evaluate(() => ({
