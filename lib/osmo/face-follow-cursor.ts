@@ -1,11 +1,17 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import {
+  clampPercent,
+  measureHighlightPercentCaps,
+  type PercentCaps,
+} from "@/lib/osmo/mascot-face-geometry";
 
 gsap.registerPlugin(ScrollTrigger);
 
 type FaceTarget = {
   el: Element;
   intensity: number;
+  isHighlight: boolean;
   setX: gsap.QuickToFunc;
   setY: gsap.QuickToFunc;
 };
@@ -18,15 +24,44 @@ type MascotFaceMotion = {
   bodySetY: gsap.QuickToFunc | null;
   bodyTiltDeg: number;
   bodyShiftPct: number;
+  highlightCaps: PercentCaps | null;
   applyNormalized: (nx: number, ny: number) => void;
   resetAll: () => void;
 };
 
 const QUICK = { duration: 0.3, ease: "power2.out" };
+const QUICK_NAV = { duration: 0.52, ease: "power3.out" };
+const QUICK_MANIFEST = { duration: 0.78, ease: "power3.out" };
 const IDLE_MOVE = { ease: "power2.inOut" as const };
 /** Mascot SVG viewBox is 0 0 444 444 — pivot body tilt around tile centre, not path bbox. */
 const MASCOT_VIEWBOX_CX = 222;
 const MASCOT_VIEWBOX_CY = 222;
+
+/** Small nav mascot: softer travel before geometry clamp. */
+const NAV_SUBTLE_SCALE = 0.68;
+/** Inline manifest mascot (~1.04em): much calmer eyes / tilt / follow. */
+const MANIFEST_SUBTLE_SCALE = 0.4;
+
+function subtleMode(section: Element): "hero" | "nav" | "manifest" {
+  const v = section.getAttribute("data-face-subtle");
+  if (v === "manifest" || v === "inline") return "manifest";
+  if (section.hasAttribute("data-face-subtle")) return "nav";
+  return "hero";
+}
+
+function subtleTravelScale(section: Element): number {
+  const mode = subtleMode(section);
+  if (mode === "manifest") return MANIFEST_SUBTLE_SCALE;
+  if (mode === "nav") return NAV_SUBTLE_SCALE;
+  return 1;
+}
+
+function pointerQuick(section: Element) {
+  const mode = subtleMode(section);
+  if (mode === "manifest") return QUICK_MANIFEST;
+  if (mode === "nav") return QUICK_NAV;
+  return QUICK;
+}
 
 function setSvgGroupPivot(el: Element, mode: "viewBox" | "fillBox") {
   const node = el as SVGGraphicsElement;
@@ -43,35 +78,50 @@ function setSvgGroupPivot(el: Element, mode: "viewBox" | "fillBox") {
 
 export function createMascotFaceMotion(section: Element): MascotFaceMotion {
   const scale = parseFloat(section.getAttribute("data-motion-scale") ?? "") || 1;
+  const subtleScale = subtleTravelScale(section);
   const baseIntensity =
-    (parseFloat(section.getAttribute("data-face") ?? "") || 30) * scale;
-  const bodyTiltDeg = 4 * scale;
-  const bodyShiftPct = 4 * scale;
+    (parseFloat(section.getAttribute("data-face") ?? "") || 30) * scale * subtleScale;
+  const bodyTiltDeg = 4 * scale * subtleScale;
+  const bodyShiftPct = 4 * scale * subtleScale;
 
+  const quick = pointerQuick(section);
   const targetEls = section.querySelectorAll("[data-face-target]");
   const targets: FaceTarget[] = Array.from(targetEls).map((el) => {
     const factor = parseFloat(el.getAttribute("data-face-target") ?? "") || 1;
+    const isHighlight = el.id === "innereyes";
     return {
       el,
       intensity: baseIntensity * factor,
-      setX: gsap.quickTo(el, "xPercent", QUICK),
-      setY: gsap.quickTo(el, "yPercent", QUICK),
+      isHighlight,
+      setX: gsap.quickTo(el, "xPercent", quick),
+      setY: gsap.quickTo(el, "yPercent", quick),
     };
   });
+
+  const highlightCaps = measureHighlightPercentCaps(section);
 
   const body = section.querySelector(".hero-mascot-body");
   if (body) setSvgGroupPivot(body, "viewBox");
   targets.forEach((t) => setSvgGroupPivot(t.el, "fillBox"));
 
-  const bodySetRotate = body ? gsap.quickTo(body, "rotation", QUICK) : null;
-  const bodySetX = body ? gsap.quickTo(body, "xPercent", QUICK) : null;
-  const bodySetY = body ? gsap.quickTo(body, "yPercent", QUICK) : null;
+  const bodySetRotate = body ? gsap.quickTo(body, "rotation", quick) : null;
+  const bodySetX = body ? gsap.quickTo(body, "xPercent", quick) : null;
+  const bodySetY = body ? gsap.quickTo(body, "yPercent", quick) : null;
+
+  const applyTarget = (target: FaceTarget, nx: number, ny: number) => {
+    let xP = nx * target.intensity;
+    let yP = ny * target.intensity;
+    if (target.isHighlight && highlightCaps) {
+      // #innereyes is nested under #eyes_2 — only a small parallax layer is clamped here.
+      xP = clampPercent(xP, highlightCaps.xPercent);
+      yP = clampPercent(yP, highlightCaps.yPercent);
+    }
+    target.setX(xP);
+    target.setY(yP);
+  };
 
   const applyNormalized = (nx: number, ny: number) => {
-    targets.forEach((target) => {
-      target.setX(nx * target.intensity);
-      target.setY(ny * target.intensity);
-    });
+    targets.forEach((target) => applyTarget(target, nx, ny));
     bodySetRotate?.(nx * bodyTiltDeg);
     bodySetX?.(nx * bodyShiftPct);
     bodySetY?.(ny * bodyShiftPct);
@@ -95,6 +145,7 @@ export function createMascotFaceMotion(section: Element): MascotFaceMotion {
     bodySetY,
     bodyTiltDeg,
     bodyShiftPct,
+    highlightCaps,
     applyNormalized,
     resetAll,
   };
@@ -187,26 +238,22 @@ export function initFaceFollowCursorGlobal(section: Element): () => void {
   return stopTracking;
 }
 
+function idleGlanceScale(section: Element): number {
+  const mode = subtleMode(section);
+  if (mode === "manifest") return 0.32;
+  if (mode === "nav") return 0.55;
+  return 1;
+}
+
 function bindFaceIdleGlance(section: Element) {
-  const { targets, body, bodyTiltDeg, bodyShiftPct, resetAll } = createMascotFaceMotion(section);
+  const motion = createMascotFaceMotion(section);
+  const { targets, body, resetAll, applyNormalized } = motion;
 
   const state = { nx: 0, ny: 0 };
+  const gScale = idleGlanceScale(section);
 
   const syncIdlePose = () => {
-    const { nx, ny } = state;
-    targets.forEach((target) => {
-      gsap.set(target.el, {
-        xPercent: nx * target.intensity,
-        yPercent: ny * target.intensity,
-      });
-    });
-    if (body) {
-      gsap.set(body, {
-        rotation: nx * bodyTiltDeg,
-        xPercent: nx * bodyShiftPct,
-        yPercent: ny * bodyShiftPct,
-      });
-    }
+    applyNormalized(state.nx, state.ny);
   };
 
   const glanceSteps: { nx: number; ny: number; move: number; hold: number }[] = [
@@ -216,7 +263,12 @@ function bindFaceIdleGlance(section: Element) {
     { nx: 0.58, ny: -0.62, move: 0.6, hold: 2.4 },
     { nx: 0.72, ny: 0.38, move: 0.52, hold: 1.8 },
     { nx: 0, ny: 0, move: 0.65, hold: 1.25 },
-  ];
+  ].map((step) => ({
+    ...step,
+    nx: step.nx * gScale,
+    ny: step.ny * gScale,
+    move: step.move * (gScale < 1 ? 1.15 : 1),
+  }));
 
   let idleTimeline: gsap.core.Timeline | null = null;
 

@@ -16,6 +16,7 @@ export function ManifestInlineMascot() {
       ref={rootRef}
       className="manifest-inline-mascot"
       data-face={MASCOT_FACE_BASE_INTENSITY}
+      data-face-subtle="manifest"
       role="img"
       aria-label="Appointment Setter"
     >

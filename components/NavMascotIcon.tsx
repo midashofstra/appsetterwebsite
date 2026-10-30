@@ -19,6 +19,7 @@ export function NavMascotIcon() {
       ref={rootRef}
       className="nav-mascot-icon"
       data-face={MASCOT_FACE_BASE_INTENSITY}
+      data-face-subtle="nav"
     >
       <MascotInlineSvg className="as-icon hero-mascot-svg nav-mascot-svg" />
     </span>
