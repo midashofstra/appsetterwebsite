@@ -42,6 +42,8 @@ export type Dictionary = {
   channels: {
     label: string;
     title: string;
+    tabsAria: string;
+    panelCta: string;
     cards: { title: string; text: string }[];
   };
   compare: {

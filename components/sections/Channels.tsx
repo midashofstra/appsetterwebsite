@@ -1,15 +1,10 @@
-import { faEnvelope, faCommentDots } from "@fortawesome/free-solid-svg-icons";
-import { faLinkedinIn } from "@fortawesome/free-brands-svg-icons";
-import { SiteIcon } from "@/components/icons/SiteIcon";
+import { ChannelsBouncyTabs } from "@/components/sections/ChannelsBouncyTabs";
 import type { Dictionary } from "@/lib/i18n/types";
-
-const channelIcons = [faLinkedinIn, faEnvelope, faCommentDots] as const;
-const channelClasses = ["card rv", "card rv d1", "card g rv d2"] as const;
 
 export function Channels({ dict }: { dict: Dictionary }) {
   const { channels } = dict;
   return (
-    <section id="kanalen" className="soft chan">
+    <section id="kanalen" className="soft chan chan-bouncy-section">
       <div className="wrap">
         <div className="head rv">
           <div>
@@ -20,6 +15,15 @@ export function Channels({ dict }: { dict: Dictionary }) {
             <h2>{channels.title}</h2>
           </div>
         </div>
+
+        <ChannelsBouncyTabs dict={dict} />
+
+        {/* Legacy three-card channels layout (Font Awesome icons):
+        import { faEnvelope, faCommentDots } from "@fortawesome/free-solid-svg-icons";
+        import { faLinkedinIn } from "@fortawesome/free-brands-svg-icons";
+        import { SiteIcon } from "@/components/icons/SiteIcon";
+        const channelIcons = [faLinkedinIn, faEnvelope, faCommentDots] as const;
+        const channelClasses = ["card rv", "card rv d1", "card g rv d2"] as const;
         <div className="cards">
           {channels.cards.map(({ title, text }, i) => (
             <div className={channelClasses[i]} key={title}>
@@ -29,6 +33,7 @@ export function Channels({ dict }: { dict: Dictionary }) {
             </div>
           ))}
         </div>
+        */}
       </div>
     </section>
   );

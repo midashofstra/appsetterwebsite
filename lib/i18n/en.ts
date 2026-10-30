@@ -58,6 +58,8 @@ export const en: Dictionary = {
   channels: {
     label: "Channels",
     title: "One agent. Everywhere your customers are.",
+    tabsAria: "Communication channels",
+    panelCta: "Try 3 days for €1",
     cards: [
       {
         title: "LinkedIn",
