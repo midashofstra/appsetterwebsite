@@ -487,12 +487,12 @@ section{padding:64px 0}
 .cal i.x{background:var(--g)}
 @media (max-width:960px){.steps .line{display:none}}
 
-/* channels — Osmo bouncy content tabs (brand tokens) */
-.chan-bouncy-section .chan-bouncy{width:min(100%,50em);margin:0 auto}
-.bouncy-tabs{display:flex;flex-flow:column;align-items:center;justify-content:flex-start;gap:2.5em;width:100%}
+/* channels / how-it-works — Osmo bouncy content tabs (full wrap width) */
+.chan-bouncy-section .chan-bouncy{width:100%;max-width:none;margin:0}
+.bouncy-tabs{display:flex;flex-flow:column;align-items:stretch;justify-content:flex-start;gap:2.5em;width:100%}
 .bouncy-tabs__nav{
-  position:relative;display:inline-flex;flex-wrap:wrap;align-items:flex-start;justify-content:center;
-  max-width:100%;padding:.35em;border-radius:999px;background:color-mix(in srgb,var(--ink) 8%,transparent);
+  position:relative;display:inline-flex;flex-wrap:wrap;align-items:flex-start;justify-content:flex-start;
+  align-self:flex-start;max-width:100%;padding:.35em;border-radius:999px;background:color-mix(in srgb,var(--ink) 8%,transparent);
   gap:.15em;
 }
 .bouncy-tabs__nav[data-wrapped]{border-radius:1.25em}
@@ -519,7 +519,7 @@ section{padding:64px 0}
 }
 .bouncy-tabs__list{width:100%;position:relative}
 .bouncy-tabs__item{
-  display:flex;align-items:center;justify-content:flex-start;gap:2em;
+  display:flex;align-items:center;justify-content:space-between;gap:clamp(1.25em,4vw,3em);width:100%;
 }
 .bouncy-tabs:not(.bouncy-tabs--ready) [data-bouncy-tabs-panel]:not([data-active]){display:none}
 .bouncy-tabs:not(.bouncy-tabs--ready) [data-bouncy-tabs-panel][data-active]{position:relative}
@@ -533,7 +533,7 @@ section{padding:64px 0}
 .bouncy-tabs__para{margin:0;font-size:17px;line-height:1.55;color:var(--text);max-width:36em}
 .bouncy-tabs__cta{margin-top:.25em}
 .bouncy-tabs__item-visual{
-  flex:none;width:45%;max-width:280px;aspect-ratio:1;border-radius:20px;overflow:hidden;
+  flex:0 0 clamp(180px, 30%, 320px);width:clamp(180px, 30%, 320px);max-width:100%;aspect-ratio:1;border-radius:20px;overflow:hidden;
   background:var(--logo-tile-bg);border:1px solid var(--line);
   display:flex;align-items:center;justify-content:center;padding:1.25em;
   box-shadow:0 1px 2px rgba(21,22,19,.04);
@@ -543,16 +543,19 @@ section{padding:64px 0}
 .bouncy-tabs__item-img--logo{max-width:64px;max-height:64px;width:64px;height:64px;flex:none}
 .bouncy-tabs__step-icon{display:block;margin:0 auto}
 .chan-bouncy-section .chan-sub{margin:12px 0 0;font-size:clamp(17px,2.2vw,20px);font-weight:600;color:var(--muted);max-width:36em;line-height:1.45}
+@media (max-width:960px){
+.bouncy-tabs__item-visual{flex:0 0 clamp(160px, 36%, 280px);width:clamp(160px, 36%, 280px)}
+}
 @media (max-width:767px){
 .bouncy-tabs{gap:1.75em}
 .bouncy-tabs__nav{
   flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;
-  width:100%;border-radius:1.25em;scrollbar-width:none;
+  align-self:stretch;width:100%;max-width:100%;border-radius:1.25em;scrollbar-width:none;
 }
 .bouncy-tabs__nav::-webkit-scrollbar{display:none}
-.bouncy-tabs__collection{padding:1.5em}
+.bouncy-tabs__collection{padding:1.5em;width:100%;max-width:100%;box-sizing:border-box}
 .bouncy-tabs__item{flex-flow:column;align-items:stretch;gap:1.25em}
-.bouncy-tabs__item-visual{width:100%;max-width:none}
+.bouncy-tabs__item-visual{flex:none;width:100%;max-width:100%}
 }
 @media (prefers-reduced-motion:reduce){
 .bouncy-tabs__indicator{transition:none}
