@@ -3,6 +3,7 @@
 import { useEffect, useId, useRef } from "react";
 import { SiteIcon } from "@/components/icons/SiteIcon";
 import { CtaButton } from "@/components/ui/CtaButton";
+import { HowItWorksFlowSteps } from "@/components/sections/HowItWorksFlowSteps";
 import { HOW_IT_WORKS_VISUALS } from "@/lib/how-it-works-tab-visuals";
 import { initBouncyContentTabs } from "@/lib/osmo/bouncy-content-tabs";
 import type { Dictionary } from "@/lib/i18n/types";
@@ -54,19 +55,23 @@ export function ChannelsBouncyTabs({ dict }: { dict: Dictionary }) {
                 data-bouncy-tabs-panel=""
                 role="tabpanel"
                 {...(i === 0 ? { "data-active": true } : {})}
-                className="bouncy-tabs__item"
+                className={`bouncy-tabs__item${visual?.kind === "flow" ? " bouncy-tabs__item--flow" : ""}`}
               >
                 <div className="bouncy-tabs__item-text">
                   <h3 className="bouncy-tabs__heading">{title}</h3>
                   <p className="bouncy-tabs__para">{text}</p>
-                  {c.panelCta && i === c.steps.length - 1 ? (
+                  {c.panelCta && i === 2 ? (
                     <CtaButton href="#start" className="bouncy-tabs__cta btn-main btn-sm">
                       {c.panelCta}
                     </CtaButton>
                   ) : null}
                 </div>
-                <div className="bouncy-tabs__item-visual">
-                  {visual?.kind === "logos" ? (
+                <div
+                  className={`bouncy-tabs__item-visual${visual?.kind === "flow" ? " bouncy-tabs__item-visual--flow" : ""}`}
+                >
+                  {visual?.kind === "flow" ? (
+                    <HowItWorksFlowSteps dict={dict} />
+                  ) : visual?.kind === "logos" ? (
                     <div className="bouncy-tabs__logo-row" aria-hidden>
                       {visual.items.map((logo) => (
                         <img

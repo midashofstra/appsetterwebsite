@@ -60,7 +60,21 @@ export const en: Dictionary = {
     title: "Inside the conversation, end to end.",
     subtitle: "One agent. Everywhere your customers are.",
     tabsAria: "How the agent works, step by step",
+    flowAria: "End-to-end flow from lead to learning",
     panelCta: "Try 3 days for €1",
+    flowSteps: [
+      { label: "Leads", description: "New interest lands in one place." },
+      { label: "First contact", description: "Outreach in your voice, fast." },
+      { label: "Conversation", description: "Back-and-forth until they're ready." },
+      { label: "Meeting", description: "On your calendar when they say yes." },
+      { label: "CRM", description: "Notes and context stay synced." },
+      { label: "Learn", description: "Gets sharper from every thread." },
+    ],
+    /* Legacy tab 1 (channel logos panel — now tab 4):
+    tabLabel: "1 · Reply",
+    title: "Reads and replies in your tone",
+    text: "It picks up incoming WhatsApp, email, LinkedIn, and other messages...",
+    */
     /* Legacy channels tabs (LinkedIn / Email / WhatsApp cards):
     label: "Channels",
     title: "One agent. Everywhere your customers are.",
@@ -68,9 +82,9 @@ export const en: Dictionary = {
     */
     steps: [
       {
-        tabLabel: "1 · Reply",
-        title: "Reads and replies in your tone",
-        text: "It picks up incoming WhatsApp, email, LinkedIn, and other messages and responds the way you would—with your voice and guardrails. One agent. Everywhere your customers are.",
+        tabLabel: "1 · End to end",
+        title: "From lead to booked meeting",
+        text: "Six steps, one agent—see how it runs without handoffs.",
       },
       {
         tabLabel: "2 · Calendar",
@@ -81,6 +95,11 @@ export const en: Dictionary = {
         tabLabel: "3 · Book",
         title: "Books the meeting—you stay in control",
         text: "When someone is ready, it schedules the appointment in your calendar. You see every thread and can take over whenever you want.",
+      },
+      {
+        tabLabel: "4 · Channels",
+        title: "Reads and replies in your tone",
+        text: "It picks up incoming WhatsApp, email, LinkedIn, and other messages and responds the way you would—with your voice and guardrails. One agent. Everywhere your customers are.",
       },
     ],
   },

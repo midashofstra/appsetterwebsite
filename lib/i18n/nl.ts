@@ -51,7 +51,21 @@ export const nl: Dictionary = {
     title: "Zo voert je agent het gesprek.",
     subtitle: "Eén agent. Overal waar je klanten zijn.",
     tabsAria: "Stappen: zo werkt de agent",
+    flowAria: "Flow van lead tot leren",
     panelCta: "Probeer 3 dagen voor €1",
+    flowSteps: [
+      { label: "Leads", description: "Nieuwe interesse komt binnen." },
+      { label: "Eerste contact", description: "Opvolging in jouw toon, snel." },
+      { label: "Gesprek", description: "Heen en weer tot ze klaar zijn." },
+      { label: "Afspraak", description: "In je agenda zodra ze ja zeggen." },
+      { label: "CRM", description: "Notities en context blijven sync." },
+      { label: "Leren", description: "Wordt scherper na elk gesprek." },
+    ],
+    /* Legacy tab 1 (kanaallogo's — nu tab 4):
+    tabLabel: "1 · Antwoord",
+    title: "Leest en antwoordt in jouw toon",
+    text: "De agent pakt binnenkomende WhatsApp-, e-mail-, LinkedIn-...",
+    */
     /* Legacy channels tabs (LinkedIn / E-mail / WhatsApp):
     label: "Kanalen",
     title: "Eén agent. Overal waar je klanten zijn.",
@@ -59,9 +73,9 @@ export const nl: Dictionary = {
     */
     steps: [
       {
-        tabLabel: "1 · Antwoord",
-        title: "Leest en antwoordt in jouw toon",
-        text: "De agent pakt binnenkomende WhatsApp-, e-mail-, LinkedIn- en andere berichten op en antwoordt zoals jij dat zou doen—in jouw stem en met jouw kaders. Eén agent. Overal waar je klanten zijn.",
+        tabLabel: "1 · Overzicht",
+        title: "Van lead tot ingeplande afspraak",
+        text: "Zes stappen, één agent—zo loopt het zonder overdracht.",
       },
       {
         tabLabel: "2 · Agenda",
@@ -72,6 +86,11 @@ export const nl: Dictionary = {
         tabLabel: "3 · Boeken",
         title: "Boekt de afspraak—jij houdt de regie",
         text: "Is iemand klaar, dan plant hij de afspraak in je agenda. Jij ziet elk gesprek en neemt over wanneer je wilt.",
+      },
+      {
+        tabLabel: "4 · Kanalen",
+        title: "Leest en antwoordt in jouw toon",
+        text: "De agent pakt binnenkomende WhatsApp-, e-mail-, LinkedIn- en andere berichten op en antwoordt zoals jij dat zou doen—in jouw stem en met jouw kaders. Eén agent. Overal waar je klanten zijn.",
       },
     ],
   },

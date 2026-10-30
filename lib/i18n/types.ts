@@ -44,7 +44,9 @@ export type Dictionary = {
     title: string;
     subtitle: string;
     tabsAria: string;
+    flowAria: string;
     panelCta: string;
+    flowSteps: { label: string; description: string }[];
     steps: { tabLabel: string; title: string; text: string }[];
   };
   compare: {

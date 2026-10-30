@@ -815,6 +815,13 @@ export function initLandingMotion(): CleanupFn {
       { trigger: ".chan-bouncy", start: "top 85%", duration: 0.65, ease: SCROLL_REVEAL_EASE }
     )
   );
+  cleanups.push(
+    revealOnScroll(
+      ".how-it-works-flow__step",
+      { opacity: [0.72, 1], y: [SCROLL_REVEAL_Y, 0] },
+      { trigger: ".how-it-works-flow", start: "top 88%", duration: 0.55, staggerEach: 0.07, ease: SCROLL_REVEAL_EASE }
+    )
+  );
 
   q(".feat").forEach((f) => {
     f.style.opacity = "0";
