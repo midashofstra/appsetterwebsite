@@ -195,6 +195,41 @@ for (const [path, tag, width, height, expectedLabels] of [
     });
   }
 
+  await page.getByRole("tab", { name: expectedLabels[6] }).click();
+  await page.waitForTimeout(450);
+  const learnPanel = await page.evaluate(() => {
+    const img = document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-photo");
+    return {
+      title: document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__heading")?.textContent?.trim(),
+      src: img?.getAttribute("src") || "",
+      hasPhoto: !!img,
+      photoVisual: !!document.querySelector(
+        "[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-visual--photo"
+      ),
+    };
+  });
+  console.log(tag, "learn", learnPanel);
+  if (path === "/en" && !learnPanel.title?.includes("Sharper after every thread")) {
+    fail(`${tag}: Learn panel title missing`);
+  }
+  if (path === "/nl" && !learnPanel.title?.includes("Scherper na elk gesprek")) {
+    fail(`${tag}: NL Learn panel title missing`);
+  }
+  if (!learnPanel.hasPhoto || !learnPanel.src.includes("step-7-learn")) {
+    fail(`${tag}: Learn tab should show step-7-learn photo`);
+  }
+  if (!learnPanel.photoVisual) fail(`${tag}: Learn photo should use photo tile styling`);
+  if (tag === "desktop-en") {
+    await page.locator("#kanalen").screenshot({
+      path: `${outDir}/how-it-works-eight-tabs-${tag}-learn.png`,
+      timeout: 12000,
+    });
+    await page.locator("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-visual--photo").screenshot({
+      path: `${outDir}/how-it-works-step-7-learn-tab-en.png`,
+      timeout: 12000,
+    });
+  }
+
   await page.getByRole("tab", { name: expectedLabels[4] }).click();
   await page.waitForTimeout(350);
   const logos = await page.locator("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-img--logo").count();
