@@ -37,9 +37,38 @@ const step2TagStyles = await page.evaluate(() => {
   });
 });
 
-if (step2TagStyles.length !== 3) {
-  console.error("Expected 3 step 2 tags, got", step2TagStyles.length);
+const expectedTags = [
+  "Installer, Rotterdam",
+  "Heat pump installs",
+  "Homeowners",
+  "Consultation & install",
+];
+
+if (step2TagStyles.length !== 4) {
+  console.error("Expected 4 step 2 tags, got", step2TagStyles.length);
   process.exitCode = 1;
+}
+
+const rowLabels = await page.evaluate(() =>
+  [...document.querySelectorAll("#plan .step--business .mini .r")].map((row) => {
+    const tag = row.querySelector(".tag");
+    const label = tag ? row.textContent?.replace(tag.textContent ?? "", "").trim() : row.textContent?.trim();
+    return label;
+  })
+);
+const expectedLabels = ["Who are you", "What do you do", "Your customer", "What's your offer"];
+for (let i = 0; i < expectedLabels.length; i++) {
+  if (rowLabels[i] !== expectedLabels[i]) {
+    console.error("Unexpected row label:", rowLabels[i], "expected", expectedLabels[i]);
+    process.exitCode = 1;
+  }
+}
+
+for (let i = 0; i < expectedTags.length; i++) {
+  if (step2TagStyles[i]?.text !== expectedTags[i]) {
+    console.error("Unexpected tag value:", step2TagStyles[i]?.text, "expected", expectedTags[i]);
+    process.exitCode = 1;
+  }
 }
 
 for (const t of step2TagStyles) {

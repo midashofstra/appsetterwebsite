@@ -44,9 +44,15 @@ export const planHtml = `<!-- PLAN -->
         <h3>Vertel over je bedrijf</h3>
         <p>Wie je bent, wie je klant is en wat je product of dienst is. Een paar regels is genoeg zodat je agent op jou klinkt.</p>
         <div class="mini" aria-hidden="true">
+          <div class="r">Wie ben jij<span class="tag">Installateur, regio Rotterdam</span></div>
+          <div class="r">Wat doe je<span class="tag">Warmtepompinstallaties</span></div>
+          <div class="r">Je klant<span class="tag">Huiseigenaren</span></div>
+          <div class="r">Wat is je aanbod<span class="tag">Advies &amp; installatie</span></div>
+          <!-- Legacy 3-row mini card:
           <div class="r">Jij<span class="tag">Installateur, regio Rotterdam</span></div>
           <div class="r">Je klant<span class="tag">Huiseigenaren</span></div>
           <div class="r">Je aanbod<span class="tag">Advies &amp; installatie</span></div>
+          -->
         </div>
       </div>
       <div class="step rv d2">

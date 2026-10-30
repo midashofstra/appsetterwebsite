@@ -46,9 +46,15 @@ export const planHtml = `<!-- PLAN -->
         <h3>Tell us about your business</h3>
         <p>Who you are, who your customer is, and what you offer. A few lines is enough for your agent to sound like you.</p>
         <div class="mini" aria-hidden="true">
+          <div class="r">Who are you<span class="tag">Installer, Rotterdam</span></div>
+          <div class="r">What do you do<span class="tag">Heat pump installs</span></div>
+          <div class="r">Your customer<span class="tag">Homeowners</span></div>
+          <div class="r">What's your offer<span class="tag">Consultation &amp; install</span></div>
+          <!-- Legacy 3-row mini card:
           <div class="r">You<span class="tag">Installer, Rotterdam</span></div>
           <div class="r">Your customer<span class="tag">Homeowners</span></div>
           <div class="r">Your offer<span class="tag">Consultation &amp; install</span></div>
+          -->
         </div>
       </div>
       <div class="step rv d2">
