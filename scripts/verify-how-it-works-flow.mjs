@@ -104,6 +104,31 @@ for (const [path, tag, width, height, expectedLabels] of [
   const logos = await page.locator("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-img--logo").count();
   if (logos !== 3) fail(`${tag}: Conversation panel should show 3 channel logos, got ${logos}`);
 
+  await page.getByRole("tab", { name: expectedLabels[5] }).click();
+  await page.waitForTimeout(350);
+  const textTop = await page.evaluate(() => {
+    const panel = document.querySelector("[data-bouncy-tabs-panel][data-active]");
+    const text = panel?.querySelector(".bouncy-tabs__item-text");
+    const collection = panel?.closest(".bouncy-tabs__collection");
+    if (!panel || !text || !collection) return null;
+    const pt = text.getBoundingClientRect().top;
+    const ct = collection.getBoundingClientRect().top;
+    const style = getComputedStyle(text);
+    return {
+      delta: pt - ct,
+      justify: style.justifyContent,
+      itemAlign: panel ? getComputedStyle(panel).alignItems : "",
+    };
+  });
+  console.log(tag, "learn text align", textTop);
+  if (!textTop || textTop.justify !== "flex-start") fail(`${tag}: text column should be flex-start`);
+  if (textTop.delta > 56) fail(`${tag}: text block should sit near top of card (delta ${textTop.delta}px)`);
+
+  await page.locator("#kanalen").screenshot({
+    path: `${outDir}/how-it-works-seven-tabs-${tag}-learn.png`,
+    timeout: 12000,
+  });
+
   await page.close();
 }
 

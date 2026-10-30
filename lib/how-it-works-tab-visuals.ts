@@ -12,6 +12,20 @@ import { INTEGRATION_LOGOS, LINKEDIN_LOGO } from "@/lib/integration-logos";
 const gmail = INTEGRATION_LOGOS.find((l) => l.label === "Gmail")!;
 const whatsapp = INTEGRATION_LOGOS.find((l) => l.label === "WhatsApp")!;
 
+/**
+ * Drop files in `public/how-it-works/` using these basenames (first match wins: .webp, .png, .jpg, .jpeg).
+ * See `public/how-it-works/README.md` for sizes and upload notes.
+ */
+export const HOW_IT_WORKS_STEP_IMAGE_SLUGS = [
+  "step-1-find-leads",
+  "step-2-add-leads",
+  "step-3-contact",
+  "step-4-conversation",
+  "step-5-book",
+  "step-6-learn",
+  "step-7-crm",
+] as const;
+
 /** Unaltered integration SVGs for Contact / Conversation panels. */
 export const HOW_IT_WORKS_CHANNEL_LOGOS = [
   { src: LINKEDIN_LOGO, alt: "LinkedIn" },

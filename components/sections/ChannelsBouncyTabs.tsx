@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useId, useRef } from "react";
-import { SiteIcon } from "@/components/icons/SiteIcon";
 import { CtaButton } from "@/components/ui/CtaButton";
+import { HowItWorksStepVisual } from "@/components/sections/HowItWorksStepVisual";
 import { HOW_IT_WORKS_VISUALS } from "@/lib/how-it-works-tab-visuals";
 import { initBouncyContentTabs } from "@/lib/osmo/bouncy-content-tabs";
 import type { Dictionary } from "@/lib/i18n/types";
@@ -10,7 +10,13 @@ import type { Dictionary } from "@/lib/i18n/types";
 /** Book step (1-based step 5) — panel CTA lives here. */
 const BOOK_STEP_INDEX = 4;
 
-export function ChannelsBouncyTabs({ dict }: { dict: Dictionary }) {
+export function ChannelsBouncyTabs({
+  dict,
+  stepImageSrcs,
+}: {
+  dict: Dictionary;
+  stepImageSrcs: (string | null)[];
+}) {
   const { channels: c } = dict;
   const rootRef = useRef<HTMLDivElement>(null);
   const reactId = useId().replace(/:/g, "");
@@ -73,30 +79,11 @@ export function ChannelsBouncyTabs({ dict }: { dict: Dictionary }) {
                     </CtaButton>
                   ) : null}
                 </div>
-                <div className="bouncy-tabs__item-visual">
-                  {visual?.kind === "logos" ? (
-                    <div className="bouncy-tabs__logo-row" aria-hidden>
-                      {visual.items.map((logo) => (
-                        <img
-                          key={logo.src}
-                          className="bouncy-tabs__item-img bouncy-tabs__item-img--logo"
-                          src={logo.src}
-                          alt={logo.alt}
-                          width={72}
-                          height={72}
-                          draggable={false}
-                        />
-                      ))}
-                    </div>
-                  ) : visual?.kind === "icon" ? (
-                    <SiteIcon
-                      icon={visual.icon}
-                      size={56}
-                      className="bouncy-tabs__step-icon"
-                      style={{ color: "var(--icon-fg, #151613)" }}
-                    />
-                  ) : null}
-                </div>
+                <HowItWorksStepVisual
+                  visual={visual}
+                  imageSrc={stepImageSrcs[i] ?? null}
+                  alt={title}
+                />
               </div>
             );
           })}

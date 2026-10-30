@@ -1,4 +1,5 @@
 import { ChannelsBouncyTabs } from "@/components/sections/ChannelsBouncyTabs";
+import { resolveHowItWorksStepImageSrcs } from "@/lib/how-it-works-step-images";
 import type { Dictionary } from "@/lib/i18n/types";
 
 /** How it works (in-conversation flow) — same #kanalen anchor; Osmo bouncy tabs. */
@@ -18,7 +19,7 @@ export function Channels({ dict }: { dict: Dictionary }) {
           </div>
         </div>
 
-        <ChannelsBouncyTabs dict={dict} />
+        <ChannelsBouncyTabs dict={dict} stepImageSrcs={resolveHowItWorksStepImageSrcs()} />
 
         {/* Legacy three-card channels layout (Font Awesome icons):
         import { faEnvelope, faCommentDots } from "@fortawesome/free-solid-svg-icons";

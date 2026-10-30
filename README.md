@@ -61,6 +61,10 @@ public/
 
 Section components preserve the prototype markup (including inline SVGs and data-URI icons) for visual parity. Iterating on copy or layout can be done per file under `components/sections/`.
 
+### How it works — step panel images
+
+Upload one square image per tab under [`public/how-it-works/`](public/how-it-works/README.md) (e.g. `step-6-learn.webp`, 1:1, ~960×960px). Missing files keep the Font Awesome / channel-logo fallback. Rebuild after adding assets.
+
 ## Deploy
 
 The site uses `output: "export"` in `next.config.ts`. Build output is static HTML in `out/`.
