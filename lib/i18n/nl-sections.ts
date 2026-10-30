@@ -4,7 +4,7 @@ import { planBookMascotHostInnerHtml } from "@/lib/plan-mascot";
 export const problemHtml = `<!-- PROBLEEM -->
 <section id="probleem">
   <div class="wrap">
-    <div class="head rv"><div><span class="label"><i></i>Het probleem</span><h2>Leads genoeg. Maar niemand die ze opvolgt.</h2></div></div>
+    <div class="head rv"><div><span class="label"><i></i>Het probleem</span><!-- Legacy h2: Leads genoeg. Maar niemand die ze opvolgt. --><h2>Herken je dit?</h2></div></div>
     <div class="cards">
       <div class="card rv">
         <h3>Geen tijd om op te volgen</h3>
