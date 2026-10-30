@@ -1,5 +1,6 @@
 import {
   faCalendarCheck,
+  faComments,
   faDatabase,
   faLightbulb,
   faMagnifyingGlass,
@@ -60,7 +61,10 @@ export const HOW_IT_WORKS_VISUALS: HowItWorksVisual[] = [
   { kind: "icon", icon: faUserPlus },
   { kind: "icon", icon: faMagnifyingGlassChart },
   { kind: "icon", icon: faPaperPlane },
+  /* Legacy Conversation panel (three channel logos when no step-5-conversation image):
   { kind: "logos", items: [...HOW_IT_WORKS_CHANNEL_LOGOS] },
+  */
+  { kind: "icon", icon: faComments },
   { kind: "icon", icon: faCalendarCheck },
   { kind: "icon", icon: faLightbulb },
   { kind: "icon", icon: faDatabase },

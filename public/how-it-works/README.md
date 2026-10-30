@@ -23,7 +23,7 @@ Examples:
 - `step-3-research.jpg`
 - `step-6-meeting.png`
 
-If no file exists for a step, the site keeps the **Font Awesome icon** fallback (Conversation uses **LinkedIn / Gmail / WhatsApp logos** until `step-5-conversation.*` is added).
+If no file exists for a step, the site keeps the **Font Awesome icon** fallback (Conversation uses a comments icon; legacy **LinkedIn / Gmail / WhatsApp** logo row is commented in `HowItWorksStepVisual.tsx`).
 
 ### Legacy filenames
 

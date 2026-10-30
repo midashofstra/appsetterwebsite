@@ -157,6 +157,53 @@ for (const [path, tag, width, height, expectedLabels] of [
     });
   }
 
+  await page.getByRole("tab", { name: expectedLabels[4] }).click();
+  await page.waitForTimeout(450);
+  const conversationPanel = await page.evaluate(() => {
+    const img = document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-photo");
+    return {
+      title: document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__heading")?.textContent?.trim(),
+      src: img?.getAttribute("src") || "",
+      hasPhoto: !!img,
+      photoVisual: !!document.querySelector(
+        "[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-visual--photo"
+      ),
+      logoCount: document.querySelectorAll(
+        "[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-img--logo"
+      ).length,
+    };
+  });
+  console.log(tag, "conversation", conversationPanel);
+  if (path === "/en" && !conversationPanel.title?.includes("Reads and replies")) {
+    fail(`${tag}: Conversation panel title missing`);
+  }
+  if (path === "/nl" && !conversationPanel.title?.includes("Leest en antwoordt")) {
+    fail(`${tag}: NL Conversation panel title missing`);
+  }
+  if (!conversationPanel.hasPhoto || !conversationPanel.src.includes("step-5-conversation")) {
+    fail(`${tag}: Conversation tab should show step-5-conversation photo`);
+  }
+  if (!conversationPanel.photoVisual) fail(`${tag}: Conversation photo should use photo tile styling`);
+  if (conversationPanel.logoCount !== 0) {
+    fail(`${tag}: Conversation tab should not show loose channel logos, got ${conversationPanel.logoCount}`);
+  }
+  if (tag === "desktop-en") {
+    await page.locator("#kanalen").screenshot({
+      path: `${outDir}/how-it-works-eight-tabs-${tag}-conversation.png`,
+      timeout: 12000,
+    });
+    await page.locator("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-visual--photo").screenshot({
+      path: `${outDir}/how-it-works-step-5-conversation-tab-en.png`,
+      timeout: 12000,
+    });
+  }
+  if (tag === "mobile-nl") {
+    await page.locator("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-visual--photo").screenshot({
+      path: `${outDir}/how-it-works-step-5-conversation-tab-nl.png`,
+      timeout: 12000,
+    });
+  }
+
   await page.getByRole("tab", { name: expectedLabels[5] }).click();
   await page.waitForTimeout(450);
   const meetingPanel = await page.evaluate(() => {
@@ -272,7 +319,7 @@ for (const [path, tag, width, height, expectedLabels] of [
       "step-2-add-leads",
       "step-3-research",
       "step-4-contact",
-      null,
+      "step-5-conversation",
       "step-6-meeting",
       "step-7-learn",
       "step-8-crm",
@@ -280,22 +327,12 @@ for (const [path, tag, width, height, expectedLabels] of [
     for (let i = 0; i < 8; i++) {
       await page.getByRole("tab", { name: expectedLabels[i] }).click();
       await page.waitForTimeout(280);
-      if (photoSlugs[i] === null) {
-        const logos = await page.locator("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-img--logo").count();
-        if (logos !== 3) fail(`${tag}: tab ${i + 1} should show 3 channel logos`);
-        continue;
-      }
       const src = await page.evaluate(() =>
         document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-photo")?.getAttribute("src")
       );
       if (!src?.includes(photoSlugs[i])) fail(`${tag}: tab ${i + 1} missing ${photoSlugs[i]}`);
     }
   }
-
-  await page.getByRole("tab", { name: expectedLabels[4] }).click();
-  await page.waitForTimeout(350);
-  const logos = await page.locator("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-img--logo").count();
-  if (logos !== 3) fail(`${tag}: Conversation panel should show 3 channel logos, got ${logos}`);
 
   await page.close();
 }

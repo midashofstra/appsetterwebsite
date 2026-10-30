@@ -35,6 +35,7 @@ export function HowItWorksStepVisual({ visual, imageSrc, alt }: Props) {
 
   return (
     <div className="bouncy-tabs__item-visual">
+      {/* Legacy Conversation channel logos (replaced by step-5-conversation photo when imageSrc is set):
       {visual?.kind === "logos" ? (
         <div className="bouncy-tabs__logo-row" aria-hidden>
           {visual.items.map((logo) => (
@@ -50,6 +51,8 @@ export function HowItWorksStepVisual({ visual, imageSrc, alt }: Props) {
           ))}
         </div>
       ) : visual?.kind === "icon" ? (
+      */}
+      {visual?.kind === "icon" ? (
         <SiteIcon
           icon={visual.icon}
           size={56}
