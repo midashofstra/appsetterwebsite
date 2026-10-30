@@ -539,6 +539,10 @@ section{padding:64px 0}
   box-shadow:0 1px 2px rgba(21,22,19,.04);
 }
 .bouncy-tabs__item-img{object-fit:contain;width:auto;height:auto;max-width:72%;max-height:72%;-webkit-user-drag:none;user-select:none}
+.bouncy-tabs__logo-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:clamp(12px,3vw,20px);width:100%;height:100%;padding:8px}
+.bouncy-tabs__item-img--logo{max-width:64px;max-height:64px;width:64px;height:64px;flex:none}
+.bouncy-tabs__step-icon{display:block;margin:0 auto}
+.chan-bouncy-section .chan-sub{margin:12px 0 0;font-size:clamp(17px,2.2vw,20px);font-weight:600;color:var(--muted);max-width:36em;line-height:1.45}
 @media (max-width:767px){
 .bouncy-tabs{gap:1.75em}
 .bouncy-tabs__nav{

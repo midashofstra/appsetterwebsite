@@ -42,9 +42,10 @@ export type Dictionary = {
   channels: {
     label: string;
     title: string;
+    subtitle: string;
     tabsAria: string;
     panelCta: string;
-    cards: { title: string; text: string }[];
+    steps: { tabLabel: string; title: string; text: string }[];
   };
   compare: {
     label: string;

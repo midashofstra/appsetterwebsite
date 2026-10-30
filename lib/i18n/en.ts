@@ -16,7 +16,7 @@ export const en: Dictionary = {
     problem: "Problem",
     why: "Why us",
     plan: "How it works",
-    channels: "Channels",
+    channels: "The agent",
     pricing: "Pricing",
     faq: "FAQ",
     // cta: "Try for €1",
@@ -56,22 +56,31 @@ export const en: Dictionary = {
     ],
   },
   channels: {
+    label: "How it works",
+    title: "Inside the conversation, end to end.",
+    subtitle: "One agent. Everywhere your customers are.",
+    tabsAria: "How the agent works, step by step",
+    panelCta: "Try 3 days for €1",
+    /* Legacy channels tabs (LinkedIn / Email / WhatsApp cards):
     label: "Channels",
     title: "One agent. Everywhere your customers are.",
-    tabsAria: "Communication channels",
-    panelCta: "Try 3 days for €1",
-    cards: [
+    cards: [ ... ],
+    */
+    steps: [
       {
-        title: "LinkedIn",
-        text: "Responds to connections and replies, and steers the chat toward a meeting.",
+        tabLabel: "1 · Reply",
+        title: "Reads and replies in your tone",
+        text: "It picks up incoming WhatsApp, email, LinkedIn, and other messages and responds the way you would—with your voice and guardrails. One agent. Everywhere your customers are.",
       },
       {
-        title: "Email",
-        text: "Follows up after a quote or form at the right moment, without being pushy.",
+        tabLabel: "2 · Calendar",
+        title: "Checks your calendar",
+        text: "It reads your real availability and only offers slots that are actually free—no double bookings or back-and-forth about times that do not work.",
       },
       {
-        title: "WhatsApp",
-        text: "Fast and personal. Where your leads prefer to reply.",
+        tabLabel: "3 · Book",
+        title: "Books the meeting—you stay in control",
+        text: "When someone is ready, it schedules the appointment in your calendar. You see every thread and can take over whenever you want.",
       },
     ],
   },
