@@ -92,19 +92,35 @@ for (const [path, tag, width, height, expectedLabels] of [
 
   await page.getByRole("tab", { name: expectedLabels[2] }).click();
   await page.waitForTimeout(450);
-  const researchPanel = await page.evaluate(() => ({
-    title: document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__heading")?.textContent?.trim(),
-    hasIcon: !!document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__step-icon"),
-  }));
+  const researchPanel = await page.evaluate(() => {
+    const img = document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-photo");
+    return {
+      title: document.querySelector("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__heading")?.textContent?.trim(),
+      src: img?.getAttribute("src") || "",
+      hasPhoto: !!img,
+      photoVisual: !!document.querySelector(
+        "[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-visual--photo"
+      ),
+    };
+  });
   console.log(tag, "research", researchPanel);
   if (path === "/en" && !researchPanel.title?.includes("Know the lead")) {
     fail(`${tag}: Research panel title missing`);
   }
-  if (!researchPanel.hasIcon) fail(`${tag}: Research should show FA fallback icon`);
+  if (!researchPanel.hasPhoto || !researchPanel.src.includes("step-3-research")) {
+    fail(`${tag}: Research tab should show step-3-research photo`);
+  }
+  if (!researchPanel.photoVisual) fail(`${tag}: Research photo should use photo tile styling`);
   await page.locator("#kanalen").screenshot({
     path: `${outDir}/how-it-works-eight-tabs-${tag}-research.png`,
     timeout: 12000,
   });
+  if (tag === "desktop-en") {
+    await page.locator("[data-bouncy-tabs-panel][data-active] .bouncy-tabs__item-visual--photo").screenshot({
+      path: `${outDir}/how-it-works-step-3-research-tab-en.png`,
+      timeout: 12000,
+    });
+  }
 
   await page.getByRole("tab", { name: expectedLabels[5] }).click();
   await page.waitForTimeout(450);
