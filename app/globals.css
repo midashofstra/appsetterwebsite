@@ -501,6 +501,31 @@ section{padding:64px 0}
 .clogos span{height:48px;min-width:120px;padding:0 18px;border-radius:14px;border:1px dashed #CFD2CA;display:inline-flex;align-items:center;justify-content:center;font-size:14px;color:var(--muted)}
 
 /* steps */
+#plan .wrap{position:relative}
+#plan .step:last-child{flex:1 1 300px}
+.plan-mascot-host{
+  pointer-events:none;z-index:2;flex:none;
+  align-self:flex-end;margin-left:auto;margin-top:auto;
+  width:clamp(160px,14vw,220px);height:clamp(160px,14vw,220px);
+  max-width:100%;
+}
+.plan-book-mascot{
+  margin:0;width:100%;height:100%;opacity:0;
+  transform:translateY(12px);
+}
+.plan-book-mascot__img{
+  display:block;width:100%;height:100%;object-fit:contain;
+}
+@media (max-width:960px){
+  .plan-mascot-host{
+    align-self:center;margin-left:auto;margin-right:auto;
+    width:clamp(120px,38vw,160px);height:clamp(120px,38vw,160px);
+    margin-top:16px;
+  }
+}
+@media (prefers-color-scheme:dark){
+  .plan-book-mascot__img{filter:brightness(0.96) contrast(1.02)}
+}
 .steps{position:relative;display:flex;flex-wrap:wrap;gap:28px}
 .steps .line{position:absolute;left:30px;right:30px;top:27px;height:2px;background:var(--line)}
 .steps .line i{display:block;height:100%;width:100%;background:var(--g);transform-origin:left center;transform:scaleX(0)}

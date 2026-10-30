@@ -872,6 +872,14 @@ export function initLandingMotion(): CleanupFn {
     );
   }
 
+  cleanups.push(
+    revealOnScroll(
+      ".plan-book-mascot",
+      { opacity: [0, 1], y: [12, 0] },
+      { trigger: "#steps", start: "top 72%", duration: 0.75, ease: SCROLL_REVEAL_EASE }
+    )
+  );
+
   const stepsSection = document.getElementById("steps");
   const lineInner = document.querySelector(".steps .line i") as HTMLElement | null;
   if (stepsSection && lineInner) {

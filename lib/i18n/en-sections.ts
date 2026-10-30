@@ -58,6 +58,7 @@ export const planHtml = `<!-- PLAN -->
         <div class="mini" aria-hidden="true">
           <div class="cal"><i></i><i class="x"></i><i></i><i></i><i class="x"></i><i class="x"></i><i></i><i class="x"></i><i></i><i></i><i></i><i class="x"></i><i></i><i class="x"></i><i class="x"></i></div>
         </div>
+        <div id="plan-mascot-host" class="plan-mascot-host"></div>
       </div>
     </div>
   </div>
