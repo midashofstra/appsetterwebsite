@@ -872,6 +872,7 @@ export function initLandingMotion(): CleanupFn {
     );
   }
 
+  /* Legacy plan book mascot scroll fade (disabled — mascot is static HTML, visible without JS):
   cleanups.push(
     revealOnScroll(
       ".plan-book-mascot",
@@ -879,6 +880,7 @@ export function initLandingMotion(): CleanupFn {
       { trigger: "#steps", start: "top 72%", duration: 0.75, ease: SCROLL_REVEAL_EASE }
     )
   );
+  */
 
   const stepsSection = document.getElementById("steps");
   const lineInner = document.querySelector(".steps .line i") as HTMLElement | null;

@@ -1,3 +1,5 @@
+import { planBookMascotHostInnerHtml } from "@/lib/plan-mascot";
+
 /** Section HTML (en) */
 export const problemHtml = `<!-- PROBLEM -->
 <section id="probleem">
@@ -64,7 +66,7 @@ export const planHtml = `<!-- PLAN -->
         <div class="mini" aria-hidden="true">
           <div class="cal"><i></i><i class="x"></i><i></i><i></i><i class="x"></i><i class="x"></i><i></i><i class="x"></i><i></i><i></i><i></i><i class="x"></i><i></i><i class="x"></i><i class="x"></i></div>
         </div>
-        <div id="plan-mascot-host" class="plan-mascot-host"></div>
+        <div id="plan-mascot-host" class="plan-mascot-host">${planBookMascotHostInnerHtml()}</div>
       </div>
     </div>
   </div>
