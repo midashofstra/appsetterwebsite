@@ -42,12 +42,13 @@ export const planHtml = `<!-- PLAN -->
       </div>
       <div class="step rv d1">
         <span class="num">2</span>
-        <h3>Describe your ideal customer</h3>
-        <p>Who do you want to talk to, and why? The AI then knows who to book meetings with.</p>
+        <!-- Legacy step 2: Describe your ideal customer — Who do you want to talk to, and why? -->
+        <h3>Tell us about your business</h3>
+        <p>Who you are, who your customer is, and what you offer. A few lines is enough for your agent to sound like you.</p>
         <div class="mini" aria-hidden="true">
-          <div class="r">Industry<span class="tag">Construction & installation</span></div>
-          <div class="r">Role<span class="tag">Owner or director</span></div>
-          <div class="r">Region<span class="tag">Netherlands</span></div>
+          <div class="r">You<span class="tag">Installer, Rotterdam</span></div>
+          <div class="r">Your customer<span class="tag">Homeowners</span></div>
+          <div class="r">Your offer<span class="tag">Consultation &amp; install</span></div>
         </div>
       </div>
       <div class="step rv d2">
